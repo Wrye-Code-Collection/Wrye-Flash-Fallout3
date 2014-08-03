@@ -2730,9 +2730,11 @@ class MreDial(MelRecord):
     classType = 'DIAL'
     melSet = MelSet(
         MelString('EDID','eid'),
-        MelFids('QSTI','quests'), ### QSTRs?
+        MelFids('QSTI','quests'),
+        MelFids('QSTR','rQuests'),
         MelString('FULL','full'),
-        MelStruct('DATA','B','dialType'),
+        MelOptStruct('PNAM','f','priority'),
+        MelStruct('DATA','2B','dialType','flags'),
     )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed() + ['infoStamp','infoStamp2','infos']
 

@@ -2473,6 +2473,9 @@ class MreClas(MelRecord):
         (14,'training'),
         (16,'recharge'),
         (17,'repair'),))
+        
+    # aiTeaches is Enum in FO3Edit values listed below
+    # for reference
     aiTeaches = Flags(0L,Flags.getNames(
         (0,'barter'),
         (1,'bigGuns'),
@@ -2488,27 +2491,18 @@ class MreClas(MelRecord):
         (11,'sneak'),
         (12,'throwing'),
         (13,'unarmed'),))
-    class MelClasData(MelStruct):
-        """Handle older trucated DATA for CLAS subrecords."""
-    #     def loadData(self,record,ins,type,size,readId):
-    #         if size == 52:
-    #             MelStruct.loadData(self,record,ins,type,size,readId)
-    #             return
-    #         #--Else 42 byte record (skips trainSkill, trainLevel,unused1...
-    #         unpacked = ins.unpack('2iI7i2I',size,readId)
-    #         unpacked += self.defaults[len(unpacked):]
-    #         setter = record.__setattr__
-    #         for attr,value,action in zip(self.attrs,unpacked,self.actions):
-    #             if callable(action): value = action(value)
-    #             setter(attr,value)
-    #         if self._debug: print unpacked, record.flags.getTrueAttrs()
+
     melSet = MelSet(
         MelString('EDID','eid'),
         MelString('FULL','full'),
         MelString('DESC','description'),
         MelString('ICON','iconPath'),
-        MelClasData('DATA','4I2IbB2s','tagSkill1','tagSkill2','tagSkill3','tagSkill4',(_flags,'flags',0L),(aiService,'services',0L),('trainSkill',0),('trainLevel',0),('unused1',null2)),
-        MelTuple('ATTR','7B','attributes',[0]*7),
+        MelStruct('DATA','4iIIbB2s','tagSkill1','tagSkill2','tagSkill3',
+            'tagSkill4',(_flags,'flags',0L),(aiService,'services',0L),
+            ('trainSkill',0),('trainLevel',0),('unused1',null2)),
+        # MelTuple('ATTR','7B','attributes',[0]*7),
+        MelStruct('ATTR','7B','strength','perception','endurance','charisma',
+            'intelligence','agility','luck'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

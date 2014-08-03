@@ -2296,6 +2296,7 @@ class MreAppa(MelRecord):
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
+# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreArmo(MelRecord):
     """Armor record."""

@@ -2439,7 +2439,6 @@ class MreCell(MelRecord):
         MelOptStruct('XCLW','f',('waterHeight',-2147483649)),
         MelString('XNAM','waterNoiseTexture'),
         MelFidList('XCLR','regions'),
-        MelOptStruct('XCMT','B','xcmt_p'),
         MelFid('XCIM','imageSpace'),
         MelOptStruct('XCET','B','xcet_p'),
         MelFid('XEZN','encounterZone'),
@@ -2447,6 +2446,7 @@ class MreCell(MelRecord):
         MelFid('XCWT','water'),
         MelOwnership(),
         MelFid('XCAS','acousticSpace'),
+        MelOptStruct('XCMT','B','xcmt_p'),
         MelFid('XCMO','music'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

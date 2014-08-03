@@ -3268,7 +3268,7 @@ class MreLscr(MelRecord):
         MelString('EDID','eid'),
         MelString('ICON','iconPath'),
         MelString('DESC','text'),
-        MelStructs('LNAM','2I2h','Locations',(FID,'direct'),(FID,'indirect'),'gridy','gridx'),
+        MelStructs('LNAM','I4s4s','Locations',(FID,'cell'),('unknown1',null4),('unknown2',null4),),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

@@ -1449,6 +1449,7 @@ class MelOwnership(MelGroup):
         MelGroup.__init__(self, 'ownership',
             MelFid('XOWN','owner'),
             MelOptStruct('XRNK','i',('rank',None)),
+            # Double check XGLB it's not used in FO3Edit
             MelFid('XGLB','global'),
         )
 

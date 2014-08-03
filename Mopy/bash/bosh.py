@@ -2806,7 +2806,6 @@ class MreDoor(MelRecord):
         MelFid('ANAM','soundClose'),
         MelFid('BNAM','soundLoop'),
         MelStruct('FNAM','B',(_flags,'flags',0L)),
-        #MelFids('TNAM','destinations'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

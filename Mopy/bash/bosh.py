@@ -2957,6 +2957,7 @@ class MreFlor(MelRecord):
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
+# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreFurn(MelRecord):
     """Furniture record."""

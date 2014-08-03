@@ -3102,6 +3102,8 @@ class MreInfo(MelRecord):
     classType = 'INFO'
     _flags = Flags(0,Flags.getNames(
         'goodbye','random','sayOnce','runImmediately','infoRefusal','randomEnd','runForRumors','sayOnceADay','alwaysDarken'))
+    _variableFlags = Flags(0L,Flags.getNames('isLongOrShort'))
+    responseFlags = Flags(0L,Flags.getNames((0, 'useEmotionAnimation'),))
     class MelInfoData(MelStruct):
         """Support older 2 byte version."""
         def loadData(self,record,ins,type,size,readId):
@@ -3129,18 +3131,45 @@ class MreInfo(MelRecord):
         MelFid('PNAM','prevInfo'),
         MelFids('NAME','addTopics'),
         MelGroups('responses',
-            MelStruct('TRDT','Ii4sB3s','emotionType','emotionValue',('unused1',null4),'responseNum',('unused2',null3)),
+            MelStruct('TRDT','Ii4sB3sIB','emotionType','emotionValue',
+                ('unused1',null4),'responseNum',('unused2',null3),
+                (FID,'sound'),(responseFlags,'resFlags'),('unused2',null3),),
             MelString('NAM1','responseText'),
             MelString('NAM2','actorNotes'),
+            MelString('NAM3','edits'),
+            MelFid('SNAM','speakerAnimation'),
+            MelFid('LNAM','listenerAnimation'),
             ),
         MelConditions(),
         MelFids('TCLT','choices'),
         MelFids('TCLF','linksFrom'),
-        MelBase('SCHD','schd_p'), #--Old format script header?
-        MelInfoSchr('SCHR','4s4I',('unused2',null4),'numRefs','compiledSize','lastIndex','scriptType'),
-        MelBase('SCDA','compiled_p'),
-        MelString('SCTX','scriptText'),
-        MelScrxen('SCRV/SCRO','references')
+        #--Old format script header?
+        # Begin Old format
+        MelGroup('onBegin',
+            MelOptStruct('SCHR','4s4I',('unused1',null4),'numRefs','compiledSize','lastIndex','scriptType'),
+            MelBase('SCDA','compiled_p'),
+            MelString('SCTX','scriptText'),
+            MelGroups('vars',
+                MelOptStruct('SLSD','I12sB7s','index',('unused1',null4+null4+null4),(_variableFlags,'flags',0L),('unused2',null4+null3)),
+                MelString('SCVR','name')),
+            MelScrxen('SCRV/SCRO','references'),
+            ),
+        MelGroup('onEnd',
+            MelBase('NEXT', 'marker', ''), #### onEnd Marker, wbEmpty
+            MelOptStruct('SCHR','4s4I',('unused1',null4),'numRefs','compiledSize','lastIndex','scriptType'),
+            MelBase('SCDA','compiled_p'),
+            MelString('SCTX','scriptText'),
+            MelGroups('vars',
+                MelOptStruct('SLSD','I12sB7s','index',('unused1',null4+null4+null4),(_variableFlags,'flags',0L),('unused2',null4+null3)),
+                MelString('SCVR','name')),
+            MelScrxen('SCRV/SCRO','references'),
+            ),
+        # End Old format
+        MelFid('SNDD', 'unused',),
+        MelString('RNAM', 'prompt'),
+        MelFid('ANAM', 'speaker',),
+        MelFid('KNAM', 'actorValuePerk',),
+        MelStruct('DNAM', 'I', 'speechChallenge',),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

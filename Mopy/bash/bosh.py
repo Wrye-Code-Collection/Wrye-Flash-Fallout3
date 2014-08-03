@@ -2166,7 +2166,10 @@ class MreHasEffects:
 #------------------------------------------------------------------------------
 class MreAchr(MelRecord): # Placed NPC
     classType = 'ACHR'
-    _flags = Flags(0L,Flags.getNames('oppositeParent'))
+    _flags = Flags(0L,Flags.getNames(
+        'oppositeParent'
+        'popIn'
+    ))
     melSet=MelSet(
         MelString('EDID','eid'),
         MelFid('NAME','base'),

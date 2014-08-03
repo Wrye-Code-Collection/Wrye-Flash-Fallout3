@@ -2816,7 +2816,13 @@ class MreDial(MelRecord):
 class MreDoor(MelRecord):
     """Container record."""
     classType = 'DOOR'
-    _flags = Flags(0,Flags.getNames('oblivionGate','automatic','hidden','minimalUse'))
+    _flags = Flags(0,Flags.getNames(
+        'oblivionGate',
+        'automaticDoor',
+        'hidden',
+        'minimalUse',
+        'slidingDoor'
+    ))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelStruct('OBND','=6h',

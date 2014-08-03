@@ -1367,7 +1367,7 @@ class MelEffects(MelGroups):
         """Initialize elements."""
         MelGroups.__init__(self,attr,
             MelFid('EFID','baseEffect'),
-            MelStruct('EFIT','5i','magnitude','area','duration','recipient','actorValue'),
+            MelStruct('EFIT','4Ii','magnitude','area','duration','recipient','actorValue'),
             # MelGroup('scriptEffect',
             #     MelEffects.MelEffectsScit(),
             #     MelString('FULL','full'),

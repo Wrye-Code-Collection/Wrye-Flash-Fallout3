@@ -3341,6 +3341,7 @@ class MreLvsp(MreLeveledList):
     classType = 'LVSP'
     __slots__ = MreLeveledList.__slots__
 
+# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreLvln(MreLeveledList):
     """LVLN record. Leveled list for NPC."""

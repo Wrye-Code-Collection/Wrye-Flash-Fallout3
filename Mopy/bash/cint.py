@@ -5414,7 +5414,7 @@ class ObModFile(object):
                         if formId[0] != self.GName:
                             masters.add(formId[0])
                 # removed 'LVSP'
-                if type in ('LVLI','LVLC'):
+                if type in ('LVLI','LVLC','LVLN'):
                     for entry in record.entries:
                         formMaster = entry.listId[0]
                         if formMaster != self.GName:

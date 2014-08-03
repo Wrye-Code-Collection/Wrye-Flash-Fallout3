@@ -2253,7 +2253,7 @@ class MreAlch(MelRecord,MreHasEffects):
 class MreAmmo(MelRecord):
     """Ammo (arrow) record."""
     classType = 'AMMO'
-    _flags = Flags(0L,Flags.getNames('notNormalWeapon'))
+    _flags = Flags(0L,Flags.getNames('notNormalWeapon','nonPlayable'))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelStruct('OBND','=6h',
@@ -2266,7 +2266,7 @@ class MreAmmo(MelRecord):
         MelDestructible(),
         MelFid('YNAM','soundPickup'),
         MelFid('ZNAM','soundDrop'),
-        MelStruct('DATA','fB3sIB','speed',(_flags,'flags',0L),('unused1',null3),'value','clipRounds'),
+        MelStruct('DATA','fB3siB','speed',(_flags,'flags',0L),('unused1',null3),'value','clipRounds'),
         MelString('ONAM','shortName'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

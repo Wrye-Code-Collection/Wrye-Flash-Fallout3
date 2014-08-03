@@ -2344,6 +2344,7 @@ class MreArmo(MelRecord):
 class MreBook(MelRecord):
     """BOOK record."""
     classType = 'BOOK'
+    # FO3Edit '', 'Can''t be Taken'
     _flags = Flags(0,Flags.getNames('isScroll','isFixed'))
     melSet = MelSet(
         MelString('EDID','eid'),
@@ -2357,6 +2358,8 @@ class MreBook(MelRecord):
         MelFid('SCRI','script'),
         MelString('DESC','text'),
         MelDestructible(),
+        MelFid('YNAM','soundPickUp'),
+        MelFid('ZNAM','soundDrop'),
         MelStruct('DATA', '=BbIf',(_flags,'flags',0L),('teaches',-1),'value','weight'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed() + ['modb']

@@ -2541,6 +2541,7 @@ class MreClot(MelRecord):
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
+# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreCont(MelRecord):
     """Container record."""

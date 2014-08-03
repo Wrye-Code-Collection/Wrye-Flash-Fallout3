@@ -2184,6 +2184,7 @@ class MreAchr(MelRecord): # Placed NPC
     )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
+# Needs to be updated
 #------------------------------------------------------------------------------
 class MreAcre(MelRecord): # Placed Creature
     classType = 'ACRE'
@@ -2200,6 +2201,7 @@ class MreAcre(MelRecord): # Placed Creature
     )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
+# Needs to be updated
 #------------------------------------------------------------------------------
 class MreActi(MelRecord):
     """Activator record."""

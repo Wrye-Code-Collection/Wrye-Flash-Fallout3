@@ -3849,8 +3849,8 @@ class ObLVLIRecord(ObBaseRecord):
     IsUseAllSpells = CBashBasicFlag('flags', 0x00000004)
     exportattrs = copyattrs = ObBaseRecord.baseattrs + ['chanceNone', 'flags', 'entries_list']
 
-# class ObLVSPRecord(ObBaseRecord):
-#     _Type = 'LVSP'
+# class ObLVLNRecord(ObBaseRecord):
+#     _Type = 'LVLN'
 #     class Entry(ListComponent):
 #         level = CBashGeneric_LIST(1, c_short)
 #         unused1 = CBashUINT8ARRAY_LIST(2, 2)
@@ -3865,7 +3865,7 @@ class ObLVLIRecord(ObBaseRecord):
 # 
 #     chanceNone = CBashGeneric(5, c_ubyte)
 #     flags = CBashGeneric(6, c_ubyte)
-#     script = CBashJunk(7) #Doesn't actually exist, but is here so that LVLC,LVLI,LVSP can be processed similarly
+#     script = CBashJunk(7) #Doesn't actually exist, but is here so that LVLC,LVLI,LVLN can be processed similarly
 #     template = CBashJunk(8) #ditto
 
 #     def create_entry(self):

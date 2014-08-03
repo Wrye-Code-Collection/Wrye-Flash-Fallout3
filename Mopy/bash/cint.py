@@ -5283,6 +5283,7 @@ class ObWTHRRecord(ObBaseRecord):
                                         'weatherType', 'boltRed', 'boltGreen', 'boltBlue', 'sounds_list'] #'modt_p',
 
 #Helper functions
+# removed 'LVSP'
 validTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SOUN','SKIL','MGEF','SCPT','LTEX','ENCH','SPEL',
                   'BSGN','ACTI','APPA','ARMO','BOOK','CLOT','CONT',
@@ -5291,8 +5292,9 @@ validTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SLGM','KEYM','ALCH','SBSP','SGST','LVLI','WTHR',
                   'CLMT','REGN','WRLD','CELL','ACHR','ACRE','REFR',
                   'PGRD','LAND','ROAD','DIAL','INFO','QUST','IDLE',
-                  'PACK','CSTY','LSCR','LVSP','ANIO','WATR','EFSH'])
+                  'PACK','CSTY','LSCR','ANIO','WATR','EFSH'])
 
+# removed 'LVSP'
 aggregateTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SOUN','SKIL','MGEF','SCPT','LTEX','ENCH','SPEL',
                   'BSGN','ACTI','APPA','ARMO','BOOK','CLOT','CONT',
@@ -5301,7 +5303,7 @@ aggregateTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SLGM','KEYM','ALCH','SBSP','SGST','LVLI','WTHR',
                   'CLMT','REGN','WRLD','CELLS','ACHRS','ACRES','REFRS',
                   'PGRDS','LANDS','ROADS','DIAL','INFOS','QUST','IDLE',
-                  'PACK','CSTY','LSCR','LVSP','ANIO','WATR','EFSH'])
+                  'PACK','CSTY','LSCR','ANIO','WATR','EFSH'])
 
 pickupables = set(['APPA','ARMO','BOOK','CLOT','INGR','LIGH','MISC',
                    'WEAP','AMMO','SLGM','KEYM','ALCH','SGST'])
@@ -5411,7 +5413,8 @@ class ObModFile(object):
                         if not formId: continue
                         if formId[0] != self.GName:
                             masters.add(formId[0])
-                if type in ('LVLI','LVSP','LVLC'):
+                # removed 'LVSP'
+                if type in ('LVLI','LVLC'):
                     for entry in record.entries:
                         formMaster = entry.listId[0]
                         if formMaster != self.GName:
@@ -5887,6 +5890,7 @@ class ObModFile(object):
         return roads
 
     @property
+    # removed 'LVSP'
     def tops(self):
         return dict((("GMST", self.GMST),("GLOB", self.GLOB),("CLAS", self.CLAS),("FACT", self.FACT),
                      ("HAIR", self.HAIR),("EYES", self.EYES),("RACE", self.RACE),("SOUN", self.SOUN),
@@ -5901,9 +5905,10 @@ class ObModFile(object):
                      ("LVLI", self.LVLI),("WTHR", self.WTHR),("CLMT", self.CLMT),("REGN", self.REGN),
                      ("CELL", self.CELL),("WRLD", self.WRLD),("DIAL", self.DIAL),("QUST", self.QUST),
                      ("IDLE", self.IDLE),("PACK", self.PACK),("CSTY", self.CSTY),("LSCR", self.LSCR),
-                     ("LVSP", self.LVSP),("ANIO", self.ANIO),("WATR", self.WATR),("EFSH", self.EFSH)))
+                     ("ANIO", self.ANIO),("WATR", self.WATR),("EFSH", self.EFSH)))
 
     @property
+    # removed 'LVSP'
     def aggregates(self):
         return dict((("GMST", self.GMST),("GLOB", self.GLOB),("CLAS", self.CLAS),("FACT", self.FACT),
                      ("HAIR", self.HAIR),("EYES", self.EYES),("RACE", self.RACE),("SOUN", self.SOUN),
@@ -5919,7 +5924,7 @@ class ObModFile(object):
                      ("WRLD", self.WRLD),("CELL", self.CELLS),("ACHR", self.ACHRS),("ACRE", self.ACRES),
                      ("REFR", self.REFRS),("PGRD", self.PGRDS),("LAND", self.LANDS),("ROAD", self.ROADS),
                      ("DIAL", self.DIAL),("INFO", self.INFOS),("QUST", self.QUST),("IDLE", self.IDLE),
-                     ("PACK", self.PACK),("CSTY", self.CSTY),("LSCR", self.LSCR),("LVSP", self.LVSP),
+                     ("PACK", self.PACK),("CSTY", self.CSTY),("LSCR", self.LSCR),
                      ("ANIO", self.ANIO),("WATR", self.WATR),("EFSH", self.EFSH)))
 
 class ObCollection:

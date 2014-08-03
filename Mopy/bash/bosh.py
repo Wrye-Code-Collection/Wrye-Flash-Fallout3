@@ -19977,7 +19977,8 @@ class PatchFile(ModFile):
         modFile.convertToLongFids()
         badForm = (GPath("Fallout3.esm"),0xA31D) #--DarkPCB record
         for blockType,block in modFile.tops.iteritems():
-            iiSkipMerge = iiMode and blockType not in ('LVLC','LVLI','LVSP','LVLN')
+            # removed 'LVSP'
+            iiSkipMerge = iiMode and blockType not in ('LVLC','LVLI','LVLN')
             #--Make sure block type is also in read and write factories
             if blockType not in self.loadFactory.recTypes:
                 recClass = self.mergeFactory.type_class[blockType]
@@ -20247,7 +20248,8 @@ class CBash_PatchFile(ObModFile):
         recordsToLoad = set()
         badForm = (GPath("Fallout3.esm"),0xA31D) #--DarkPCB record
         for blockType, block in modFile.aggregates.iteritems():
-            iiSkipMerge = iiMode and blockType not in ('LVLC','LVLI','LVSP','LVLN')
+            # removed 'LVSP'
+            iiSkipMerge = iiMode and blockType not in ('LVLC','LVLI','LVLN')
             if iiSkipMerge: continue
             #--Make sure block type is also in read and write factories
             for record in block:
@@ -20331,7 +20333,8 @@ class CBash_PatchFile(ObModFile):
         """Scans load+merge mods."""
         if not len(self.loadMods): return
         iiModeSet = set(('InventOnly','IIM'))
-        levelLists = set(('LVLC','LVLI','LVSP','LVLN'))
+        # removed 'LVSP'
+        levelLists = set(('LVLC','LVLI','LVLN'))
         nullProgress = bolt.Progress()
 
         IIMSet = set([modName for modName in (self.allSet|self.scanSet) if bool(modInfos[modName].getBashTags() & iiModeSet)])
@@ -33037,7 +33040,8 @@ class ListsMerger(SpecialPatcher,ListPatcher):
         """Prepare to handle specified patch mod. All functions are called after this."""
         Patcher.initPatchFile(self,patchFile,loadMods)
         self.srcMods = set(self.getConfigChecked()) & set(loadMods)
-        self.listTypes = ('LVLC','LVLI','LVSP','LVLN')
+        # removed 'LVSP'
+        self.listTypes = ('LVLC','LVLI','LVLN')
         self.type_list = dict([(type,{}) for type in self.listTypes])
         self.masterItems = {}
         self.mastersScanned = set()
@@ -33169,7 +33173,8 @@ class ListsMerger(SpecialPatcher,ListPatcher):
         for leveler in (self.levelers or []):
             log('* '+self.getItemLabel(leveler))
         #--Save to patch file
-        for label, type in ((_('Creature'),'LVLC'), (_('Item'),'LVLI'), (_('Spell'),'LVSP'), (_('NPC'),'LVLN')):
+        # removed 'LVSP'
+        for label, type in ((_('Creature'),'LVLC'), (_('Item'),'LVLI'), (_('NPC'),'LVLN')):
             log.setHeader(_('=== Merged %s Lists') % label)
             patchBlock = getattr(self.patchFile,type)
             levLists = self.type_list[type]
@@ -33181,7 +33186,8 @@ class ListsMerger(SpecialPatcher,ListPatcher):
                 for mod in record.mergeSources:
                     log('  * ' + self.getItemLabel(mod))
         #--Discard empty sublists
-        for label, type in ((_('Creature'),'LVLC'), (_('Item'),'LVLI'), (_('Spell'),'LVSP'), (_('NPC'),'LVLN')):
+        # removed 'LVSP'
+        for label, type in ((_('Creature'),'LVLC'), (_('Item'),'LVLI'), (_('NPC'),'LVLN')):
             patchBlock = getattr(self.patchFile,type)
             levLists = self.type_list[type]
             #--Empty lists
@@ -35201,8 +35207,9 @@ class ContentsChecker(SpecialPatcher,Patcher):
     def initPatchFile(self,patchFile,loadMods):
         """Prepare to handle specified patch mod. All functions are called after this."""
         Patcher.initPatchFile(self,patchFile,loadMods)
+        # removed 'LVSP'
         self.contType_entryTypes = {
-            'LVSP':'LVSP,SPEL,'.split(','),
+         #   'LVSP':'LVSP,SPEL,'.split(','),
             'LVLC':'LVLC,CREA,'.split(','),
             'LVLN':'LVLN,NPC_,'.split(','),
             #--LVLI will also be applied for containers.
@@ -35263,7 +35270,8 @@ class ContentsChecker(SpecialPatcher,Patcher):
         log.setHeader('= '+self.__class__.name)
         #--Lists
         for cAttr,eAttr,types in (
-            ('entries','listId',('LVSP','LVLI','LVLC','LVLN')),
+            # removed 'LVSP'
+            ('entries','listId',('LVLI','LVLC','LVLN')),
             ('items','item',('CONT','CREA','NPC_')),
             ):
             for type in types:

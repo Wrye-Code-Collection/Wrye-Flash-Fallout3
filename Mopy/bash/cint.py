@@ -5771,11 +5771,11 @@ class ObModFile(object):
         return None
     LSCR = CBashRECORDARRAY(ObLSCRRecord, 'LSCR', 0)
 
-    # def create_LVSP(self, EditorID=0, FormID=0):
-    #    RecordID = CBash.CreateRecord(self._CollectionID, self._ModID, cast("LVSP", POINTER(c_ulong)).contents.value, MakeShortFid(self._CollectionID, FormID), EditorID, 0, 0)
-    #    if(RecordID): return ObLVSPRecord(self._CollectionID, self._ModID, RecordID, 0, 0)
+    # def create_LVLN(self, EditorID=0, FormID=0):
+    #    RecordID = CBash.CreateRecord(self._CollectionID, self._ModID, cast("LVLN", POINTER(c_ulong)).contents.value, MakeShortFid(self._CollectionID, FormID), EditorID, 0, 0)
+    #    if(RecordID): return ObLVLNRecord(self._CollectionID, self._ModID, RecordID, 0, 0)
     #    return None
-    # LVSP = CBashRECORDARRAY(ObLVSPRecord, 'LVSP', 0)
+    # LVLN = CBashRECORDARRAY(ObLVLNRecord, 'LVLN', 0)
 
     def create_ANIO(self, EditorID=0, FormID=0):
         RecordID = CBash.CreateRecord(self._CollectionID, self._ModID, cast("ANIO", POINTER(c_ulong)).contents.value, MakeShortFid(self._CollectionID, FormID), EditorID, 0, 0)

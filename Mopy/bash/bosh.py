@@ -3336,11 +3336,11 @@ class MreLvli(MreLeveledList):
     __slots__ = MreLeveledList.__slots__
 
 #------------------------------------------------------------------------------
-class MreLvsp(MreLeveledList):
-    """LVSP record. Leveled list for items."""
-    classType = 'LVSP'
-    __slots__ = MreLeveledList.__slots__
-
+# class MreLvsp(MreLeveledList):
+#    """LVSP record. Leveled list for items."""
+#    classType = 'LVSP'
+#    __slots__ = MreLeveledList.__slots__
+#
 # Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreLvln(MreLeveledList):
@@ -5752,11 +5752,12 @@ class MreNavi(MelRecord):
 
 #------------------------------------------------------------------------------
 # MreRecord.type_class
+# MreLvsp removed
 MreRecord.type_class = dict((x.classType,x) for x in (
     MreAchr, MreAcre, MreActi, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn,
     MreCell, MreClas, MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, MreFact,
     MreFlor, MreFurn, MreGlob, MreGmst, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr,
-    MreLvlc, MreLvli, MreLvsp, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreRefr,
+    MreLvlc, MreLvli, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreRefr,
     MreRoad, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat, MreTree, MreTes4,
     MreWatr, MreWeap, MreWrld, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, MreSbsp,
     MreDial, MreInfo, MreTxst, MreMicn, MreFlst, MrePerk, MreExpl, MreIpct, MreIpds, MreProj,
@@ -19779,11 +19780,12 @@ class Save_NPCEdits:
 class PatchFile(ModFile):
     """Defines and executes patcher configuration."""
     #--Class
+    # removed MreLvsp
     mergeClasses = (
         MreActi, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn, MreClas,
         MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, MreFact, MreFlor, MreFurn,
         MreGlob, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr, MreLvlc, MreLvli,
-        MreLvsp, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst,
+        MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst,
         MreSlgm, MreSoun, MreSpel, MreStat, MreTree, MreWatr, MreWeap, MreWthr,
         MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, MreSbsp, MreSkil,
         MreTxst, MreMicn, MreFlst, MreLvln, MrePerk, MreExpl, MreIpct, MreIpds, MreProj,
@@ -33090,11 +33092,13 @@ class ListsMerger(SpecialPatcher,ListPatcher):
 
     def getReadClasses(self):
         """Returns load factory classes needed for reading."""
-        return (MreLvlc,MreLvli,MreLvsp,MreLvln)
+        # removed MreLvsp
+        return (MreLvlc,MreLvli,MreLvln)
 
     def getWriteClasses(self):
         """Returns load factory classes needed for writing."""
-        return (MreLvlc,MreLvli,MreLvsp,MreLvln)
+        # removed MreLvsp
+        return (MreLvlc,MreLvli,MreLvln)
 
     def scanModFile(self, modFile, progress):
         """Add lists from modFile."""

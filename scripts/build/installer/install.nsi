@@ -152,38 +152,38 @@
             ${EndIf}
         ${EndIf}
         ; Write the uninstall keys for Windows
-        SetOutPath "$COMMONFILES\Wrye FlashNV"
-        WriteRegStr HKLM "Software\Wrye FlashNV" "Installer Path" "$EXEPATH"
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "DisplayName" "Wrye FlashNV"
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "UninstallString" '"$COMMONFILES\Wrye FlashNV\uninstall.exe"'
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "URLInfoAbout" 'http://www.nexusmods.com/newvegas/mods/35003'
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "HelpLink" 'http://forums.bethsoft.com/topic/1234195-relz-wrye-flash-nv/'
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "Publisher" 'Wrye & Wrye Flash Development Team'
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "DisplayVersion" '${WB_FILEVERSION}'
-        WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "NoModify" 1
-        WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashNV" "NoRepair" 1
-        CreateDirectory "$COMMONFILES\Wrye FlashNV"
-        WriteUninstaller "$COMMONFILES\Wrye FlashNV\uninstall.exe"
+        SetOutPath "$COMMONFILES\Wrye FlashFO3"
+        WriteRegStr HKLM "Software\Wrye FlashFO3" "Installer Path" "$EXEPATH"
+        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "DisplayName" "Wrye FlashFO3"
+        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "UninstallString" '"$COMMONFILES\Wrye FlashFO3\uninstall.exe"'
+        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "URLInfoAbout" 'http://www.nexusmods.com/fallout3/mods/11336'
+        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "HelpLink" 'http://forums.bethsoft.com/topic/1211142-relz-wrye-flash/'
+        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "Publisher" 'Wrye & Wrye Flash Development Team'
+        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "DisplayVersion" '${WB_FILEVERSION}'
+        WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "NoModify" 1
+        WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3" "NoRepair" 1
+        CreateDirectory "$COMMONFILES\Wrye FlashFO3"
+        WriteUninstaller "$COMMONFILES\Wrye FlashFO3\uninstall.exe"
     SectionEnd
 
     Section "Start Menu Shortcuts" Shortcuts_SM
 
-        CreateDirectory "$SMPROGRAMS\Wrye FlashNV"
-        CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Uninstall.lnk" "$COMMONFILES\Wrye FlashNV\uninstall.exe" "" "$COMMONFILES\Wrye FlashNV\uninstall.exe" 0
+        CreateDirectory "$SMPROGRAMS\Wrye FlashFO3"
+        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Uninstall.lnk" "$COMMONFILES\Wrye FlashFO3\uninstall.exe" "" "$COMMONFILES\Wrye FlashFO3\uninstall.exe" 0
 
         ${If} $CheckState_NV == ${BST_CHECKED}
             ${If} Path_NV != $Empty
                 SetOutPath $Path_NV\Mopy
                 ${If} $CheckState_NV_Py == ${BST_CHECKED}
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Wrye FlashNV - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash Launcher.pyw" "" "$Path_NV\Mopy\bash\images\bash_32.ico" 0
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Wrye FlashNV - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash Debug.bat" "" "$Path_NV\Mopy\bash\images\bash_32.ico" 0
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash Launcher.pyw" "" "$Path_NV\Mopy\bash\images\bash_32.ico" 0
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash Debug.bat" "" "$Path_NV\Mopy\bash\images\bash_32.ico" 0
                     ${If} $CheckState_NV_Exe == ${BST_CHECKED}
-                        CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Wrye FlashNV (Standalone) - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash.exe"
-                        CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Wrye FlashNV (Standalone) - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash.exe" "-d"
+                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash.exe"
+                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash.exe" "-d"
                     ${EndIf}
                 ${ElseIf} $CheckState_NV_Exe == ${BST_CHECKED}
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Wrye FlashNV - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash.exe"
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashNV\Wrye FlashNV - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash.exe" "-d"
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash.exe"
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash.exe" "-d"
                 ${EndIf}
             ${EndIf}
         ${EndIf}

@@ -113,9 +113,9 @@ Unicode true
         StrCpy $Python_pywin32 "1"
 
         ${If} $Path_NV == $Empty
-            ReadRegStr $Path_NV HKLM "Software\Bethesda Softworks\FalloutNV" "Installed Path"
+            ReadRegStr $Path_NV HKLM "Software\Bethesda Softworks\Fallout3" "Installed Path"
             ${If} $Path_NV == $Empty
-                ReadRegStr $Path_NV HKLM "SOFTWARE\Wow6432Node\Bethesda Softworks\FalloutNV" "Installed Path"
+                ReadRegStr $Path_NV HKLM "SOFTWARE\Wow6432Node\Bethesda Softworks\Fallout3" "Installed Path"
             ${EndIf}
         ${EndIf}
         ${If} $Path_NV != $Empty

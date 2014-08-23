@@ -27,15 +27,15 @@ import bapi
 bapiDir = u'..\\Mopy\\bash\\compiled'
 
 # Detect games.
-fallout3Dir = None
+falloutNVDir = None
 
-#Detect Fallout3.
+#Detect FalloutNV.
 try:
-    key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, u'Software\\Bethesda Softworks\\Fallout3', 0, _winreg.KEY_READ|_winreg.KEY_WOW64_32KEY)
+    key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, u'Software\\Bethesda Softworks\\FalloutNV', 0, _winreg.KEY_READ|_winreg.KEY_WOW64_32KEY)
     value = _winreg.QueryValueEx(key,u'Installed Path')
     if value[1] == _winreg.REG_SZ and os.path.exists(value[0]):
-        fallout3Dir = value[0]
-        print u'Found Fallout3.'
+        falloutNVDir = value[0]
+        print u'Found FalloutNV.'
 except:
     raise
 
@@ -57,20 +57,20 @@ if bapi.BAPI:
 else:
     raise Exception("Couldn't load BOSS API.")
 
-if fallout3Dir:
-    # Convert Fallout 3 masterlist.
-    if bossDir and os.path.exists(bossDir + u'\\Fallout 3\\masterlist.txt'):
-       masterlistDir = bossDir + u'\\Fallout 3\\masterlist.txt'
+if falloutNVDir:
+    # Convert Fallout New Vegas masterlist.
+    if bossDir and os.path.exists(bossDir + u'\\Fallout New Vegas\\masterlist.txt'):
+       masterlistDir = bossDir + u'\\Fallout New Vegas\\masterlist.txt'
     else:
-       masterlistDir = u'C:\\BOSS\\Fallout 3\\masterlist.txt'
+       masterlistDir = u'C:\\BOSS\\Fallout New Vegas\\masterlist.txt'
     print u'Getting masterlist from %s' % masterlistDir
-    taglistDir = u'..\\Data\\Bash Patches\\taglist.txt'
+    taglistDir = u'..\Data\\Bash Patches\\taglist.txt'
     if os.path.exists(masterlistDir):
-        boss = bapi.BossDb(fallout3Dir,bapi.BOSS_API_GAME_FALLOUT3)
+        boss = bapi.BossDb(falloutNVDir,bapi.BOSS_API_GAME_FALLOUTNV)
         boss.Load(masterlistDir)
         boss.DumpMinimal(taglistDir,True)
-        print u'Fallout 3 masterlist converted.'
+        print u'Fallout New Vegas masterlist converted.'
     else:
-        print u'Error: Fallout 3 masterlist not found.'
+        print u'Error: Fallout New Vegas masterlist not found.'
     
 print u'Taglist generator finished.'

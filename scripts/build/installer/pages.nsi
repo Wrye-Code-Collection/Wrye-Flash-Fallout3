@@ -18,7 +18,7 @@
             Pop $Label
             IntOp $0 0 + 25
         ${If} $Path_FO3 != $Empty
-            ${NSD_CreateCheckBox} 0 $0u 30% 13u "Install for FalloutNV"
+            ${NSD_CreateCheckBox} 0 $0u 30% 13u "Install for Fallout3"
                 Pop $Check_FO3
                 ${NSD_SetState} $Check_FO3 $CheckState_FO3
             ${NSD_CreateCheckBox} 30% $0u 40% 13u "Wrye Flash [Standalone]"
@@ -94,7 +94,7 @@
         Pop $Label
         SetCtlColors $Label "FF0000" "transparent"
 
-        ${NSD_CreateLabel} 0 24 100% 128u "This is a very common cause of problems when using Wrye Flash. Highly recommended that you stop this installation now, reinstall (FalloutNV/Skyrim/Steam) into another directory outside of Program Files, such as C:\Games\FalloutNV, and install Wrye Flash at that location.$\n$\nThe problems with installing in Program Files stem from a feature of Windows that did not exist when FalloutNV was released: User Access Controls (UAC).  If you continue with the install into Program Files, you may have trouble starting or using Wrye Flash, as it may not be able to access its own files."
+        ${NSD_CreateLabel} 0 24 100% 128u "This is a very common cause of problems when using Wrye Flash. Highly recommended that you stop this installation now, reinstall (Fallout3/Skyrim/Steam) into another directory outside of Program Files, such as C:\Games\Fallout3, and install Wrye Flash at that location.$\n$\nThe problems with installing in Program Files stem from a feature of Windows that did not exist when Fallout3 was released: User Access Controls (UAC).  If you continue with the install into Program Files, you may have trouble starting or using Wrye Flash, as it may not be able to access its own files."
         Pop $Label
 
         nsDialogs::Show
@@ -108,7 +108,7 @@
     Function PAGE_FINISH
         !insertmacro MUI_HEADER_TEXT $(PAGE_FINISH_TITLE) $(PAGE_FINISH_SUBTITLE)
 
-        ReadRegStr $Path_FO3 HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
+        ReadRegStr $Path_FO3 HKLM "Software\Wrye FlashFO3" "Fallout3 Path"
 
         nsDialogs::Create 1018
             Pop $Dialog
@@ -179,7 +179,7 @@
 
         IntOp $0 0 + 9
         ${If} $Path_FO3 != $Empty
-            ${NSD_CreateCheckBox} 0 $0u 100% 13u "&FalloutNV"
+            ${NSD_CreateCheckBox} 0 $0u 100% 13u "&Fallout3"
                 Pop $Check_FO3
                 ${NSD_SetState} $Check_FO3 $CheckState_FO3
             IntOp $0 $0 + 13

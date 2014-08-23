@@ -121,7 +121,7 @@
             Pop $Label
         IntOp $0 0 + 17
         ${If} $Path_NV != $Empty
-            ${NSD_CreateCheckBox} 0 $0u 100% 8u "FalloutNV"
+            ${NSD_CreateCheckBox} 0 $0u 100% 8u "Fallout3"
                 Pop $Check_NV
             IntOp $0 $0 + 9
         ${EndIf}

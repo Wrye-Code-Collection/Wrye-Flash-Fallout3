@@ -8,7 +8,7 @@
         ; Remove files and Directories - Directories are only deleted if empty.
         ${If} $CheckState_NV == ${BST_CHECKED}
             ${If} $Path_NV != $Empty
-                !insertmacro UninstallFlash $Path_NV "FalloutNV"
+                !insertmacro UninstallFlash $Path_NV "Fallout3"
             ${EndIf}
         ${EndIf}
 

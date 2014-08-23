@@ -145,10 +145,10 @@
     Section "Wrye Flash" Main
         SectionIn RO
 
-        ${If} $CheckState_NV == ${BST_CHECKED}
+        ${If} $CheckState_FO3 == ${BST_CHECKED}
             ; Install resources:
-            ${If} Path_NV != $Empty
-                !insertmacro InstallBashFiles "Fallout3" "Fallout3" "$Path_NV" $Reg_Value_NV_Py $Reg_Value_NV_Exe "FalloutNV Path" $CheckState_NV_Py $CheckState_NV_Exe true
+            ${If} Path_FO3 != $Empty
+                !insertmacro InstallBashFiles "Fallout3" "Fallout3" "$Path_FO3" $Reg_Value_FO3_Py $Reg_Value_FO3_Exe "FalloutNV Path" $CheckState_FO3_Py $CheckState_FO3_Exe true
             ${EndIf}
         ${EndIf}
         ; Write the uninstall keys for Windows
@@ -171,19 +171,19 @@
         CreateDirectory "$SMPROGRAMS\Wrye FlashFO3"
         CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Uninstall.lnk" "$COMMONFILES\Wrye FlashFO3\uninstall.exe" "" "$COMMONFILES\Wrye FlashFO3\uninstall.exe" 0
 
-        ${If} $CheckState_NV == ${BST_CHECKED}
-            ${If} Path_NV != $Empty
-                SetOutPath $Path_NV\Mopy
-                ${If} $CheckState_NV_Py == ${BST_CHECKED}
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash Launcher.pyw" "" "$Path_NV\Mopy\bash\images\bash_32.ico" 0
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash Debug.bat" "" "$Path_NV\Mopy\bash\images\bash_32.ico" 0
-                    ${If} $CheckState_NV_Exe == ${BST_CHECKED}
-                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash.exe"
-                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash.exe" "-d"
+        ${If} $CheckState_FO3 == ${BST_CHECKED}
+            ${If} Path_FO3 != $Empty
+                SetOutPath $Path_FO3\Mopy
+                ${If} $CheckState_FO3_Py == ${BST_CHECKED}
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_FO3\Mopy\Wrye Flash Launcher.pyw" "" "$Path_FO3\Mopy\bash\images\bash_32.ico" 0
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash Debug.bat" "" "$Path_FO3\Mopy\bash\images\bash_32.ico" 0
+                    ${If} $CheckState_FO3_Exe == ${BST_CHECKED}
+                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV.lnk" "$Path_FO3\Mopy\Wrye Flash.exe"
+                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash.exe" "-d"
                     ${EndIf}
-                ${ElseIf} $CheckState_NV_Exe == ${BST_CHECKED}
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_NV\Mopy\Wrye Flash.exe"
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_NV\Mopy\Wrye Flash.exe" "-d"
+                ${ElseIf} $CheckState_FO3_Exe == ${BST_CHECKED}
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_FO3\Mopy\Wrye Flash.exe"
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash.exe" "-d"
                 ${EndIf}
             ${EndIf}
         ${EndIf}

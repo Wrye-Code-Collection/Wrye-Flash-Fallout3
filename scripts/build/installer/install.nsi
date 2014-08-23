@@ -148,7 +148,7 @@
         ${If} $CheckState_NV == ${BST_CHECKED}
             ; Install resources:
             ${If} Path_NV != $Empty
-                !insertmacro InstallBashFiles "FalloutNV" "FalloutNV" "$Path_NV" $Reg_Value_NV_Py $Reg_Value_NV_Exe "FalloutNV Path" $CheckState_NV_Py $CheckState_NV_Exe true
+                !insertmacro InstallBashFiles "Fallout3" "Fallout3" "$Path_NV" $Reg_Value_NV_Py $Reg_Value_NV_Exe "FalloutNV Path" $CheckState_NV_Py $CheckState_NV_Exe true
             ${EndIf}
         ${EndIf}
         ; Write the uninstall keys for Windows

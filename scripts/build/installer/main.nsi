@@ -93,17 +93,17 @@ Unicode true
     Function un.onInit
         StrCpy $Empty ""
         StrCpy $True "True"
-        ReadRegStr $Path_FO3              HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
-        ReadRegStr $Reg_Value_FO3_Py      HKLM "Software\Wrye FlashFO3" "FalloutNV Python Version"
-        ReadRegStr $Reg_Value_FO3_Exe     HKLM "Software\Wrye FlashFO3" "FalloutNV Standalone Version"
+        ReadRegStr $Path_FO3              HKLM "Software\Wrye FlashFO3" "Fallout3 Path"
+        ReadRegStr $Reg_Value_FO3_Py      HKLM "Software\Wrye FlashFO3" "Fallout3 Python Version"
+        ReadRegStr $Reg_Value_FO3_Exe     HKLM "Software\Wrye FlashFO3" "Fallout3 Standalone Version"
     FunctionEnd
 
     Function .onInit
         StrCpy $Empty ""
         StrCpy $True "True"
-        ReadRegStr $Path_FO3              HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
-        ReadRegStr $Reg_Value_FO3_Py      HKLM "Software\Wrye FlashFO3" "FalloutNV Python Version"
-        ReadRegStr $Reg_Value_FO3_Exe     HKLM "Software\Wrye FlashFO3" "FalloutNV Standalone Version"
+        ReadRegStr $Path_FO3              HKLM "Software\Wrye FlashFO3" "Fallout3 Path"
+        ReadRegStr $Reg_Value_FO3_Py      HKLM "Software\Wrye FlashFO3" "Fallout3 Python Version"
+        ReadRegStr $Reg_Value_FO3_Exe     HKLM "Software\Wrye FlashFO3" "Fallout3 Standalone Version"
 
         StrCpy $MinVersion_Comtypes '0.6.2'
         StrCpy $MinVersion_wx '2.8.12'

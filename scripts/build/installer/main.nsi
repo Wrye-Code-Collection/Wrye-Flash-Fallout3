@@ -41,19 +41,19 @@ Unicode true
     Var Label
     Var Empty
     Var True
-    Var Path_NV
+    Var Path_FO3
 
     ;Game specific Data:
-    Var Check_NV
-    Var CheckState_NV
-    Var Check_NV_Py
-    Var CheckState_NV_Py
-    Var Check_NV_Exe
-    Var CheckState_NV_Exe
-    Var Reg_Value_NV_Py
-    Var Reg_Value_NV_Exe
-    Var PathDialogue_NV
-    Var Browse_NV
+    Var Check_FO3
+    Var CheckState_FO3
+    Var Check_FO3_Py
+    Var CheckState_FO3_Py
+    Var Check_FO3_Exe
+    Var CheckState_FO3_Exe
+    Var Reg_Value_FO3_Py
+    Var Reg_Value_FO3_Exe
+    Var PathDialogue_FO3
+    Var Browse_FO3
     Var Check_Readme
     Var Check_DeleteOldFiles
     Var Function_Browse
@@ -93,17 +93,17 @@ Unicode true
     Function un.onInit
         StrCpy $Empty ""
         StrCpy $True "True"
-        ReadRegStr $Path_NV              HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
-        ReadRegStr $Reg_Value_NV_Py      HKLM "Software\Wrye FlashFO3" "FalloutNV Python Version"
-        ReadRegStr $Reg_Value_NV_Exe     HKLM "Software\Wrye FlashFO3" "FalloutNV Standalone Version"
+        ReadRegStr $Path_FO3              HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
+        ReadRegStr $Reg_Value_FO3_Py      HKLM "Software\Wrye FlashFO3" "FalloutNV Python Version"
+        ReadRegStr $Reg_Value_FO3_Exe     HKLM "Software\Wrye FlashFO3" "FalloutNV Standalone Version"
     FunctionEnd
 
     Function .onInit
         StrCpy $Empty ""
         StrCpy $True "True"
-        ReadRegStr $Path_NV              HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
-        ReadRegStr $Reg_Value_NV_Py      HKLM "Software\Wrye FlashFO3" "FalloutNV Python Version"
-        ReadRegStr $Reg_Value_NV_Exe     HKLM "Software\Wrye FlashFO3" "FalloutNV Standalone Version"
+        ReadRegStr $Path_FO3              HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
+        ReadRegStr $Reg_Value_FO3_Py      HKLM "Software\Wrye FlashFO3" "FalloutNV Python Version"
+        ReadRegStr $Reg_Value_FO3_Exe     HKLM "Software\Wrye FlashFO3" "FalloutNV Standalone Version"
 
         StrCpy $MinVersion_Comtypes '0.6.2'
         StrCpy $MinVersion_wx '2.8.12'
@@ -112,22 +112,22 @@ Unicode true
         StrCpy $Python_wx "1"
         StrCpy $Python_pywin32 "1"
 
-        ${If} $Path_NV == $Empty
-            ReadRegStr $Path_NV HKLM "Software\Bethesda Softworks\Fallout3" "Installed Path"
-            ${If} $Path_NV == $Empty
-                ReadRegStr $Path_NV HKLM "SOFTWARE\Wow6432Node\Bethesda Softworks\Fallout3" "Installed Path"
+        ${If} $Path_FO3 == $Empty
+            ReadRegStr $Path_FO3 HKLM "Software\Bethesda Softworks\Fallout3" "Installed Path"
+            ${If} $Path_FO3 == $Empty
+                ReadRegStr $Path_FO3 HKLM "SOFTWARE\Wow6432Node\Bethesda Softworks\Fallout3" "Installed Path"
             ${EndIf}
         ${EndIf}
-        ${If} $Path_NV != $Empty
-            StrCpy $CheckState_NV ${BST_CHECKED}
+        ${If} $Path_FO3 != $Empty
+            StrCpy $CheckState_FO3 ${BST_CHECKED}
         ${EndIf}
 
-        ${If} $Reg_Value_NV_Exe == $True
-        ${OrIf} $Reg_Value_NV_Py != $True
-            StrCpy $CheckState_NV_Exe ${BST_CHECKED}
+        ${If} $Reg_Value_FO3_Exe == $True
+        ${OrIf} $Reg_Value_FO3_Py != $True
+            StrCpy $CheckState_FO3_Exe ${BST_CHECKED}
         ${EndIf}
-        ${If} $Reg_Value_NV_Py == $True
-            StrCpy $CheckState_NV_Py ${BST_CHECKED}
+        ${If} $Reg_Value_FO3_Py == $True
+            StrCpy $CheckState_FO3_Py ${BST_CHECKED}
         ${EndIf}
 
     FunctionEnd
@@ -136,8 +136,8 @@ Unicode true
 ;-------------------------------- Auxilliary Functions
     Function OnClick_Browse
         Pop $0
-        ${If} $0 == $Browse_NV
-            StrCpy $1 $PathDialogue_NV
+        ${If} $0 == $Browse_FO3
+            StrCpy $1 $PathDialogue_FO3
         ${EndIf}
         ${NSD_GetText} $1 $Function_DirPrompt
         nsDialogs::SelectFolderDialog /NOUNLOAD "Please select a target directory" $Function_DirPrompt
@@ -152,8 +152,8 @@ Unicode true
 
     Function un.OnClick_Browse
         Pop $0
-        ${If} $0 == $Browse_NV
-            StrCpy $1 $PathDialogue_NV
+        ${If} $0 == $Browse_FO3
+            StrCpy $1 $PathDialogue_FO3
         ${EndIf}
         ${NSD_GetText} $1 $Function_DirPrompt
         nsDialogs::SelectFolderDialog /NOUNLOAD "Please select a target directory" $Function_DirPrompt

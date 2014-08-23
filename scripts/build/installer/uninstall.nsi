@@ -6,16 +6,16 @@
 ;-------------------------------- The Uninstallation Code:
     Section "Uninstall"
         ; Remove files and Directories - Directories are only deleted if empty.
-        ${If} $CheckState_NV == ${BST_CHECKED}
-            ${If} $Path_NV != $Empty
-                !insertmacro UninstallFlash $Path_NV "Fallout3"
+        ${If} $CheckState_FO3 == ${BST_CHECKED}
+            ${If} $Path_FO3 != $Empty
+                !insertmacro UninstallFlash $Path_FO3 "Fallout3"
             ${EndIf}
         ${EndIf}
 
 
         ;If it is a complete uninstall remove the shared data:
-        ReadRegStr $Path_NV HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
-        ${If} $Path_NV == $Empty
+        ReadRegStr $Path_FO3 HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
+        ${If} $Path_FO3 == $Empty
             DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3"
             ReadRegStr $0 HKLM "Software\Wrye FlashFO3" "Installer Path"
             DeleteRegKey HKLM "SOFTWARE\Wrye FlashFO3"

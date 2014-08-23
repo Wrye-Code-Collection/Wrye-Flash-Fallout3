@@ -17,23 +17,23 @@
         ${NSD_CreateLabel} 0 0 100% 24u "Select which Game(s)/Extra location(s) which you would like to install Wrye Flash for.$\nAlso select which version(s) to install (Standalone exe (default) and/or Python version)."
             Pop $Label
             IntOp $0 0 + 25
-        ${If} $Path_NV != $Empty
+        ${If} $Path_FO3 != $Empty
             ${NSD_CreateCheckBox} 0 $0u 30% 13u "Install for FalloutNV"
-                Pop $Check_NV
-                ${NSD_SetState} $Check_NV $CheckState_NV
+                Pop $Check_FO3
+                ${NSD_SetState} $Check_FO3 $CheckState_FO3
             ${NSD_CreateCheckBox} 30% $0u 40% 13u "Wrye Flash [Standalone]"
-                Pop $Check_NV_Exe
-                ${NSD_AddStyle} $Check_NV_Exe ${WS_GROUP}
-                ${NSD_SetState} $Check_NV_Exe  $CheckState_NV_Exe
+                Pop $Check_FO3_Exe
+                ${NSD_AddStyle} $Check_FO3_Exe ${WS_GROUP}
+                ${NSD_SetState} $Check_FO3_Exe  $CheckState_FO3_Exe
             ${NSD_CreateCheckBox} 70% $0u 30% 13u "Wrye Flash [Python]"
-                Pop $Check_NV_Py
-;                ${NSD_SetState} $Check_NV_Py  $CheckState_NV_Py
+                Pop $Check_FO3_Py
+;                ${NSD_SetState} $Check_FO3_Py  $CheckState_FO3_Py
             IntOp $0 $0 + 13
-            ${NSD_CreateDirRequest} 0 $0u 90% 13u "$Path_NV"
-                Pop $PathDialogue_NV
+            ${NSD_CreateDirRequest} 0 $0u 90% 13u "$Path_FO3"
+                Pop $PathDialogue_FO3
             ${NSD_CreateBrowseButton} -10% $0u 5% 13u "..."
-                Pop $Browse_NV
-                nsDialogs::OnClick $Browse_NV $Function_Browse
+                Pop $Browse_FO3
+                nsDialogs::OnClick $Browse_FO3 $Function_Browse
             IntOp $0 $0 + 13
         ${EndIf}
         nsDialogs::Show
@@ -45,22 +45,22 @@
         StrCpy $ExeVersionInstall $Empty
 
         ; Game paths
-        ${NSD_GetText} $PathDialogue_NV $Path_NV
+        ${NSD_GetText} $PathDialogue_FO3 $Path_FO3
 
         ; Game states
-        ${NSD_GetState} $Check_NV $CheckState_NV
+        ${NSD_GetState} $Check_FO3 $CheckState_FO3
 
         ; Python states
-        ${NSD_GetState} $Check_NV_Py $CheckState_NV_Py
-        ${If} $CheckState_NV_Py == ${BST_CHECKED}
-        ${AndIf} $CheckState_NV == ${BST_CHECKED}
+        ${NSD_GetState} $Check_FO3_Py $CheckState_FO3_Py
+        ${If} $CheckState_FO3_Py == ${BST_CHECKED}
+        ${AndIf} $CheckState_FO3 == ${BST_CHECKED}
             StrCpy $PythonVersionInstall $True
         ${Endif}
 
         ; Standalone states
-        ${NSD_GetState} $Check_NV_Exe $CheckState_NV_Exe
-        ${If} $CheckState_NV_Exe == ${BST_CHECKED}
-        ${AndIf} $CheckState_NV == ${BST_CHECKED}
+        ${NSD_GetState} $Check_FO3_Exe $CheckState_FO3_Exe
+        ${If} $CheckState_FO3_Exe == ${BST_CHECKED}
+        ${AndIf} $CheckState_FO3 == ${BST_CHECKED}
             StrCpy $ExeVersionInstall $True
         ${Endif}
     FunctionEnd
@@ -72,8 +72,8 @@
 
         ; test for installation in program files
         StrCpy $1 $Empty
-        ${If} $CheckState_NV == ${BST_CHECKED}
-            ${StrLoc} $0 $Path_NV "$PROGRAMFILES\" ">"
+        ${If} $CheckState_FO3 == ${BST_CHECKED}
+            ${StrLoc} $0 $Path_FO3 "$PROGRAMFILES\" ">"
             ${If} "0" == $0
                 StrCpy $1 $True
             ${Endif}
@@ -108,7 +108,7 @@
     Function PAGE_FINISH
         !insertmacro MUI_HEADER_TEXT $(PAGE_FINISH_TITLE) $(PAGE_FINISH_SUBTITLE)
 
-        ReadRegStr $Path_NV HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
+        ReadRegStr $Path_FO3 HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
 
         nsDialogs::Create 1018
             Pop $Dialog
@@ -120,9 +120,9 @@
         ${NSD_CreateLabel} 0 0 100% 16u "Please select which Wrye Flash installation(s), if any, you would like to run right now:"
             Pop $Label
         IntOp $0 0 + 17
-        ${If} $Path_NV != $Empty
+        ${If} $Path_FO3 != $Empty
             ${NSD_CreateCheckBox} 0 $0u 100% 8u "Fallout3"
-                Pop $Check_NV
+                Pop $Check_FO3
             IntOp $0 $0 + 9
         ${EndIf}
         IntOp $0 $0 + 9
@@ -138,26 +138,26 @@
     FunctionEnd
 
     Function PAGE_FINISH_Leave
-        ${NSD_GetState} $Check_NV $CheckState_NV
+        ${NSD_GetState} $Check_FO3 $CheckState_FO3
 
-        ${If} $CheckState_NV == ${BST_CHECKED}
-            SetOutPath "$Path_NV\Mopy"
-            ${If} $CheckState_NV_Py == ${BST_CHECKED}
-                ExecShell "open" '"$Path_NV\Mopy\Wrye Flash Launcher.pyw"'
-            ${ElseIf} $CheckState_NV_Exe == ${BST_CHECKED}
-                ExecShell "open" "$Path_NV\Mopy\Wrye Flash.exe"
+        ${If} $CheckState_FO3 == ${BST_CHECKED}
+            SetOutPath "$Path_FO3\Mopy"
+            ${If} $CheckState_FO3_Py == ${BST_CHECKED}
+                ExecShell "open" '"$Path_FO3\Mopy\Wrye Flash Launcher.pyw"'
+            ${ElseIf} $CheckState_FO3_Exe == ${BST_CHECKED}
+                ExecShell "open" "$Path_FO3\Mopy\Wrye Flash.exe"
             ${EndIf}
         ${EndIf}
         ${NSD_GetState} $Check_Readme $0
         ${If} $0 == ${BST_CHECKED}
-            ${If} $Path_NV != $Empty
-                ExecShell "open" "$Path_NV\Mopy\Wrye Flash.html"
+            ${If} $Path_FO3 != $Empty
+                ExecShell "open" "$Path_FO3\Mopy\Wrye Flash.html"
             ${EndIf}
         ${EndIf}
         ${NSD_GetState} $Check_DeleteOldFiles $0
         ${If} $0 == ${BST_CHECKED}
-            ${If} $Path_NV != $Empty
-                !insertmacro RemoveOldFiles "$Path_NV"
+            ${If} $Path_FO3 != $Empty
+                !insertmacro RemoveOldFiles "$Path_FO3"
             ${EndIf}
         ${EndIf}
     FunctionEnd
@@ -178,16 +178,16 @@
         Pop $Label
 
         IntOp $0 0 + 9
-        ${If} $Path_NV != $Empty
+        ${If} $Path_FO3 != $Empty
             ${NSD_CreateCheckBox} 0 $0u 100% 13u "&FalloutNV"
-                Pop $Check_NV
-                ${NSD_SetState} $Check_NV $CheckState_NV
+                Pop $Check_FO3
+                ${NSD_SetState} $Check_FO3 $CheckState_FO3
             IntOp $0 $0 + 13
-            ${NSD_CreateDirRequest} 0 $0u 90% 13u "$Path_NV"
-                Pop $PathDialogue_NV
+            ${NSD_CreateDirRequest} 0 $0u 90% 13u "$Path_FO3"
+                Pop $PathDialogue_FO3
             ${NSD_CreateBrowseButton} -10% $0u 5% 13u "..."
-                Pop $Browse_NV
-                nsDialogs::OnClick $Browse_NV $Function_Browse
+                Pop $Browse_FO3
+                nsDialogs::OnClick $Browse_FO3 $Function_Browse
             IntOp $0 $0 + 13
         ${EndIf}
         ;${NSD_CreateCheckBox} 0 $0u 100% 13u "Uninstall userfiles/Bash data."
@@ -197,6 +197,6 @@
     FunctionEnd
 
     Function un.PAGE_SELECT_GAMES_Leave
-        ${NSD_GetText} $PathDialogue_NV $Path_NV
-        ${NSD_GetState} $Check_NV $CheckState_NV
+        ${NSD_GetText} $PathDialogue_FO3 $Path_FO3
+        ${NSD_GetState} $Check_FO3 $CheckState_FO3
     FunctionEnd

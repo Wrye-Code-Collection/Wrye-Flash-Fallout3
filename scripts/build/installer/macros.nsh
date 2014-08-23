@@ -27,16 +27,16 @@
             ; TODO copy one from NMM or FOMM
             ; File /r "Mopy\templates\FalloutNV\ArchiveInvalidationInvalidated!.bsa"
         ${EndIf}
-        WriteRegStr HKLM "SOFTWARE\Wrye FlashNV" "${RegPath}" "${GameDir}"
+        WriteRegStr HKLM "SOFTWARE\Wrye FlashFO3" "${RegPath}" "${GameDir}"
         ${If} ${DoPython} == ${BST_CHECKED}
             ; Install Python only files
             SetOutPath "${GameDir}\Mopy"
             File /r "Mopy\*.py" "Mopy\*.pyw" "Mopy\*.bat"
             ; Write the installation path into the registry
-            WriteRegStr HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Python Version" "True"
+            WriteRegStr HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Python Version" "True"
         ${ElseIf} ${RegValuePy} == $Empty
             ; Only write this entry if it's never been installed before
-            WriteRegStr HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Python Version" ""
+            WriteRegStr HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Python Version" ""
         ${EndIf}
         ${If} ${DoExe} == ${BST_CHECKED}
             ; Install the standalone only files
@@ -47,10 +47,10 @@
                 File "Mopy\w9xpopen.exe"
             ${EndIf}
             ; Write the installation path into the registry
-            WriteRegStr HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Standalone Version" "True"
+            WriteRegStr HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Standalone Version" "True"
         ${ElseIf} ${RegValueExe} == $Empty
             ; Only write this entry if it's never been installed before
-            WriteRegStr HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Standalone Version" ""
+            WriteRegStr HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Standalone Version" ""
         ${EndIf}
     !macroend
 
@@ -59,9 +59,9 @@
         ; Paramters:
         ;  GameName -  name of the game to remove registry entries for
         
-        DeleteRegValue HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Path"
-        DeleteRegValue HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Python Version"
-        DeleteRegValue HKLM "SOFTWARE\Wrye FlashNV" "${GameName} Standalone Version"
+        DeleteRegValue HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Path"
+        DeleteRegValue HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Python Version"
+        DeleteRegValue HKLM "SOFTWARE\Wrye FlashFO3" "${GameName} Standalone Version"
     !macroend
 
 
@@ -89,7 +89,7 @@
         RMDir "${Path}\Data\Docs"
         RMDir "${Path}\Data\Bash Patches"
         ; No idea what this really does
-        Delete "$SMPROGRAMS\Wrye FlashNV\*falloutnv*"
+        Delete "$SMPROGRAMS\Wrye FlashFO3\*falloutfo3*"
     !macroend
 
     !macro UninstallFlash GamePath GameName

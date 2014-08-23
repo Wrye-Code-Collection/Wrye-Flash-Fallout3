@@ -148,7 +148,7 @@
         ${If} $CheckState_FO3 == ${BST_CHECKED}
             ; Install resources:
             ${If} Path_FO3 != $Empty
-                !insertmacro InstallBashFiles "Fallout3" "Fallout3" "$Path_FO3" $Reg_Value_FO3_Py $Reg_Value_FO3_Exe "FalloutNV Path" $CheckState_FO3_Py $CheckState_FO3_Exe true
+                !insertmacro InstallBashFiles "Fallout3" "Fallout3" "$Path_FO3" $Reg_Value_FO3_Py $Reg_Value_FO3_Exe "Fallout3 Path" $CheckState_FO3_Py $CheckState_FO3_Exe true
             ${EndIf}
         ${EndIf}
         ; Write the uninstall keys for Windows
@@ -175,15 +175,15 @@
             ${If} Path_FO3 != $Empty
                 SetOutPath $Path_FO3\Mopy
                 ${If} $CheckState_FO3_Py == ${BST_CHECKED}
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_FO3\Mopy\Wrye Flash Launcher.pyw" "" "$Path_FO3\Mopy\bash\images\bash_32.ico" 0
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash Debug.bat" "" "$Path_FO3\Mopy\bash\images\bash_32.ico" 0
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - Fallout3.lnk" "$Path_FO3\Mopy\Wrye Flash Launcher.pyw" "" "$Path_FO3\Mopy\bash\images\bash_32.ico" 0
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - Fallout3 (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash Debug.bat" "" "$Path_FO3\Mopy\bash\images\bash_32.ico" 0
                     ${If} $CheckState_FO3_Exe == ${BST_CHECKED}
-                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV.lnk" "$Path_FO3\Mopy\Wrye Flash.exe"
-                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - FalloutNV (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash.exe" "-d"
+                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - Fallout3.lnk" "$Path_FO3\Mopy\Wrye Flash.exe"
+                        CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 (Standalone) - Fallout3 (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash.exe" "-d"
                     ${EndIf}
                 ${ElseIf} $CheckState_FO3_Exe == ${BST_CHECKED}
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV.lnk" "$Path_FO3\Mopy\Wrye Flash.exe"
-                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - FalloutNV (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash.exe" "-d"
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - Fallout3.lnk" "$Path_FO3\Mopy\Wrye Flash.exe"
+                    CreateShortCut "$SMPROGRAMS\Wrye FlashFO3\Wrye FlashFO3 - Fallout3 (Debug Log).lnk" "$Path_FO3\Mopy\Wrye Flash.exe" "-d"
                 ${EndIf}
             ${EndIf}
         ${EndIf}

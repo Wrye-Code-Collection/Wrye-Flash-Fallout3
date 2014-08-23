@@ -14,7 +14,7 @@
 
 
         ;If it is a complete uninstall remove the shared data:
-        ReadRegStr $Path_FO3 HKLM "Software\Wrye FlashFO3" "FalloutNV Path"
+        ReadRegStr $Path_FO3 HKLM "Software\Wrye FlashFO3" "Fallout3 Path"
         ${If} $Path_FO3 == $Empty
             DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Wrye FlashFO3"
             ReadRegStr $0 HKLM "Software\Wrye FlashFO3" "Installer Path"

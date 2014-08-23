@@ -7,7 +7,7 @@
     !macro InstallBashFiles GameName GameTemplate GameDir RegValuePy RegValueExe RegPath DoPython DoExe DoAII
         ; Parameters:
         ;  GameName - name of the game files are being installed for.  This is used for registry entries
-        ;  GameTemplate - name of the game that the template files are coming from (for example, Nehrim uses FalloutNV files for templates)
+        ;  GameTemplate - name of the game that the template files are coming from (for example, Nehrim uses Fallout3 files for templates)
         ;  GameDir - base directory for the game (one folder up from the Data directory)
         ;  RegValuePy - Registry value for the python version (Usually of the form $Reg_Value_FO3_Py)
         ;  RegValueExe - Registry value for the standalone version
@@ -15,7 +15,7 @@
         ;  DoPython - Install python version of Wrye Flash (should be {BST_CHECKED} for true - this allows you to simple pass the state of the checkbox)
         ;  DoExe - Install the standalone version of Wrye Flash (should be {BST_CHECKED} for true)
         ;  IsExtra - true or false: if false, template files are not installed (since we don't know which type of game it is)
-        ;  DoAII - true or false: if true, installs the ArchiveInvalidationInvalidated files (FalloutNV based games)
+        ;  DoAII - true or false: if true, installs the ArchiveInvalidationInvalidated files (Fallout3 based games)
 
         ; Install common files
         SetOutPath "${GameDir}\Mopy"
@@ -25,7 +25,7 @@
             SetOutPath "${GameDir}\Data"
             ; ArchiveInvalidationInvalidated!.bsa not included
             ; TODO copy one from NMM or FOMM
-            ; File /r "Mopy\templates\FalloutNV\ArchiveInvalidationInvalidated!.bsa"
+            ; File /r "Mopy\templates\Fallout3\ArchiveInvalidationInvalidated!.bsa"
         ${EndIf}
         WriteRegStr HKLM "SOFTWARE\Wrye FlashFO3" "${RegPath}" "${GameDir}"
         ${If} ${DoPython} == ${BST_CHECKED}

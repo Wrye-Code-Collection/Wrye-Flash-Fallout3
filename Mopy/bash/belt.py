@@ -577,9 +577,9 @@ class PageVersions(PageInstaller):
         # sizerVersions.Add(wx.StaticText(self, -1, obgeHave))
         # sizerVersions.Add(wx.StaticBitmap(self, -1, bmp[bOBGEOk]))
 
-        linkWB = wx.HyperlinkCtrl(self, -1, 'Wrye Flash', 'http://www.fallout3nexus.com/downloads/file.php?id=11336')
+        linkWB = wx.HyperlinkCtrl(self, -1, 'Wrye Flash', 'http://www.nexusmods.com/fallout3/mods/11336')
         linkWB.SetVisitedColour(linkWB.GetNormalColour())
-        linkWB.SetToolTip(wx.ToolTip('http://www.fallout3nexus.com/'))
+        linkWB.SetToolTip(wx.ToolTip('http://www.nexusmods.com/fallout3'))
         sizerVersions.Add(linkWB)
         sizerVersions.Add(wx.StaticText(self, -1, wbNeed))
         sizerVersions.Add(wx.StaticText(self, -1, wbHave))

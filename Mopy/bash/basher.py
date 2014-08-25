@@ -4837,7 +4837,7 @@ class BashFrame(wx.Frame):
         sizer = vSizer((notebook,1,wx.GROW))
         self.SetSizer(sizer)
         deprint(_("Wrye Flash in %s Mode") % (['ANSI','Unicode'][bolt.bUseUnicode]))
-        if bolt.bUseUnicode: 
+        if bolt.bUseUnicode:
             wxver = wx.version()
             deprint(wxver)
             if not 'unicode' in wxver.lower() and not '2.9' in wxver:
@@ -6020,7 +6020,7 @@ class PatchDialog(wx.Dialog):
                 if configIsCBash != self.doCBash:
                     patchConfigs = self.UpdateConfig(patchConfigs)
             else:   #try the non-current Bashed Patch mode:
-                patchConfigs = table.getItem(bolt.Path('Saved Bashed Patch Configuration (%s)' % (['CBash','Python'][self.doCBash])),'bash.patch.configs',{})  
+                patchConfigs = table.getItem(bolt.Path('Saved Bashed Patch Configuration (%s)' % (['CBash','Python'][self.doCBash])),'bash.patch.configs',{})
                 if patchConfigs:
                     patchConfigs = self.UpdateConfig(patchConfigs)
         for index,patcher in enumerate(self.patchers):
@@ -6598,20 +6598,20 @@ class TweakPatcher(Patcher):
         value = []
         for i, v in enumerate(tweak.choiceValues[index]):
             subtweaktype = type(v)
-            if subtweaktype == float: 
-                label = _('Enter the desired custom tweak value.\nDue to an inability to get decimal numbers from the wxPython prompt please enter an extra zero after your choice if it is not meant to be a decimal.\nIf you are trying to enter a decimal multiply it by 10, for example for 0.3 enter 3 instead.\n%s') % (tweak.key[i]) 
+            if subtweaktype == float:
+                label = _('Enter the desired custom tweak value.\nDue to an inability to get decimal numbers from the wxPython prompt please enter an extra zero after your choice if it is not meant to be a decimal.\nIf you are trying to enter a decimal multiply it by 10, for example for 0.3 enter 3 instead.\n%s') % (tweak.key[i])
                 new = balt.askNumber(self.gConfigPanel,label,prompt=_('Value'),title=_('%s ~ Custom Tweak Value') % (tweak.label),value=self.tweaks[tweakIndex].choiceValues[index][i],min=-10000,max=10000)
                 if new == None: #user hit cancel
-                    return    
+                    return
                 value.append(float(new)/10)
-            elif subtweaktype == int: 
-                label = _('Enter the desired custom tweak value.\n%s') % (tweak.key[i]) 
+            elif subtweaktype == int:
+                label = _('Enter the desired custom tweak value.\n%s') % (tweak.key[i])
                 new = balt.askNumber(self.gConfigPanel,label,prompt=_('Value'),title=_('%s ~ Custom Tweak Value') % (tweak.label),value=self.tweaks[tweakIndex].choiceValues[index][i],min=-10000,max=10000)
                 if new == None: #user hit cancel
                     return
                 value.append(new)
             elif subtweaktype in (str,unicode):
-                label = _('Enter the desired custom tweak text.\n%s') % (tweak.key[i]) 
+                label = _('Enter the desired custom tweak text.\n%s') % (tweak.key[i])
                 new = balt.askText(self.gConfigPanel,label,title=_('%s ~ Custom Tweak Text') % (tweak.label),default=self.tweaks[tweakIndex].choiceValues[index][i])
                 if new == None: #user hit cancel
                     return
@@ -8465,7 +8465,7 @@ class Installer_OpenFallout3Nexus(InstallerLink):
         message = _("Attempt to open this as a mod at Fallout 3 Nexus? This assumes that the trailing digits in the package's name are actually the id number of the mod at Fallout 3 Nexus. If this assumption is wrong, you'll just get a random mod page (or error notice) at Fallout 3 Nexus.")
         if balt.askContinue(self.gTank,message,'bash.installers.openFallout3Nexus',_('Open at Fallout 3 Nexus')):
             id = bosh.reFallout3Nexus.search(self.selected[0].s).group(2)
-            os.startfile('http://www.fallout3nexus.com/downloads/file.php?id='+id)
+            os.startfile('http://www.nexusmods.com/fallout3/mods/'+id)
 
 
 class Installer_OpenSearch(InstallerLink):
@@ -9865,7 +9865,7 @@ class User_BackupSettings(Link):
         def PromptConfirm(msg=None):
             msg = msg or _('Do you want to backup your Bash settings now?')
             return balt.askYes(bashFrame,msg,_('Backup Bash Settings?'))
-            
+
         BashFrame.SaveSettings(bashFrame)
         #backup = barb.BackupSettings(bashFrame)
         try:
@@ -10383,7 +10383,7 @@ class Mod_CreateBOSSReport(Link):
                 url = None
                 ma = bosh.reFallout3Nexus.search(installer)
                 if ma and ma.group(2):
-                    url = 'http://www.fallout3nexus.com/downloads/file.php?id='+ma.group(2)
+                    url = 'http://www.nexusmods.com/fallout3/mods/'+ma.group(2)
                 # if not url:
                 #     ma = bosh.reTESA.search(installer)
                 #     if ma and ma.group(2):
@@ -10831,7 +10831,7 @@ class Mod_MarkMergeable(Link):
                 else:
                     mod_mergeInfo[fileName] = (fileInfo.size,False)
                 no.append("%s:%s" % (fileName.s,canMerge))
-        message = '== %s ' % (['Python','CBash'][self.doCBash])+_('Mergeability')+'\n\n' 
+        message = '== %s ' % (['Python','CBash'][self.doCBash])+_('Mergeability')+'\n\n'
         if yes:
             message += _('=== Mergeable\n* ') + '\n\n* '.join(x.s for x in yes)
         if yes and no:
@@ -11523,7 +11523,7 @@ class Mod_Patch_Update(Link):
             _("Building with CBash is cool.  It's faster and allows more things to be handled, but it is still in BETA.  If you have problems, post them in the official thread, then use the non-CBash build function."),
             'bash.patch.ReallyUseCBash.294'): # We'll re-enable this warning for each release, until CBash isn't beta anymore
             return
-        if self.CBashMismatch: 
+        if self.CBashMismatch:
             if not balt.askContinue(self.window,
                     _("The patch you are rebuilding (%s) was created in %s mode.  You are trying to rebuild it using %s mode.  Wrye Bash will attempt to import your settings over, however some may not be copied correctly.")
                         % (self.data[0].s,['CBash','Python'][self.doCBash],['Python','CBash'][self.doCBash]),

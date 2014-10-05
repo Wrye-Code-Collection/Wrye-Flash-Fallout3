@@ -21748,7 +21748,8 @@ class CellImporter(ImportPatcher):
     text = _("Import cells (climate, lighting, and water) from source mods.")
     tip = text
     autoRe = re.compile(r"^UNDEFINED$",re.I)
-    autoKey = ('C.Climate','C.Light','C.Water','C.Owner','C.Name','C.RecordFlags','C.Music')#,'C.Maps')
+    autoKey = (u'C.Acoustic',u'C.Climate',u'C.Encounter',u'C.ImageSpace',u'C.Light',
+    u'C.LTemplate',u'C.Music',u'C.Name',u'C.Owner',u'C.RecordFlags',u'C.Water',)#,u'C.Maps')
     defaultItemCheck = inisettings['AutoItemCheck'] #--GUI: Whether new items are checked by default or not.
 
     #--Patch Phase ------------------------------------------------------------
@@ -21759,27 +21760,34 @@ class CellImporter(ImportPatcher):
         self.sourceMods = self.getConfigChecked()
         self.isActive = bool(self.sourceMods)
         self.recAttrs = {
-            'C.Climate': ('climate',),
-            'C.Music': ('music',),
-            'C.Name': ('full',),
-            'C.Owner': ('ownership',),
-            'C.Water': ('water','waterHeight'),
-            'C.Light': ('ambientRed','ambientGreen','ambientBlue','unused1',
-            'directionalRed','directionalGreen','directionalBlue','unused2',
-            'fogRed','fogGreen','fogBlue','unused3',
-            'fogNear','fogFar','directionalXY','directionalZ',
-            'directionalFade','fogClip','fogPower',
-            'lightTemplate','lightInheritFlags'),
-            'C.RecordFlags': ('flags1',), # Yes seems funky but thats the way it is
+            u'C.Acoustic': ('acousticSpace',),
+            u'C.Climate': ('climate',),
+            u'C.Encounter': ('encounterZone',),
+            u'C.ImageSpace': ('imageSpace',),
+            u'C.Light': ('ambientRed','ambientGreen','ambientBlue','unused1',
+                        'directionalRed','directionalGreen','directionalBlue','unused2',
+                        'fogRed','fogGreen','fogBlue','unused3',
+                        'fogNear','fogFar','directionalXY','directionalZ',
+                        'directionalFade','fogClip',),
+            u'C.LTemplate': ('lightTemplate',),
+            u'C.Music': ('music',),
+            u'C.Name': ('full',),
+            u'C.Owner': ('ownership',),
+            u'C.RecordFlags': ('flags1',), # Yes seems funky but thats the way it is
+            u'C.Water': ('water','waterHeight',),
             }
         self.recFlags = {
-            'C.Climate': 'behaveLikeExterior',
-            'C.Music': '',
-            'C.Name': '',
-            'C.Owner': 'publicPlace',
-            'C.Water': 'hasWater',
-            'C.Light': '',
-            'C.RecordFlags': '',
+            u'C.Acoustic': '',
+            u'C.Climate': 'behaveLikeExterior',
+            u'C.Encounter': '',
+            u'C.ImageSpace': '',
+            u'C.Light': '',
+            u'C.LTemplate': '',
+            u'C.Music': '',
+            u'C.Name': '',
+            u'C.Owner': 'publicPlace',
+            u'C.RecordFlags': '',
+            u'C.Water': 'hasWater',
             }
 
     def getReadClasses(self):
@@ -25263,12 +25271,14 @@ class SoundPatcher(ImportPatcher):
             recAttrs_class[recClass] = ('soundLevel','sound1','sound2')
         for recClass in (MreProj,):
             recAttrs_class[recClass] = ('sound','soundCountDown','soundDisable','soundLevel')
+        for recClass in (MreAlch,):
+            recAttrs_class[recClass] = ('soundPickUp','soundDrop','soundConsume')
         for recClass in (MreAspc,):
             recAttrs_class[recClass] = ('soundLooping','useSoundFromRegion','environmentType')
         for recClass in (MreWeap,):
             recAttrs_class[recClass] = ('soundGunShot3D','soundGunShot2D','soundGunShot3DLooping','soundLevel')
         #--Needs Longs
-        self.longTypes = set(('MGEF','ACTI','TACT','LIGH','WTHR','CONT','DOOR','EXPL','IPCT','PROJ','ASPC','WEAP','REGN'))
+        self.longTypes = set(('MGEF','ACTI','TACT','LIGH','WTHR','CONT','DOOR','EXPL','IPCT','PROJ','ALCH','ASPC','WEAP'))
 
     def initData(self,progress):
         """Get sounds from source files."""

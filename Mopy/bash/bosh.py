@@ -2243,8 +2243,8 @@ class MreAlch(MelRecord,MreHasEffects):
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelDestructible(),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         #--10:chems,11:stimpack,12:food,13:alcohol
         MelStruct('ETYP','i','etype'),
         MelStruct('DATA','f','weight'),
@@ -2269,8 +2269,8 @@ class MreAmmo(MelRecord):
         MelString('ICON','largeIconPath'),
         MelString('MICO','smallIconPath'),
         MelDestructible(),
-        MelFid('YNAM','soundPickup'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelStruct('DATA','fB3siB','speed',(_flags,'flags',0L),('unused1',null3),'value','clipRounds'),
         MelString('ONAM','shortName'),
         )
@@ -2338,8 +2338,8 @@ class MreArmo(MelRecord):
         MelFid('REPL','repairList'),
         MelFid('BIPL','bipedModelList'),
         MelStruct('ETYP','i',(_etype,'etype',0L)),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelStruct('DATA','=IIf','value','health','weight'),
         MelStruct('DNAM','=HH','ar','flags'), # AR is multiplied by 100.
         )
@@ -2363,8 +2363,8 @@ class MreBook(MelRecord):
         MelFid('SCRI','script'),
         MelString('DESC','text'),
         MelDestructible(),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelStruct('DATA', '=BbIf',(_flags,'flags',0L),('teaches',-1),'value','weight'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed() + ['modb']
@@ -3215,8 +3215,8 @@ class MreKeym(MelRecord):
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelDestructible(),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelStruct('DATA','if','value','weight'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
@@ -3413,8 +3413,8 @@ class MreMisc(MelRecord):
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelDestructible(),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelStruct('DATA','if','value','weight'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
@@ -4732,8 +4732,8 @@ class MreWeap(MelRecord):
         #0:bigGuns,1:energyWeapons,2:smallGuns,3:meleeWeapons,4:unarmedWeapon,5:thrownWeapons,6:mine,
         MelStruct('ETYP','I','etype'),
         MelFid('BIPL','bipedModelList'),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelModel('shellCasingModel',2),
         MelModel('scopeModel',3),
         MelFid('EFSD','scopeEffect'),
@@ -4746,9 +4746,9 @@ class MreWeap(MelRecord):
         MelFid('NAM7','soundGunShot3DLooping'),
         MelFid('TNAM','soundMeleeSwingGunNoAmmo'),
         MelFid('NAM6','soundBlock'),
-        MelFid('UNAM','idle'),
-        MelFid('NAM9','equip'),
-        MelFid('NAM8','unequip'),
+        MelFid('UNAM','idleSound',),
+        MelFid('NAM9','equipSound'),
+        MelFid('NAM8','unequipSound'),
         MelStruct('DATA','2IfHB','value','health','weight','damage','clipsize'),
         MelWeapDnam('DNAM','Iff4B5fI4BffII11fIIffIfff',
                     'animationType','animationMultiplier','reach',(_dflags1,'dnamFlags1',0L),
@@ -5394,8 +5394,8 @@ class MreNote(MelRecord):
         MelModel(),
         MelString('ICON','largeIconPath'),
         MelString('MICO','smallIconPath'),
-        MelFid('YNAM','soundPickUp'),
-        MelFid('ZNAM','soundDrop'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
         MelStruct('DATA','B','dataType'),
         MelFidList('ONAM','quests'),
         MelString('XNAM','texture'),
@@ -25259,30 +25259,45 @@ class SoundPatcher(ImportPatcher):
         self.classestemp = set()
         #--Type Fields
         recAttrs_class = self.recAttrs_class = {}
-        for recClass in (MreMgef,):
-            recAttrs_class[recClass] = ('castingSound','boltSound','hitSound','areaSound')
         for recClass in (MreActi,):
             recAttrs_class[recClass] = ('soundLooping','soundActivation')
-        for recClass in (MreLigh,MreTact):
-            recAttrs_class[recClass] = ('sound',)
-        for recClass in (MreWthr,):
-            recAttrs_class[recClass] = ('sounds',)
+        for recClass in (MreAddn,):
+            recAttrs_class[recClass] = ('ambientSound',)
+        for recClass in (MreAlch,):
+            recAttrs_class[recClass] = ('dropSound','pickupSound','soundConsume')
+        for recClass in (MreAspc,):
+            recAttrs_class[recClass] = ('soundLooping','useSoundFromRegion','environmentType')
         for recClass in (MreCont,):
             recAttrs_class[recClass] = ('soundOpen','soundClose')
+        for recClass in (MreCrea,):
+            recAttrs_class[recClass] = ('footWeight','inheritsSoundsFrom','sounds')
         for recClass in (MreDoor,):
             recAttrs_class[recClass] = ('soundOpen','soundClose','soundLoop')
         for recClass in (MreExpl,MreIpct,):
             recAttrs_class[recClass] = ('soundLevel','sound1','sound2')
+        for recClass in (MreLigh,):
+            recAttrs_class[recClass] = ('sound',)
+        for recClass in (MreMgef,):
+            recAttrs_class[recClass] = ('castingSound','boltSound','hitSound','areaSound')
         for recClass in (MreProj,):
             recAttrs_class[recClass] = ('sound','soundCountDown','soundDisable','soundLevel')
-        for recClass in (MreAlch,):
-            recAttrs_class[recClass] = ('soundPickUp','soundDrop','soundConsume')
-        for recClass in (MreAspc,):
-            recAttrs_class[recClass] = ('soundLooping','useSoundFromRegion','environmentType')
+        for recClass in (MreSoun,):
+            recAttrs_class[recClass] = ('soundFile', 'minDistance', 'maxDistance', 'freqAdjustment',
+                                        'flags', 'staticAtten', 'stopTime', 'startTime', 'point0', 'point1',
+                                        'point2', 'point3', 'point4', 'reverb', 'priority', 'xLoc', 'yLoc',)
+        for recClass in (MreTact,):
+            recAttrs_class[recClass] = ('sound',)
+        for recClass in (MreWatr,):
+            recAttrs_class[recClass] = ('sound',)
         for recClass in (MreWeap,):
-            recAttrs_class[recClass] = ('soundGunShot3D','soundGunShot2D','soundGunShot3DLooping','soundLevel')
+            recAttrs_class[recClass] = ('pickupSound','dropSound','soundGunShot3D','soundGunShot2D',
+                                        'soundGunShot3DLooping','soundMeleeSwingGunNoAmmo','soundBlock','idleSound',
+                                        'equipSound','unequipSound','soundLevel',)
+        for recClass in (MreWthr,):
+            recAttrs_class[recClass] = ('sounds',)
         #--Needs Longs
-        self.longTypes = set(('MGEF','ACTI','TACT','LIGH','WTHR','CONT','DOOR','EXPL','IPCT','PROJ','ALCH','ASPC','WEAP'))
+        self.longTypes = set(('ACTI', 'ADDN', 'ALCH', 'ASPC', 'CONT', 'CREA', 'DOOR', 'EXPL', 'IPCT',
+                              'LIGH', 'MGEF', 'PROJ', 'SOUN', 'TACT', 'WATR', 'WEAP', 'WTHR',))
 
     def initData(self,progress):
         """Get sounds from source files."""

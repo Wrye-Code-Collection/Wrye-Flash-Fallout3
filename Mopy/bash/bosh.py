@@ -2228,6 +2228,22 @@ class MreActi(MelRecord):
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
+class MreAddn(MelRecord):
+    """Addon"""
+    classType = 'ADDN'
+    melSet = MelSet(
+        MelString('EDID','eid'),
+        MelStruct('OBND','=6h',
+                  'boundX1','boundY1','boundZ1',
+                  'boundX2','boundY2','boundZ2'),
+        MelModel(),
+        MelStruct('DATA','i','nodeIndex'),
+        MelOptStruct('SNAM','I',(FID,'ambientSound')),
+        MelStruct('DNAM','H2s','mastPartSysCap','unknown',),
+        )
+    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
+
+#------------------------------------------------------------------------------
 class MreAlch(MelRecord,MreHasEffects):
     """ALCH (potion) record."""
     classType = 'ALCH'
@@ -5759,10 +5775,10 @@ class MreNavi(MelRecord):
 # MreRecord.type_class
 # MreLvsp removed
 MreRecord.type_class = dict((x.classType,x) for x in (
-    MreAchr, MreAcre, MreActi, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn,
-    MreCell, MreClas, MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, MreFact,
-    MreFlor, MreFurn, MreGlob, MreGmst, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr,
-    MreLvlc, MreLvli, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreRefr,
+    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, 
+    MreBsgn, MreCell, MreClas, MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, 
+    MreFact, MreFlor, MreFurn, MreGlob, MreGmst, MreGras, MreHair, MreIngr, MreKeym, MreLigh, 
+    MreLscr, MreLvlc, MreLvli, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreRefr,
     MreRoad, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat, MreTree, MreTes4,
     MreWatr, MreWeap, MreWrld, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, MreSbsp,
     MreDial, MreInfo, MreTxst, MreMicn, MreFlst, MrePerk, MreExpl, MreIpct, MreIpds, MreProj,
@@ -19787,14 +19803,13 @@ class PatchFile(ModFile):
     #--Class
     # removed MreLvsp
     mergeClasses = (
-        MreActi, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn, MreClas,
+        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn, MreClas,
         MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, MreFact, MreFlor, MreFurn,
-        MreGlob, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr, MreLvlc, MreLvli,
-        MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst,
-        MreSlgm, MreSoun, MreSpel, MreStat, MreTree, MreWatr, MreWeap, MreWthr,
-        MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, MreSbsp, MreSkil,
-        MreTxst, MreMicn, MreFlst, MreLvln, MrePerk, MreExpl, MreIpct, MreIpds, MreProj,
-        MreDebr, MreImad, MreMstt, MreNote, MreTerm, MreAvif, MreEczn, MreBptd, MreVtyp,
+        MreGlob, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr, MreLvlc, MreLvli, MreMgef, 
+        MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst, MreSlgm, MreSoun, MreSpel, 
+        MreStat, MreTree, MreWatr, MreWeap, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, 
+        MreSbsp, MreSkil, MreTxst, MreMicn, MreFlst, MreLvln, MrePerk, MreExpl, MreIpct, MreIpds, 
+        MreProj, MreDebr, MreImad, MreMstt, MreNote, MreTerm, MreAvif, MreEczn, MreBptd, MreVtyp,
         MreMusc, MrePwat, MreAspc, MreHdpt, MreDobj, MreIdlm, MreArma, MreTact)
 
     @staticmethod

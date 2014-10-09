@@ -142,7 +142,7 @@ installersWindow = None
 
 allTags = sorted((
     'Body-F', 'Body-M', 'Body-Size-M', 'Body-Size-F', 'C.Acoustic', 'C.Climate',
-    'C.Encounter', 'C.ImageSpace', 'C.Light', 'C.LTemplate', 'C.Music', 'C.Name',
+    'C.Encounter', 'C.ImageSpace', 'C.Light', 'C.Music', 'C.Name',
     'C.RecordFlags', 'C.Owner', 'C.Water', 'Deactivate', 'Delev', 'Eyes',
     'Factions', 'Relations', 'Filter', 'Graphics', 'Hair', 'IIM', 'Invent',
     'Names', 'NoMerge', 'NpcFaces', 'R.Relations', 'Relev', 'Scripts',
@@ -21754,7 +21754,7 @@ class CellImporter(ImportPatcher):
     tip = text
     autoRe = re.compile(r"^UNDEFINED$",re.I)
     autoKey = ('C.Acoustic','C.Climate','C.Encounter','C.ImageSpace','C.Light',
-    'C.LTemplate','C.Music','C.Name','C.Owner','C.RecordFlags','C.Water',)#,'C.Maps')
+    'C.Music','C.Name','C.Owner','C.RecordFlags','C.Water',)#,'C.Maps')
     defaultItemCheck = inisettings['AutoItemCheck'] #--GUI: Whether new items are checked by default or not.
 
     #--Patch Phase ------------------------------------------------------------
@@ -21775,7 +21775,6 @@ class CellImporter(ImportPatcher):
                         'fogNear','fogFar','directionalXY','directionalZ',
                         'directionalFade','fogClip','fogPower',
                         'lightTemplate','lightInheritFlags'),
-            'C.LTemplate': ('lightTemplate',),
             'C.Music': ('music',),
             'C.Name': ('full',),
             'C.Owner': ('ownership',),
@@ -21788,7 +21787,6 @@ class CellImporter(ImportPatcher):
             'C.Encounter': '',
             'C.ImageSpace': '',
             'C.Light': '',
-            'C.LTemplate': '',
             'C.Music': '',
             'C.Name': '',
             'C.Owner': 'publicPlace',

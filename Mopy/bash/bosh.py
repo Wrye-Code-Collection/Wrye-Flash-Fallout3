@@ -5551,6 +5551,32 @@ class MreRegn(MelRecord):
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
+class MreRgdl(MelRecord):
+    """Ragdoll"""
+    classType = 'RGDL'
+    _flags = Flags(0L,Flags.getNames('disableOnMove'))
+    melSet = MelSet(
+        MelString('EDID','eid'),
+        MelStruct('NVER','I','version'),
+        MelStruct('DATA','I4s5Bs','boneCount','unused1','feedback',
+            'footIK','lookIK','grabIK','poseMatching','unused2'),
+        MelFid('XNAM','actorBase'),
+        MelFid('TNAM','bodyPartData'),
+        MelStruct('RAFD','13f2i','keyBlendAmount','hierarchyGain','positionGain',
+            'velocityGain','accelerationGain','snapGain','velocityDamping',
+            'snapMaxLinearVelocity','snapMaxAngularVelocity','snapMaxLinearDistance',
+            'snapMaxAngularDistance','posMaxVelLinear',
+            'posMaxVelAngular','posMaxVelProjectile','posMaxVelMelee'),
+        MelStructA('RAFB','H','feedbackDynamicBones','bone'),
+        MelStruct('RAPS','3HBs4f','matchBones1','matchBones2','matchBones3',
+            (_flags,'flags'),'unused3','motorsStrength',
+            'poseActivationDelayTime','matchErrorAllowance',
+            'displacementToDisable',),
+        MelString('ANAM','deathPose'),
+        )
+    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
+
+#------------------------------------------------------------------------------
 class MreRoad(MelRecord):
     """Road structure. Part of large worldspaces."""
     ####Could probably be loaded via MelStructA,

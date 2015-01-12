@@ -3026,13 +3026,31 @@ class MreDebr(MelRecord):
 class MreDial(MelRecord):
     """Dialog record."""
     classType = 'DIAL'
+    _flags = Flags(0,Flags.getNames('rumors','toplevel',))
+    class MelDialData(MelStruct):
+        """Handle older truncated DATA for DIAL subrecord."""
+        def loadData(self,record,ins,type,size,readId):
+            if size == 2:
+                MelStruct.loadData(self,record,ins,type,size,readId)
+                return
+            elif size == 1:
+                unpacked = ins.unpack('B',size,readId)
+            else:
+                raise "Unexpected size encountered for DIAL subrecord: %s" % size
+            unpacked += self.defaults[len(unpacked):]
+            setter = record.__setattr__
+            for attr,value,action in zip(self.attrs,unpacked,self.actions):
+                if callable(action): value = action(value)
+                setter(attr,value)
+            if self._debug: print unpacked, record.flags.getTrueAttrs()
+
     melSet = MelSet(
         MelString('EDID','eid'),
         MelFids('QSTI','quests'),
-        MelFids('QSTR','rQuests'),
+        MelFids('QSTR','quests'),
         MelString('FULL','full'),
-        MelOptStruct('PNAM','f','priority'),
-        MelStruct('DATA','2B','dialType','flags'),
+        MelStruct('PNAM','f','priority'),
+        MelDialData('DATA','BB','dialType',(_flags,'dialFlags',0L)),
     )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed() + ['infoStamp','infoStamp2','infos']
 
@@ -3063,7 +3081,9 @@ class MreDial(MelRecord):
         """Dumps self., then group header and then records."""
         MreRecord.dump(self,out)
         if not self.infos: return
-        size = 20 + sum([20 + info.getSize() for info in self.infos])
+        # Magic number '24': size of Fallout 3's record header
+        # Magic format '4sIIIII': format for Fallout 3's GRUP record
+        size = 24 + sum([24 + info.getSize() for info in self.infos])
         out.pack('4sIIIII','GRUP',size,self.fid,7,self.infoStamp,self.infoStamp2)
         for info in self.infos: info.dump(out)
 

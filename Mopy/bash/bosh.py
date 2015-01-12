@@ -2170,21 +2170,47 @@ class MreHasEffects:
 #------------------------------------------------------------------------------
 # Mod Records -----------------------------------------------------------------
 #------------------------------------------------------------------------------
-class MreAchr(MelRecord): # Placed NPC
+class MreAchr(MelRecord):
+    """Placed NPC"""
     classType = 'ACHR'
-    _flags = Flags(0L,Flags.getNames(
-        'oppositeParent'
-        'popIn'
-    ))
+    _flags = Flags(0L,Flags.getNames('oppositeParent','popIn'))
+    _variableFlags = Flags(0L,Flags.getNames('isLongOrShort'))
     melSet=MelSet(
         MelString('EDID','eid'),
         MelFid('NAME','base'),
-        MelXpci('XPCI'),
-        MelOptStruct('XLOD','3f',('lod1',None),('lod2',None),('lod3',None)), ####Distant LOD Data, unknown
-        MelOptStruct('XESP','IB3s',(FID,'parent'),(_flags,'parentFlags'),('unused1',null3)),
+        MelFid('XEZN','encounterZone'),
+        MelBase('XRGD','ragdollData'),
+        MelBase('XRGB','ragdollBipedData'),
+        MelGroup('patrolData',
+            MelStruct('XPRD','f','idleTime'),
+            MelBase('XPPA','patrolScriptMarker'),
+            MelFid('INAM', 'idle'),
+            MelStruct('SCHR','4s4I',('unused1',null4),'numRefs','compiledSize','lastIndex','scriptType'),
+            MelBase('SCDA','compiled_p'),
+            MelString('SCTX','scriptText'),
+            MelGroups('vars',
+                MelStruct('SLSD','I12sB7s','index',('unused1',null4+null4+null4),(_variableFlags,'flags',0L),('unused2',null4+null3)),
+                MelString('SCVR','name')),
+            MelScrxen('SCRV/SCRO','references'),
+            MelFid('TNAM','topic'),
+            ),
+        MelStruct('XLCM','i','levelModifier'),
         MelFid('XMRC','merchantContainer'),
-        MelFid('XHRS','horse'),
-        MelBase('XRGD','xrgd_p'), ###Ragdoll Data, ByteArray
+        MelStruct('XCNT','i','count'),
+        MelStruct('XRDS','f','radius',),
+        MelStruct('XHLP','f','health',),
+        MelStructs('XDCR','II','linkedDecals',(FID,'reference'),'unknown'), # ??
+        MelFid('XLKR','linkedReference'),
+        MelOptStruct('XCLP','8B','linkStartColorRed','linkStartColorGreen','linkStartColorBlue',('linkColorUnused1',null1),
+                     'linkEndColorRed','linkEndColorGreen','linkEndColorBlue',('linkColorUnused2',null1)),
+        MelGroup('activateParents',
+            MelStruct('XAPD','B','flags'),
+            MelStructs('XAPR','If','activateParentRefs',(FID,'reference'),'delay')
+            ),
+        MelOptStruct('XESP','IB3s',(FID,'parent'),(_flags,'parentFlags'),('unused1',null3)),
+        MelOptStruct('XEMI','I',(FID,'emittance')),
+        MelFid('XMBR','multiboundReference'),
+        MelBase('XIBS','ignoredBySandbox'),
         MelOptStruct('XSCL','f',('scale',1.0)),
         MelOptStruct('DATA','=6f',('posX',None),('posY',None),('posZ',None),('rotX',None),('rotY',None),('rotZ',None)),
     )
@@ -5779,9 +5805,9 @@ class MreWthr(MelRecord):
 # MreRecord.type_class
 # MreLvsp removed
 MreRecord.type_class = dict((x.classType,x) for x in (
-    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, 
-    MreBsgn, MreCell, MreClas, MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, 
-    MreFact, MreFlor, MreFurn, MreGlob, MreGmst, MreGras, MreHair, MreIngr, MreKeym, MreLigh, 
+    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook,
+    MreBsgn, MreCell, MreClas, MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes,
+    MreFact, MreFlor, MreFurn, MreGlob, MreGmst, MreGras, MreHair, MreIngr, MreKeym, MreLigh,
     MreLscr, MreLvlc, MreLvli, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreRefr,
     MreRoad, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat, MreTree, MreTes4,
     MreWatr, MreWeap, MreWrld, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, MreSbsp,
@@ -19809,10 +19835,10 @@ class PatchFile(ModFile):
     mergeClasses = (
         MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn, MreClas,
         MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, MreFact, MreFlor, MreFurn,
-        MreGlob, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr, MreLvlc, MreLvli, MreMgef, 
-        MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst, MreSlgm, MreSoun, MreSpel, 
-        MreStat, MreTree, MreWatr, MreWeap, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, 
-        MreSbsp, MreSkil, MreTxst, MreMicn, MreFlst, MreLvln, MrePerk, MreExpl, MreIpct, MreIpds, 
+        MreGlob, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr, MreLvlc, MreLvli, MreMgef,
+        MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst, MreSlgm, MreSoun, MreSpel,
+        MreStat, MreTree, MreWatr, MreWeap, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn,
+        MreSbsp, MreSkil, MreTxst, MreMicn, MreFlst, MreLvln, MrePerk, MreExpl, MreIpct, MreIpds,
         MreProj, MreDebr, MreImad, MreMstt, MreNote, MreTerm, MreAvif, MreEczn, MreBptd, MreVtyp,
         MreMusc, MrePwat, MreAspc, MreHdpt, MreDobj, MreIdlm, MreArma, MreTact)
 

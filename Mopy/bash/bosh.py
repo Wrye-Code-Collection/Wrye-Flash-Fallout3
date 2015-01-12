@@ -2510,7 +2510,8 @@ class MreBook(MelRecord):
 class MreBptd(MelRecord):
     """Body part data record."""
     classType = 'BPTD'
-    _flags = Flags(0L,Flags.getNames('severable','ikData','ikBipedData','explodable','ikIsHead','ikHeadtracking','toHitChanceAbsolute'))
+    _flags = Flags(0L,Flags.getNames('severable','ikData','ikBipedData',
+        'explodable','ikIsHead','ikHeadtracking','toHitChanceAbsolute'))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelModel(),
@@ -2519,12 +2520,20 @@ class MreBptd(MelRecord):
             MelString('BPNN','nodeName'),
             MelString('BPNT','vatsTarget'),
             MelString('BPNI','ikDataStartNode'),
-            MelStruct('BPND','f6BH2I2f3I7f2I2B2sf','damageMult',(_flags,'flags'),'partType','healthPercent','actorValue',
-                      'toHitChance','explodableChancePercent','explodableDebrisCount',(FID,'explodableDebris',0L),(FID,'explodableExplosion',0L),
-                      'trackingMaxAngle','explodableDebrisScale','severableDebrisCount',(FID,'severableDebris',0L),(FID,'severableExplosion',0L),
-                      'severableDebrisScale','goreEffectPosTransX','goreEffectPosTransY','goreEffectPosTransZ',
-                      'goreEffectPosRotX','goreEffectPosRotY','goreEffectPosRotZ',(FID,'severableImpactDataSet',0L),(FID,'explodableImpactDataSet',0L),
-                      'severableDecalCount','explodableDecalCount',('unused',null2),'limbReplacementScale'),
+            MelStruct('BPND','f3Bb2BH2I2fi2I7f2I2B2sf','damageMult',
+                      (_flags,'flags'),'partType','healthPercent','actorValue',
+                      'toHitChance','explodableChancePercent',
+                      'explodableDebrisCount',(FID,'explodableDebris',0L),
+                      (FID,'explodableExplosion',0L),'trackingMaxAngle',
+                      'explodableDebrisScale','severableDebrisCount',
+                      (FID,'severableDebris',0L),(FID,'severableExplosion',0L),
+                      'severableDebrisScale','goreEffectPosTransX',
+                      'goreEffectPosTransY','goreEffectPosTransZ',
+                      'goreEffectPosRotX','goreEffectPosRotY','goreEffectPosRotZ',
+                      (FID,'severableImpactDataSet',0L),
+                      (FID,'explodableImpactDataSet',0L),'severableDecalCount',
+                      'explodableDecalCount',('unused',null2),
+                      'limbReplacementScale'),
             MelString('NAM1','limbReplacementModel'),
             MelString('NAM4','goreEffectsTargetBone'),
             MelBase('NAM5','endMarker'),

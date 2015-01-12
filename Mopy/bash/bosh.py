@@ -3287,9 +3287,10 @@ class MreFact(MelRecord):
     """Faction record."""
     classType = 'FACT'
     _flags = Flags(0L,Flags.getNames('hiddenFromPC','evil','specialCombat'))
+    _flags2 = Flags(0L,Flags.getNames('trackCrime','allowSell',))
 
     class MelFactData(MelStruct):
-        """Handle older trucated DATA for FACT subrecord."""
+        """Handle older truncated DATA for FACT subrecord."""
         def loadData(self,record,ins,type,size,readId):
             if size == 4:
                 MelStruct.loadData(self,record,ins,type,size,readId)
@@ -3313,7 +3314,7 @@ class MreFact(MelRecord):
         MelString('EDID','eid'),
         MelString('FULL','full'),
         MelStructs('XNAM','IiI','relations',(FID,'faction'),'mod','groupCombatReaction'),
-        MelFactData('DATA','2B2s',(_flags,'flags',0L),'flags2','unknown'),
+        MelFactData('DATA','2B2s',(_flags,'flags',0L),'flagsFact','unknown'),
         MelOptStruct('CNAM','f',('crimeGoldMultiplier',None)),
         MelGroups('ranks',
             MelStruct('RNAM','i','rank'),

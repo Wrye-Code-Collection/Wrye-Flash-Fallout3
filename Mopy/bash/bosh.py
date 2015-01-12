@@ -4228,17 +4228,12 @@ class MreNavm(MelRecord):
 class MreNote(MelRecord):
     """Note record."""
     classType = 'NOTE'
-    _type = Flags(0,Flags.getNames(
-            ( 0,'sound' ),
-            ( 1,'text' ),
-            ( 2,'image' ),
-            ( 3,'voice' ),
-            ))
     class MelNoteTnam(MelBase):
         """text or topic"""
         def hasFids(self,formElements):
             formElements.add(self)
         def loadData(self,record,ins,type,size,readId):
+            #0:'sound',1:'text',2:'image',3:'voice'
             if record.dataType == 1: # text (string)
                 value = ins.readString(size,readId)
                 record.__setattr__(self.attr, (False, value))
@@ -4253,6 +4248,7 @@ class MreNote(MelRecord):
             if value is None: return
             (isFid, value) = value
             if value is not None:
+                #0:'sound',1:'text',2:'image',3:'voice'
                 if record.dataType == 1: # text (string)
                     out.packSub0(self.subType,value)
                 elif record.dataType == 3: # voice (fid:DIAL)
@@ -4271,6 +4267,7 @@ class MreNote(MelRecord):
         def hasFids(self,formElements):
             formElements.add(self)
         def loadData(self,record,ins,type,size,readId):
+            #0:'sound',1:'text',2:'image',3:'voice'
             if record.dataType == 0: # sound (fid:SOUN)
                 (value,) = ins.unpack('I',size,readId)
                 record.__setattr__(self.attr, (True, value))
@@ -4303,6 +4300,7 @@ class MreNote(MelRecord):
         MelString('MICO','smallIconPath'),
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
+        #0:'sound',1:'text',2:'image',3:'voice'
         MelStruct('DATA','B','dataType'),
         MelFidList('ONAM','quests'),
         MelString('XNAM','texture'),

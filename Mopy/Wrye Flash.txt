@@ -38,6 +38,11 @@ Additionally, Wrye Bash comes packaged with the following programs:
 {{CONTENTS=0}}
 **All versions by Wrye team and or Valda unless otherwise noted.**
 
+
+=== 30.5 [1/11/2015]
+* Updated MreAchr, MreAcre, MreAlch, MreArma, MreArmo, MreArmo, MreBook, MreBptd, MreClas, MreCrea, MreDebr, MreDial, MreEfsh, MreFact, MreFlst, MreIdle, MreIdlm, MreImad, MreInfo, MreIngr, MreIpct, MreIpds, MreLigh, MreMgef, MreNavi, MreNpc, MreRefr, MreRegn, MreScpt, MreSoun, MreTerm, MreTxst, MreWeap, MreWthr
+* Added MreCams, MreCobj, MreCpth, MreImgs, MreLgtm, MreMesg, MrePgre, MrePmis, MreRads, MreRgdl, MreScol, 
+
 === 30.5 [10/4/2014]
 * Updated CellImporter
 * Added ALCH to SoundPatcher

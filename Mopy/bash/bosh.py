@@ -2692,34 +2692,33 @@ class MreClas(MelRecord):
         (16,'recharge'),
         (17,'repair'),))
 
-    # aiTeaches is Enum in FO3Edit values listed below
-    # for reference
-    aiTeaches = Flags(0L,Flags.getNames(
-        (0,'barter'),
-        (1,'bigGuns'),
-        (2,'energyWeapons'),
-        (3,'explosives'),
-        (4,'lockpick'),
-        (5,'medicine'),
-        (6,'meleeWeapons'),
-        (7,'none'),
-        (8,'repair'),
-        (9,'science'),
-        (10,'smallGuns'),
-        (11,'sneak'),
-        (12,'throwing'),
-        (13,'unarmed'),))
+        # trainSkill
+        # -1, None
+        #  0, Barter
+        #  1, Big Guns (obsolete)
+        #  2, Energy Weapons
+        #  3, Explosives
+        #  4, Lockpick
+        #  5, Medicine
+        #  6, Melee Weapons
+        #  7, Repair
+        #  8, Science
+        #  9, Guns
+        # 10, Sneak
+        # 11, Speech
+        # 12, Survival
+        # 13, Unarmed
 
     melSet = MelSet(
         MelString('EDID','eid'),
         MelString('FULL','full'),
         MelString('DESC','description'),
         MelString('ICON','iconPath'),
-        MelStruct('DATA','4iIIbB2s','tagSkill1','tagSkill2','tagSkill3',
+        MelStruct('DATA','4i2IbB2s','tagSkill1','tagSkill2','tagSkill3',
             'tagSkill4',(_flags,'flags',0L),(aiService,'services',0L),
-            ('trainSkill',0),('trainLevel',0),('unused1',null2)),
+            ('trainSkill',-1),('trainLevel',0),('unused1',null2)),
         # MelTuple('ATTR','7B','attributes',[0]*7),
-        MelStruct('ATTR','7B','strength','perception','endurance','charisma',
+        MelStructA('ATTR','7B','strength','perception','endurance','charisma',
             'intelligence','agility','luck'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

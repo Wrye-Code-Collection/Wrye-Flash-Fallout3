@@ -3980,43 +3980,6 @@ class MreLscr(MelRecord):
 #------------------------------------------------------------------------------
 class MreLtex(MelRecord):
     """Landscape Texture."""
-    # flags are actually an enum....
-    # leaving in case it's used in patcher
-    # if not it should be removed
-    _flags = Flags(0L,Flags.getNames(
-        ( 0,'stone'),
-        ( 1,'cloth'),
-        ( 2,'dirt'),
-        ( 3,'glass'),
-        ( 4,'grass'),
-        ( 5,'metal'),
-        ( 6,'organic'),
-        ( 7,'skin'),
-        ( 8,'water'),
-        ( 9,'wood'),
-        (10,'heavyStone'),
-        (11,'heavyMetal'),
-        (12,'heavyWood'),
-        (13,'chain'),
-        (14,'snow'),
-        (15,'elevator'),
-        (16,'hollowMetal'),
-        (17,'sheetMetal'),
-        (18,'sand'),
-        (19,'brikenConcrete'),
-        (20,'vehilceBody'),
-        (21,'vehilcePartSolid'),
-        (22,'vehilcePartHollow'),
-        (23,'barrel'),
-        (24,'bottle'),
-        (25,'sodaCan'),
-        (26,'pistol'),
-        (27,'rifle'),
-        (28,'shoppingCart'),
-        (29,'lunchbox'),
-        (30,'babyRattle'),
-        (31,'ruberBall'),
-        ))
     classType = 'LTEX'
     melSet = MelSet(
         MelString('EDID','eid'),

@@ -2346,7 +2346,7 @@ class MreAmmo(MelRecord):
         MelDestructible(),
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
-        MelStruct('DATA','fB3siB','speed',(_flags,'flags',0L),('unused1',null3),'value','clipRounds'),
+        MelStruct('DATA','fB3sIB','speed',(_flags,'flags',0L),('unused1',null3),'value','clipRounds'),
         MelString('ONAM','shortName'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

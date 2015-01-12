@@ -5763,7 +5763,7 @@ class MreSoun(MelRecord):
 
 #------------------------------------------------------------------------------
 class MreSpel(MelRecord,MreHasEffects):
-    """Spell record."""
+    """Actor Effect"""
     classType = 'SPEL'
     class SpellFlags(Flags):
         """For SpellFlags, immuneSilence activates bits 1 AND 3."""
@@ -5773,7 +5773,8 @@ class MreSpel(MelRecord,MreHasEffects):
             if index == 1:
                 setter(self,3,value)
     flags = SpellFlags(0L,Flags.getNames('noAutoCalc', 'immuneToSilence',
-        'startSpell', None,'ignoreLOS','scriptEffectAlwaysApplies','disallowAbsorbReflect','touchExplodesWOTarget'))
+        'startSpell',None,'ignoreLOS','scriptEffectAlwaysApplies',
+        'disallowAbsorbReflect','touchExplodesWOTarget'))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelFull0(),

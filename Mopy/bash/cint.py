@@ -4886,8 +4886,8 @@ class ObSOUNRecord(ObBaseRecord):
     IsMenuSound = CBashBasicFlag('flags', 0x00000020)
     Is2D = CBashBasicFlag('flags', 0x00000040)
     Is360LFE = CBashBasicFlag('flags', 0x00000080)
-    exportattrs = copyattrs = ObBaseRecord.baseattrs + ['soundPath', 'minDistance', 'maxDistance',
-                                        'freqAdjustment', 'flags', 'staticAtten',
+    exportattrs = copyattrs = ObBaseRecord.baseattrs + ['soundPath', 'minDist', 'maxDist',
+                                        'freqAdj', 'flags', 'staticAtten',
                                         'stopTime', 'startTime']
 
 class ObSPELRecord(ObBaseRecord):

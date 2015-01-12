@@ -6295,7 +6295,7 @@ MreRecord.type_class = dict((x.classType,x) for x in (
     MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlor, MreFlst, MreFurn, MreGlob, MreGmst,
     MreGras, MreHair, MreHdpt, MreIdle, MreIdlm, MreImad, MreImgs, MreInfo, MreIngr, MreIpct,
     MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex, MreLvlc, MreLvli, MreLvln, MreMesg,
-    MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNavm MreNote, MreNpc, MrePack, MrePerk,
+    MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNavm, MreNote, MreNpc, MrePack, MrePerk,
     MrePgre, MrePmis, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRefr, MreRegn, MreRgdl,
     MreRoad, MreSbsp, MreScol, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat,
     MreTact, MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWrld, MreWthr,

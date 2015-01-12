@@ -3232,7 +3232,7 @@ class MreEfsh(MelRecord):
 class MreEnch(MelRecord,MreHasEffects):
     """Enchantment (Object Effect) record."""
     classType = 'ENCH'
-    _flags = Flags(0L,Flags.getNames('noAutoCalc'))
+    _flags = Flags(0L,Flags.getNames('noAutoCalc',None,'hideEffect'))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelFull0(), #--At least one mod has this. Odd.

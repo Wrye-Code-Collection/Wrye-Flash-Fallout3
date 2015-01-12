@@ -3262,7 +3262,7 @@ class MreExpl(MelRecord):
         MelModel(),
         MelFid('EITM','objectEffect'),
         MelFid('MNAM','imageSpaceModifier'),
-        MelStruct('DATA','fffIIHfIIfffI','force','damage','radius',(FID,'light',None),
+        MelStruct('DATA','fffIIIfIIfffI','force','damage','radius',(FID,'light',None),
                   (FID,'sound1',None),(_flags,'flags'),'isRadius',(FID,'impactDataset',None),
                   (FID,'sound2',None),'radiationLevel','radiationTime','radiationRadius','soundLevel'),
         MelFid('INAM','placedImpactObject'),

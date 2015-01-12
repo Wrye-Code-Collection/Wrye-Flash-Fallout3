@@ -2442,11 +2442,14 @@ class MreArmo(MelRecord):
         MelDestructible(),
         MelFid('REPL','repairList'),
         MelFid('BIPL','bipedModelList'),
-        MelStruct('ETYP','i',(_etype,'etype',0L)),
+        #-1:None,0:Big Guns,1:Energy Weapons,2:Small Guns,3:Melee Weapons,
+        #4:Unarmed Weapon,5:Thrown Weapons,6:Mine,7:Body Wear,8:Head Wear,
+        #9:Hand Wear,10:Chems,11:Stimpack,12:Food,13:Alcohol
+        MelStruct('ETYP','i',('etype',-1)),
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
-        MelStruct('DATA','=IIf','value','health','weight'),
-        MelStruct('DNAM','=HH','ar','flags'), # AR is multiplied by 100.
+        MelStruct('DATA','=2if','value','health','weight'),
+        MelStruct('DNAM','=hH','ar','flags'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

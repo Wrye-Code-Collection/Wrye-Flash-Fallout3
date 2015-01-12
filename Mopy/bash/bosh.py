@@ -6289,15 +6289,18 @@ class MreWthr(MelRecord):
 # MreRecord.type_class
 # MreLvsp removed
 MreRecord.type_class = dict((x.classType,x) for x in (
-    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook,
-    MreBsgn, MreCell, MreClas, MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes,
-    MreFact, MreFlor, MreFurn, MreGlob, MreGmst, MreGras, MreHair, MreIngr, MreKeym, MreLigh,
-    MreLscr, MreLvlc, MreLvli, MreMgef, MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreRefr,
-    MreRoad, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat, MreTree, MreTes4,
-    MreWatr, MreWeap, MreWrld, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn, MreSbsp,
-    MreDial, MreInfo, MreTxst, MreMicn, MreFlst, MrePerk, MreExpl, MreIpct, MreIpds, MreProj,
-    MreLvln, MreDebr, MreImad, MreMstt, MreNote, MreTerm, MreAvif, MreEczn, MreBptd, MreVtyp,
-    MreMusc, MrePwat, MreAspc, MreHdpt, MreDobj, MreIdlm, MreArma, MreTact, MreNavm))
+    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArma, MreArmo,
+    MreAspc, MreAvif, MreBook, MreBptd, MreBsgn, MreCams, MreCell, MreClas, MreClmt, MreClot,
+    MreCobj, MreCont, MreCpth, MreCrea, MreCsty, MreDebr, MreDial, MreDobj, MreDoor, MreEczn,
+    MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlor, MreFlst, MreFurn, MreGlob, MreGmst,
+    MreGras, MreHair, MreHdpt, MreIdle, MreIdlm, MreImad, MreImgs, MreInfo, MreIngr, MreIpct,
+    MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex, MreLvlc, MreLvli, MreLvln, MreMesg,
+    MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNavm MreNote, MreNpc, MrePack, MrePerk,
+    MrePgre, MrePmis, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRefr, MreRegn, MreRgdl,
+    MreRoad, MreSbsp, MreScol, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat,
+    MreTact, MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWrld, MreWthr,
+    MreTes4,
+    ))
 MreRecord.simpleTypes = (set(MreRecord.type_class) -
     set(('TES4','ACHR','ACRE','REFR','CELL','PGRD','ROAD','LAND','WRLD','INFO','DIAL','PGRE','NAVM')))
 

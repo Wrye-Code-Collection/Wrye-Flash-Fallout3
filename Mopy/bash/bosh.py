@@ -5747,7 +5747,6 @@ class MreSoun(MelRecord):
                   'boundX1','boundY1','boundZ1',
                   'boundX2','boundY2','boundZ2'),
         MelString('FNAM','soundFile'),
-        MelStruct('RNAM','B','_rnam'),
         MelOptStruct('SNDD','=2BbsIh2B6h3i',('minDist',0), ('maxDist',0),
                     ('freqAdj',0), ('unusedSndd',null1),(_flags,'flags',0L),
                     ('staticAtten',0),('stopTime',0),('startTime',0),

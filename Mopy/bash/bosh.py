@@ -5740,6 +5740,7 @@ class MreSoun(MelRecord):
             return ()
         def setDefault(self,record): return
         def dumpData(self,record,out): return
+
     melSet = MelSet(
         MelString('EDID','eid'),
         MelStruct('OBND','=6h',
@@ -6156,7 +6157,7 @@ class MreWeap(MelRecord):
         MelWeapDnam('DNAM','I2f4B4f4sI4B2f2I11fiI2fi3f',
                     'animationType','animationMultiplier','reach',(_dflags1,'dnamFlags1',0L),
                     'gripAnimation','ammoUse','reloadAnimation','minSpread','spread',
-                    'unknown','sightFov','unknown2',(FID,'projectile',0L),
+                    'unused1','sightFov',('unused2',null4),(FID,'projectile',0L),
                     'baseVatsToHitChance','attackAnimation','projectileCount','embeddedWeaponActorValue','minRange','maxRange',
                     'onHit',(_dflags2,'dnamFlags2',0L),'animationAttackMultiplier','fireRate','overrideActionPoint',
                     'rumbleLeftMotorStrength','rumbleRightMotorStrength','rumbleDuration','overrideDamageToWeaponMult',
@@ -25833,7 +25834,7 @@ class SoundPatcher(ImportPatcher):
         for recClass in (MreProj,):
             recAttrs_class[recClass] = ('sound','soundCountDown','soundDisable','soundLevel')
         for recClass in (MreSoun,):
-            recAttrs_class[recClass] = ('soundFile', 'minDistance', 'maxDistance', 'freqAdjustment',
+            recAttrs_class[recClass] = ('soundFile', 'minDist', 'maxDist', 'freqAdj',
                                         'flags', 'staticAtten', 'stopTime', 'startTime', 'point0', 'point1',
                                         'point2', 'point3', 'point4', 'reverb', 'priority', 'xLoc', 'yLoc',)
         for recClass in (MreTact,):

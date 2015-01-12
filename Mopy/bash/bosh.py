@@ -6104,10 +6104,10 @@ class MreWeap(MelRecord):
                 return
             elif size == 124:
                 #--Else 124 byte record (skips sightUsage, semiAutomaticFireDelayMin and semiAutomaticFireDelayMax...
-                unpacked = ins.unpack('Iff4B5fI4BffII11fIIffI',size,readId)
+                unpacked = ins.unpack('I2f4B4f4sI4B2f2I11fiI2fi',size,readId)
             elif size == 120:
                 #--Else 120 byte record (skips resistType, sightUsage, semiAutomaticFireDelayMin and semiAutomaticFireDelayMax...
-                unpacked = ins.unpack('Iff4B5fI4BffII11fIIff',size,readId)
+                unpacked = ins.unpack('I2f4B4f4sI4B2f2I11fiI2f',size,readId)
             else:
                 raise "Unexpected size encountered for WEAP:DNAM subrecord: %s" % size
             unpacked += self.defaults[len(unpacked):]

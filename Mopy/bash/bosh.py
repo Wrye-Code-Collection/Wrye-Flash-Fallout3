@@ -6089,11 +6089,6 @@ class MreWeap(MelRecord):
             'shortBurst',
             'RumbleAlternate',
             'longBurst',
-            'unknown12','unknown13','unknown14','unknown15',
-            'unknown16','unknown17','unknown18','unknown19',
-            'unknown20','unknown21','unknown22','unknown23',
-            'unknown24','unknown25','unknown26','unknown27',
-            'unknown28','unknown29','unknown30','unknown31',
         ))
     _cflags = Flags(0L,Flags.getNames(
             'onDeath',
@@ -6102,7 +6097,7 @@ class MreWeap(MelRecord):
         ))
 
     class MelWeapDnam(MelStruct):
-        """Handle older trucated DNAM for WEAP subrecord."""
+        """Handle older truncated DNAM for WEAP subrecord."""
         def loadData(self,record,ins,type,size,readId):
             if size == 136:
                 MelStruct.loadData(self,record,ins,type,size,readId)
@@ -6132,13 +6127,13 @@ class MreWeap(MelRecord):
         MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
-        MelFid('EITM','effect'),
-        MelOptStruct('EAMT','H', 'enchantment'),
+        MelFid('EITM','enchantment'),
+        MelOptStruct('EAMT','H', 'enchantPoints'),
         MelFid('NAM0','ammo'),
         MelDestructible(),
         MelFid('REPL','repairList'),
         #0:bigGuns,1:energyWeapons,2:smallGuns,3:meleeWeapons,4:unarmedWeapon,5:thrownWeapons,6:mine,
-        MelStruct('ETYP','I','etype'),
+        MelStruct('ETYP','i',('etype',-1)),
         MelFid('BIPL','bipedModelList'),
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
@@ -6155,10 +6150,10 @@ class MreWeap(MelRecord):
         MelFid('TNAM','soundMeleeSwingGunNoAmmo'),
         MelFid('NAM6','soundBlock'),
         MelFid('UNAM','idleSound',),
-        MelFid('NAM9','equipSound'),
-        MelFid('NAM8','unequipSound'),
+        MelFid('NAM9','equipSound',),
+        MelFid('NAM8','unequipSound',),
         MelStruct('DATA','2IfHB','value','health','weight','damage','clipsize'),
-        MelWeapDnam('DNAM','Iff4B5fI4BffII11fIIffIfff',
+        MelWeapDnam('DNAM','I2f4B4f4sI4B2f2I11fiI2fi3f',
                     'animationType','animationMultiplier','reach',(_dflags1,'dnamFlags1',0L),
                     'gripAnimation','ammoUse','reloadAnimation','minSpread','spread',
                     'unknown','sightFov','unknown2',(FID,'projectile',0L),
@@ -6166,8 +6161,10 @@ class MreWeap(MelRecord):
                     'onHit',(_dflags2,'dnamFlags2',0L),'animationAttackMultiplier','fireRate','overrideActionPoint',
                     'rumbleLeftMotorStrength','rumbleRightMotorStrength','rumbleDuration','overrideDamageToWeaponMult',
                     'attackShotsPerSec','reloadTime','jamTime','aimArc','skill','rumblePattern','rambleWavelangth','limbDmgMult',
-                    ('resistType',0xFFFFFFFF),'sightUsage','semiAutomaticFireDelayMin','semiAutomaticFireDelayMax'),
-        MelStruct('CRDT','IfHI','criticalDamage','criticalMultiplier',(_cflags,'criticalFlags',0L),(FID,'criticalEffect',0L)),
+                    ('resistType',0xFFFFFFFF),'sightUsage','semiAutomaticFireDelayMin',
+                    'semiAutomaticFireDelayMax'),
+        MelStruct('CRDT','H2sfB3sI','criticalDamage','unknown3','criticalMultiplier',
+                 (_cflags,'criticalFlags',0L),'unknown4',(FID,'criticalEffect',0L)),
         MelBase('VNAM','soundLevel'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

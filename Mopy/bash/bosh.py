@@ -3120,11 +3120,10 @@ class MreDoor(MelRecord):
     """Container record."""
     classType = 'DOOR'
     _flags = Flags(0,Flags.getNames(
-        'oblivionGate',
-        'automaticDoor',
-        'hidden',
-        'minimalUse',
-        'slidingDoor'
+        ( 1,'automatic'),
+        ( 2,'hidden'),
+        ( 3,'minimalUse'),
+        ( 4,'slidingDoor',),
     ))
     melSet = MelSet(
         MelString('EDID','eid'),

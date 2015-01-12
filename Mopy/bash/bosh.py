@@ -5287,16 +5287,26 @@ class MreRace(MelRecord):
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
+class MreRads(MelRecord):
+    """Radiation Stage record."""
+    classType = 'RADS'
+    melSet = MelSet(
+        MelString('EDID','eid'),
+        MelStruct('DATA','2I','trigerThreshold',(FID,'actorEffect')),
+        )
+    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
+
+#------------------------------------------------------------------------------
 class MreRefr(MelRecord):
     classType = 'REFR'
-    _flags = Flags(0L,Flags.getNames('visible', 'canTravelTo'))
+    _flags = Flags(0L,Flags.getNames('visible', 'canTravelTo','showAllHidden'))
     _parentFlags = Flags(0L,Flags.getNames('oppositeParent'))
     _actFlags = Flags(0L,Flags.getNames('useDefault', 'activate','open','openByDefault'))
     _lockFlags = Flags(0L,Flags.getNames(None, None, 'leveledLock'))
     _destinationFlags = Flags(0L,Flags.getNames('noAlarm'))
     _variableFlags = Flags(0L,Flags.getNames('isLongOrShort'))
     class MelRefrXloc(MelOptStruct):
-        """Handle older trucated XLOC for REFR subrecord."""
+        """Handle older truncated XLOC for REFR subrecord."""
         def loadData(self,record,ins,type,size,readId):
             if size == 20:
                 MelStruct.loadData(self,record,ins,type,size,readId)
@@ -5333,6 +5343,7 @@ class MreRefr(MelRecord):
                     record.full = ins.readString(size,readId)
                 elif type == 'TNAM':
                     record.markerType, record.unused5 = insUnpack('Bs',size,readId)
+                # WMI1 not used in FO3, leaving so it doesn't break something
                 elif type == 'WMI1':
                     record.reputation = insUnpack('I',size,readId)
                 pos = insTell()
@@ -5350,6 +5361,7 @@ class MreRefr(MelRecord):
                     if value != None:
                         out.packSub0('FULL',value)
                     out.packSub('TNAM','Bs',record.markerType, record.unused5)
+                    # WMI1 not used in FO3, leaving so it doesn't break something
                     out.packRef('WMI1',record.reputation)
                 except struct.error:
                     print self.subType,self.format,record.flags,record.full,record.markerType
@@ -5371,16 +5383,6 @@ class MreRefr(MelRecord):
         MelOptStruct('XTEL','I6fI',(FID,'destinationFid'),'destinationPosX','destinationPosY',
             'destinationPosZ','destinationRotX','destinationRotY','destinationRotZ',(_destinationFlags,'destinationFlags')),
         MelRefrXmrk('XMRK','',('hasXmrk',False),(_flags,'flags',0L),'full','markerType',('unused5',null1),(FID,'reputation')), ####Map Marker Start Marker, wbEmpty
-        MelGroup('audioData',
-            MelBase('MMRK','audioMarker'),
-            MelBase('FULL','full_p'),
-            MelFid('CNAM','audioLocation'),
-            MelBase('BNAM','bnam_p'),
-            MelBase('MNAM','mnam_p'),
-            MelBase('NNAM','nnam_p'),
-            ),
-        MelBase('XSRF','xsrf_p'),
-        MelBase('XSRD','xsrd_p'),
         MelFid('XTRG','targetId'),
         MelOptStruct('XLCM','i',('levelMod',None)),
         MelGroup('patrolData',
@@ -5418,9 +5420,8 @@ class MreRefr(MelRecord):
             MelStruct('XAPD','B','flags'),
             MelStructs('XAPR','If','activateParentRefs',(FID,'reference'),'delay')
             ),
-        MelString('XATO','activationPrompt'),
         MelOptStruct('XESP','IB3s',(FID,'parent'),(_parentFlags,'parentFlags'),('unused6',null3)),
-        MelOptStruct('XEMI','I',(FID,'emitance')),
+        MelOptStruct('XEMI','I',(FID,'emittance')),
         MelFid('XMBR','multiboundReference'),
         MelOptStruct('XACT','I',(_actFlags,'actFlags',0L)), ####Action Flag
         MelBase('ONAM','onam_p'), ####Open by Default, wbEmpty
@@ -5455,12 +5456,6 @@ class MreRefr(MelRecord):
 class MreRegn(MelRecord):
     """Region record."""
     classType = 'REGN'
-    _flags = Flags(0L,Flags.getNames(
-        ( 2,'objects'),
-        ( 3,'weather'),
-        ( 4,'map'),
-        ( 6,'grass'),
-        ( 7,'sound'),))
     obflags = Flags(0L,Flags.getNames(
         ( 0,'conform'),
         ( 1,'paintVertices'),
@@ -5475,6 +5470,8 @@ class MreRegn(MelRecord):
         ( 1,'cloudy'),
         ( 2,'rainy'),
         ( 3,'snowy'),))
+    rdatFlags = Flags(0L,Flags.getNames(
+        ( 0,'Override'),))
 
     ####Lazy hacks to correctly read/write regn data
     class MelRegnStructA(MelStructA):
@@ -5536,19 +5533,21 @@ class MreRegn(MelRecord):
             MelStruct('RPLI','I','edgeFalloff'),
             MelStructA('RPLD','2f','points','posX','posY')),
         MelGroups('entries',
-            MelStruct('RDAT', 'I2B2s','entryType', (_flags,'flags'), 'priority', ('unused1',null2)), ####flags actually an enum...
+            #2:Objects,3:Weather,4:Map,5:Land,6:Grass,7:Sound
+            MelStruct('RDAT', 'I2B2s','entryType', (rdatFlags,'flags'), 'priority', ('unused1',null2)),
             MelRegnStructA('RDOT', 'IH2sf4B2H4s4f3H2s4s', 'objects', (FID,'objectId'), 'parentIndex',
-            ('unused1',null2), 'density', 'clustering', 'minSlope', 'maxSlope',
-            (obflags, 'flags'), 'radiusWRTParent', 'radius', ('unk1',null4),
-            'maxHeight', 'sink', 'sinkVar', 'sizeVar', 'angleVarX',
-            'angleVarY',  'angleVarZ', ('unused2',null2), ('unk2',null4)),
+                ('unused1',null2), 'density', 'clustering', 'minSlope', 'maxSlope',
+                (obflags, 'flags'), 'radiusWRTParent', 'radius', ('unk1',null4),
+                'maxHeight', 'sink', 'sinkVar', 'sizeVar', 'angleVarX',
+                'angleVarY',  'angleVarZ', ('unused2',null2), ('unk2',null4)),
             MelRegnString('RDMP', 'mapName'),
-            #MelRegnString('ICON', 'iconPath'),  ####Obsolete? Only one record in Fallout3.esm
-            MelRegnStructA('RDGS', 'I4s', 'grasses', (FID,'grass'), ('unk1',null4)),
-            MelRegnOptStruct('RDMD', 'I', ('musicType',None)),
+            MelRegnStructA('RDGS', 'I4s', 'grass', ('unknown',null4)),
+            MelRegnOptStruct('RDMD', 'I', 'musicType'),
+            MelFid('RDMO','music'),
             MelRegnStructA('RDSD', '3I', 'sounds', (FID, 'sound'), (sdflags, 'flags'), 'chance'),
-            MelRegnStructA('RDWT', '3I', 'weather', (FID, 'weather', None), 'chance', (FID, 'global', None))),
-    )
+            MelRegnStructA('RDWT', '3I', 'weather', (FID, 'weather', None), 'chance', (FID, 'global', None)),
+            ),
+        )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------

@@ -3047,7 +3047,7 @@ class MreDial(MelRecord):
     melSet = MelSet(
         MelString('EDID','eid'),
         MelFids('QSTI','quests'),
-        MelFids('QSTR','quests'),
+        MelFids('QSTR','rQuests'),
         MelString('FULL','full'),
         MelStruct('PNAM','f','priority'),
         MelDialData('DATA','BB','dialType',(_flags,'dialFlags',0L)),

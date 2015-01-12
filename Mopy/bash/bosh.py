@@ -4059,6 +4059,7 @@ class MreMgef(MelRecord):
         ( 0,'hostile'),
         ( 1,'recover'),
         ( 2,'detrimental'),
+        ( 3,'magnitude'),
         ( 4,'self'),
         ( 5,'touch'),
         ( 6,'target'),
@@ -4066,16 +4067,18 @@ class MreMgef(MelRecord):
         ( 8,'noMagnitude'),
         ( 9,'noArea'),
         (10,'fxPersist'),
-        (12,'goryVisuals'),
-        (13,'displayNameOnly'),
-        (15,'radioBroadcast'),
+        (11,'spellmaking'),
+        (12,'enchanting'),
+        (13,'noIngredient'),
+        (16,'useWeapon'),
+        (17,'useArmor'),
+        (18,'useCreature'),
         (19,'useSkill'),
         (20,'useAttr'),
-        (24,'painless'),
+        (24,'useAV'),
         (25,'sprayType'),
         (26,'boltType'),
-        (27,'noHitEffect'),
-        (28,'noDeathDispel'),))
+        (27,'noHitEffect'),))
 
     melSet = MelSet(
         MelString('EDID','eid'),
@@ -4084,16 +4087,22 @@ class MreMgef(MelRecord):
         MelString('ICON','iconPath'),
         MelModel(),
         # 'counterEffectCount' is a count of ESCE and should be updated
-        MelStruct('DATA','IfI2iH2sIf6I2fIi',(_flags,'flags'),'baseCost',
-            (FID,'associated'),'school','resistValue','counterEffectCount',
-            'unused1',(FID,'light',0),'projectileSpeed',(FID,'effectShader',0),
-            (FID,'objectDisplayShader',0),(FID,'castingSound',0),
-            (FID,'boltSound',0),(FID,'hitSound',0),(FID,'areaSound',0),
-            ('cefEnchantment',0.0),('cefBarter',0.0),'archType','actorValue'),
+        MelStruct('DATA','IfI2iH2sIf6I2fIi',
+            (_flags,'flags'),'baseCost',(FID,'associated'),'school','resistValue',
+            'counterEffectCount',('unused1',null2),(FID,'light',0),'projectileSpeed',
+            (FID,'effectShader',0),(FID,'objectDisplayShader',0),
+            (FID,'castingSound',0),(FID,'boltSound',0),(FID,'hitSound',0),
+            (FID,'areaSound',0),('cefEnchantment',0.0),('cefBarter',0.0),
+            'archType','actorValue'),
         MelGroups('counterEffects',
             MelOptStruct('ESCE','I',(FID,'counterEffectCode',0)),),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
+
+    def dumpData(self,out):
+        counterEffects = self.counterEffects
+        self.counterEffectCount = len(counterEffects) if counterEffects else 0
+        MelRecord.dumpData(self,out)
 
 #------------------------------------------------------------------------------
 class MreMicn(MelRecord):

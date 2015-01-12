@@ -2421,10 +2421,6 @@ class MreArmo(MelRecord):
         (6,'notPlayable'),
         (7,'heavyArmor')
     ))
-    _etype = Flags(0L,Flags.getNames(
-        'alcohol','bigGuns','bodyWear','chems','energyWeapons','food','handWear','headWear',
-        'meleeWeapons','mine','none','smallGuns','stimpack','thrownWeapons','unarmedWeapon'
-    ))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelStruct('OBND','=6h',
@@ -2442,7 +2438,7 @@ class MreArmo(MelRecord):
         MelModel('femaleWorld',4),
         MelString('ICO2','femaleIconPath'),
         MelString('MIC2','femaleSmallIconPath'),
-        MelString('BMCT','ragdollConstraintTemplate'),
+        MelString('BMCT','ragdollTemplatePath'),
         MelDestructible(),
         MelFid('REPL','repairList'),
         MelFid('BIPL','bipedModelList'),

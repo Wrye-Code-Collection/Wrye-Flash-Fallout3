@@ -1,8 +1,8 @@
 @ECHO OFF && PUSHD "%~dp0" && SETLOCAL EnableDelayedExpansion
 
-:: Wrye Bash Debug.bat
+:: Wrye Flash Debug.bat
 ::
-:: Retrieves the Python executable path from the registry and runs Wrye Bash
+:: Retrieves the Python executable path from the registry and runs Wrye Flash
 :: with debugging turned on, redirecting all output to a log file.
 
 
@@ -88,10 +88,11 @@ SET PYTHON=%PYPATH%python.exe
 :FOUNDPYTHON
 ECHO Found Python at '%PYTHON%' >%OUTFILE%
 ECHO Found Python at '%PYTHON%'
-ECHO Launching Wrye Bash in debug mode >>%OUTFILE%
-ECHO Launching Wrye Bash in debug mode
-"%PYTHON%" "Wrye Bash Launcher.pyw" -d %1 %2 %3 %4 %5 %6 %7 %8 %9 >>%OUTFILE% 2>&1
+ECHO Launching Wrye Flash 30.6 in debug mode >>%OUTFILE%
+ECHO Launching Wrye Flash 30.6 in debug mode
+"%PYTHON%" "Wrye Flash Launcher.pyw" -d %1 %2 %3 %4 %5 %6 %7 %8 %9 >>%OUTFILE% 2>&1
 
 
 :END
 ENDLOCAL && EXIT /B
+pause

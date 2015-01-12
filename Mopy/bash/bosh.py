@@ -3854,7 +3854,7 @@ class MreIpds(MelRecord):
     """Impact Dataset record."""
     classType = 'IPDS'
     class MelIpdsData(MelStruct):
-        """Handle older trucated DATA for IPDS subrecord."""
+        """Handle older truncated DATA for IPDS subrecord."""
         def loadData(self,record,ins,type,size,readId):
             if size == 48:
                 MelStruct.loadData(self,record,ins,type,size,readId)
@@ -3873,9 +3873,11 @@ class MreIpds(MelRecord):
             if self._debug: print unpacked
     melSet = MelSet(
         MelString('EDID','eid'),
-        MelIpdsData('DATA','12I',(FID,'stone',0),(FID,'dirt',0),(FID,'grass',0),(FID,'metal',0),
-                    (FID,'wood',0),(FID,'organic',0),(FID,'cloth',0),(FID,'water',0),
-                    (FID,'hollowMetal',0),(FID,'organicBug',0),(FID,'organicGlow',0)),
+        MelIpdsData('DATA','12I',(FID,'stone',0),(FID,'dirt',0),
+                    (FID,'grass',0),(FID,'glass',0),(FID,'metal',0),
+                    (FID,'wood',0),(FID,'organic',0),(FID,'cloth',0),
+                    (FID,'water',0),(FID,'hollowMetal',0),(FID,'organicBug',0),
+                    (FID,'organicGlow',0)),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

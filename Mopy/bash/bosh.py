@@ -2761,6 +2761,27 @@ class MreClot(MelRecord):
 
 # Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
+class MreCobj(MelRecord):
+    """Constructible Object record (recipies)"""
+    classType = 'COBJ'
+
+    melSet = MelSet(
+        MelString('EDID','eid'),
+        MelStruct('OBND','=6h',
+                  'boundX1','boundY1','boundZ1',
+                  'boundX2','boundY2','boundZ2'),
+        MelString('FULL','full'),
+        MelModel(),
+        MelString('ICON','iconPath'),
+        MelString('MICO','smallIconPath'),
+        MelFid('SCRI','script'),
+        MelFid('YNAM','pickupSound'),
+        MelFid('ZNAM','dropSound'),
+        MelStruct('DATA','if','value','weight'),
+        )
+    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
+
+#------------------------------------------------------------------------------
 class MreCont(MelRecord):
     """Container record."""
     classType = 'CONT'

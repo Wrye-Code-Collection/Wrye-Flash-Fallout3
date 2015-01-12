@@ -2341,7 +2341,7 @@ class MreAmmo(MelRecord):
                   'boundX2','boundY2','boundZ2'),
         MelString('FULL','full'),
         MelModel(),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelDestructible(),
         MelFid('YNAM','pickupSound'),
@@ -2478,7 +2478,7 @@ class MreAvif(MelRecord):
         MelString('EDID','eid'),
         MelString('FULL','full'),
         MelString('DESC','description'),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelString('ANAM','shortName'),
     )
@@ -2497,7 +2497,7 @@ class MreBook(MelRecord):
                   'boundX2','boundY2','boundZ2'),
         MelString('FULL','full'),
         MelModel(),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelString('DESC','text'),
@@ -3711,7 +3711,7 @@ class MreKeym(MelRecord):
                   'boundX2','boundY2','boundZ2'),
         MelString('FULL','full'),
         MelModel(),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelDestructible(),
@@ -3904,7 +3904,7 @@ class MreMicn(MelRecord):
     classType = 'MICN'
     melSet = MelSet(
         MelString('EDID','eid'),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
@@ -3920,7 +3920,7 @@ class MreMisc(MelRecord):
                   'boundX2','boundY2','boundZ2'),
         MelString('FULL','full'),
         MelModel(),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelDestructible(),
@@ -4092,7 +4092,7 @@ class MreNote(MelRecord):
                   'boundX2','boundY2','boundZ2'),
         MelString('FULL','full'),
         MelModel(),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
@@ -4612,7 +4612,7 @@ class MrePerk(MelRecord):
         MelString('EDID','eid'),
         MelString('FULL','full'),
         MelString('DESC','description'),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelConditions(),
         MelGroup('_data',
@@ -5225,7 +5225,7 @@ class MreRegn(MelRecord):
 
     melSet = MelSet(
         MelString('EDID','eid'),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelStruct('RCLR','3Bs','mapRed','mapBlue','mapGreen',('unused1',null1)),
         MelFid('WNAM','worldspace'),
@@ -5726,7 +5726,7 @@ class MreWeap(MelRecord):
                   'boundX2','boundY2','boundZ2'),
         MelString('FULL','full'),
         MelModel('model'),
-        MelString('ICON','largeIconPath'),
+        MelString('ICON','iconPath'),
         MelString('MICO','smallIconPath'),
         MelFid('SCRI','script'),
         MelFid('EITM','effect'),
@@ -17163,22 +17163,22 @@ class CompleteItemData:
         """Initialize."""
         self.type_stats = {'ALCH':{},'AMMO':{},'ARMO':{},'ARMA':{},'BOOK':{},'INGR':{},'KEYM':{},'LIGH':{},'MISC':{},'WEAP':{}}
         self.type_attrs = {
-            'ALCH':('eid', 'full', 'weight', 'value', 'largeIconPath', 'smallIconPath'),
-            'AMMO':('eid', 'full', 'speed',  'value', 'clipRounds', 'largeIconPath', 'smallIconPath'),
+            'ALCH':('eid', 'full', 'weight', 'value', 'iconPath', 'smallIconPath'),
+            'AMMO':('eid', 'full', 'speed',  'value', 'clipRounds', 'iconPath', 'smallIconPath'),
             'ARMO':('eid', 'full', 'weight', 'value', 'health', 'ar', 'maleLargeIconPath', 'maleSmallIconPath', 'femaleLargeIconPath', 'femaleSmallIconPath'),
             'ARMA':('eid', 'full', 'weight', 'value', 'health', 'ar', 'maleLargeIconPath', 'maleSmallIconPath', 'femaleLargeIconPath', 'femaleSmallIconPath'),
-            'BOOK':('eid', 'full', 'weight', 'value', 'largeIconPath', 'smallIconPath'),
+            'BOOK':('eid', 'full', 'weight', 'value', 'iconPath', 'smallIconPath'),
             'INGR':('eid', 'full', 'weight', 'value', 'iconPath'),
-            'KEYM':('eid', 'full', 'weight', 'value', 'largeIconPath', 'smallIconPath'),
+            'KEYM':('eid', 'full', 'weight', 'value', 'iconPath', 'smallIconPath'),
             'LIGH':('eid', 'full', 'weight', 'value', 'duration','iconPath'),
-            'MISC':('eid', 'full', 'weight', 'value', 'largeIconPath', 'smallIconPath'),
+            'MISC':('eid', 'full', 'weight', 'value', 'iconPath', 'smallIconPath'),
             'WEAP':('eid', 'full', 'weight', 'value', 'health', 'damage','clipsize',
                     'animationMultiplier','reach','ammoUse','minSpread','spread','sightFov','baseVatsToHitChance','projectileCount',
                     'minRange','maxRange','animationAttackMultiplier','fireRate','overrideActionPoint','rumbleLeftMotorStrength',
                     'rumbleRightMotorStrength','rumbleDuration','overrideDamageToWeaponMult','attackShotsPerSec',
                     'reloadTime','jamTime','aimArc','rambleWavelangth','limbDmgMult','sightUsage',
                     'semiAutomaticFireDelayMin','semiAutomaticFireDelayMax','criticalDamage','criticalMultiplier',
-                    'largeIconPath', 'smallIconPath'),
+                    'iconPath', 'smallIconPath'),
             }
         self.aliases = aliases or {} #--For aliasing mod fulls
 
@@ -22143,13 +22143,13 @@ class GraphicsPatcher(ImportPatcher):
         for recClass in (MreLigh,):
             recAttrs_class[recClass] = ('iconPath','model')
         for recClass in (MreMicn,):
-            recAttrs_class[recClass] = ('largeIconPath','smallIconPath')
+            recAttrs_class[recClass] = ('iconPath','smallIconPath')
         for recClass in (MreAlch, MreAmmo, MreAppa, MreBook, MreIngr, MreKeym, MreMisc, MreSgst, MreSlgm, MreTree):
-            recAttrs_class[recClass] = ('largeIconPath','smallIconPath','model')
+            recAttrs_class[recClass] = ('iconPath','smallIconPath','model')
         for recClass in (MreNote,):
-            recAttrs_class[recClass] = ('largeIconPath','smallIconPath','model','texture')
+            recAttrs_class[recClass] = ('iconPath','smallIconPath','model','texture')
         for recClass in (MreWeap,):
-            recAttrs_class[recClass] = ('largeIconPath','smallIconPath','model','shellCasingModel','scopeModel','worldModel','firstPersonModel','animationType','gripAnimation','reloadAnimation')
+            recAttrs_class[recClass] = ('iconPath','smallIconPath','model','shellCasingModel','scopeModel','worldModel','firstPersonModel','animationType','gripAnimation','reloadAnimation')
         for recClass in (MreArmo, MreArma, MreClot):
             recAttrs_class[recClass] = ('maleBody','maleWorld','maleLargeIconPath','maleSmallIconPath','femaleBody','femaleWorld','femaleLargeIconPath','femaleSmallIconPath','flags')
         for recClass in (MreCrea,):

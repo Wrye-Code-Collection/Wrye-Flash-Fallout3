@@ -20320,14 +20320,16 @@ class PatchFile(ModFile):
     #--Class
     # removed MreLvsp
     mergeClasses = (
-        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArmo, MreBook, MreBsgn, MreClas,
-        MreClot, MreCont, MreCrea, MreDoor, MreEfsh, MreEnch, MreEyes, MreFact, MreFlor, MreFurn,
-        MreGlob, MreGras, MreHair, MreIngr, MreKeym, MreLigh, MreLscr, MreLvlc, MreLvli, MreMgef,
-        MreMisc, MreNpc,  MrePack, MreQust, MreRace, MreScpt, MreSgst, MreSlgm, MreSoun, MreSpel,
-        MreStat, MreTree, MreWatr, MreWeap, MreWthr, MreClmt, MreCsty, MreIdle, MreLtex, MreRegn,
-        MreSbsp, MreSkil, MreTxst, MreMicn, MreFlst, MreLvln, MrePerk, MreExpl, MreIpct, MreIpds,
-        MreProj, MreDebr, MreImad, MreMstt, MreNote, MreTerm, MreAvif, MreEczn, MreBptd, MreVtyp,
-        MreMusc, MrePwat, MreAspc, MreHdpt, MreDobj, MreIdlm, MreArma, MreTact)
+        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArma, MreArmo, MreAspc, MreAvif,
+        MreBook, MreBptd, MreBsgn, MreCams, MreClas, MreClmt, MreClot, MreCobj, MreCont, MreCpth,
+        MreCrea, MreCsty, MreDebr, MreDobj, MreDoor, MreEczn, MreEfsh, MreEnch, MreExpl, MreEyes,
+        MreFact, MreFlor, MreFlst, MreFurn, MreGlob, MreGras, MreHair, MreHdpt, MreIdle, MreIdlm,
+        MreImad, MreImgs, MreIngr, MreIpct, MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex,
+        MreLvlc, MreLvli, MreLvln, MreMesg, MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNote,
+        MreNpc, MrePack, MrePerk, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRegn, MreRgdl,
+        MreSbsp, MreScol, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat, MreTact,
+        MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWthr,
+        )
 
     @staticmethod
     def modIsMergeable(modInfo,progress=None,verbose=True):

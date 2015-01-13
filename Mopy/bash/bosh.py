@@ -6104,10 +6104,10 @@ class MreWeap(MelRecord):
                 return
             elif size == 124:
                 #--Else 124 byte record (skips sightUsage, semiAutomaticFireDelayMin and semiAutomaticFireDelayMax...
-                unpacked = ins.unpack('I2f4B4f4sI4B2f2I11fiI2fi',size,readId)
+                unpacked = ins.unpack('IffBBBBfffffIBBBBffIIfffffffffffiIffi',size,readId)
             elif size == 120:
                 #--Else 120 byte record (skips resistType, sightUsage, semiAutomaticFireDelayMin and semiAutomaticFireDelayMax...
-                unpacked = ins.unpack('I2f4B4f4sI4B2f2I11fiI2f',size,readId)
+                unpacked = ins.unpack('IffBBBBfffffIBBBBffIIfffffffffffiIff',size,readId)
             else:
                 raise "Unexpected size encountered for WEAP:DNAM subrecord: %s" % size
             unpacked += self.defaults[len(unpacked):]
@@ -6153,18 +6153,22 @@ class MreWeap(MelRecord):
         MelFid('NAM9','equipSound',),
         MelFid('NAM8','unequipSound',),
         MelStruct('DATA','2IfHB','value','health','weight','damage','clipsize'),
-        MelWeapDnam('DNAM','I2f4B4f4sI4B2f2I11fiI2fi3f',
-                    'animationType','animationMultiplier','reach',(_dflags1,'dnamFlags1',0L),
-                    'gripAnimation','ammoUse','reloadAnimation','minSpread','spread',
-                    'unused1','sightFov',('unused2',null4),(FID,'projectile',0L),
-                    'baseVatsToHitChance','attackAnimation','projectileCount','embeddedWeaponActorValue','minRange','maxRange',
-                    'onHit',(_dflags2,'dnamFlags2',0L),'animationAttackMultiplier','fireRate','overrideActionPoint',
-                    'rumbleLeftMotorStrength','rumbleRightMotorStrength','rumbleDuration','overrideDamageToWeaponMult',
-                    'attackShotsPerSec','reloadTime','jamTime','aimArc',('skill',45),'rumblePattern','rambleWavelangth','limbDmgMult',
-                    ('resistType',-1),'sightUsage','semiAutomaticFireDelayMin',
-                    'semiAutomaticFireDelayMax'),
-        MelStruct('CRDT','H2sfB3sI','criticalDamage','unknown3','criticalMultiplier',
-                 (_cflags,'criticalFlags',0L),'unknown4',(FID,'criticalEffect',0L)),
+        MelWeapDnam('DNAM','IffBBBBfffffIBBBBffIIfffffffffffiIffifff',
+                    'animationType','animationMultiplier','reach',
+                    (_dflags1,'dnamFlags1',0L),'gripAnimation','ammoUse',
+                    'reloadAnimation','minSpread','spread','weapDnam1','sightFov',
+                    ('weapDnam2',0.0),(FID,'projectile',0L),'baseVatsToHitChance',
+                    'attackAnimation','projectileCount','embeddedWeaponActorValue',
+                    'minRange','maxRange','onHit',(_dflags2,'dnamFlags2',0L),
+                    'animationAttackMultiplier','fireRate','overrideActionPoint',
+                    'rumbleLeftMotorStrength','rumbleRightMotorStrength',
+                    'rumbleDuration','overrideDamageToWeaponMult','attackShotsPerSec',
+                    'reloadTime','jamTime','aimArc',('skill',45),'rumblePattern',
+                    'rambleWavelangth','limbDmgMult',('resistType',-1),
+                    'sightUsage','semiAutomaticFireDelayMin',
+                    'semiAutomaticFireDelayMax',),
+        MelStruct('CRDT','H2sfB3sI','criticalDamage','weapCrdt1','criticalMultiplier',
+                 (_cflags,'criticalFlags',0L),'weapCrdt2',(FID,'criticalEffect',0L)),
         MelBase('VNAM','soundLevel'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

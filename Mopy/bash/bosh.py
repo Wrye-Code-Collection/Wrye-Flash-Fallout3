@@ -2716,10 +2716,10 @@ class MreClas(MelRecord):
         MelString('ICON','iconPath'),
         MelStruct('DATA','4i2IbB2s','tagSkill1','tagSkill2','tagSkill3',
             'tagSkill4',(_flags,'flags',0L),(aiService,'services',0L),
-            ('trainSkill',-1),('trainLevel',0),('unused1',null2)),
+            ('trainSkill',-1),('trainLevel',0),('clasData1',null2)),
         # MelTuple('ATTR','7B','attributes',[0]*7),
-        MelStructA('ATTR','7B','strength','perception','endurance','charisma',
-            'intelligence','agility','luck'),
+        MelStructA('ATTR','7B','attributes','strength','perception','endurance',
+                   'charisma','intelligence','agility','luck'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 

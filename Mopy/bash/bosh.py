@@ -2195,7 +2195,7 @@ class MreAchr(MelRecord):
             MelFid('TNAM','topic'),
             ),
         MelStruct('XLCM','i','levelModifier'),
-        MelFid('XMRC','merchantContainer'),
+        MelFid('XMRC','merchantContainer',),
         MelStruct('XCNT','i','count'),
         MelStruct('XRDS','f','radius',),
         MelStruct('XHLP','f','health',),
@@ -2346,7 +2346,8 @@ class MreAmmo(MelRecord):
         MelDestructible(),
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
-        MelStruct('DATA','fB3siB','speed',(_flags,'flags',0L),('unused1',null3),'value','clipRounds'),
+        MelStruct('DATA','fB3siB','speed',(_flags,'flags',0L),('ammoData1',null3),
+                  'value','clipRounds'),
         MelString('ONAM','shortName'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
@@ -2407,7 +2408,7 @@ class MreArma(MelRecord):
         #9:Hand Wear,10:Chems,11:Stimpack,12:Food,13:Alcohol
         MelStruct('ETYP','i',('etype',-1)),
         MelStruct('DATA','IIf','value','health','weight'),
-        MelStruct('DNAM','HH','ar','flags'),
+        MelStruct('DNAM','hH','ar','flags'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
@@ -2429,7 +2430,8 @@ class MreArmo(MelRecord):
         MelString('FULL','full'),
         MelFid('SCRI','script'),
         MelFid('EITM','objectEffect'),
-        MelStruct('BMDT','=IB3s',(_flags,'bipedFlags',0L),(_generalFlags,'generalFlags',0L),'unused',),
+        MelStruct('BMDT','=IB3s',(_flags,'bipedFlags',0L),
+                  (_generalFlags,'generalFlags',0L),'armoBMDT1',),
         MelModel('maleBody'),
         MelModel('maleWorld',2),
         MelString('ICON','maleIconPath'),
@@ -2512,10 +2514,28 @@ class MreBptd(MelRecord):
     classType = 'BPTD'
     _flags = Flags(0L,Flags.getNames('severable','ikData','ikBipedData',
         'explodable','ikIsHead','ikHeadtracking','toHitChanceAbsolute'))
+    class MelBptdGroups(MelGroups):
+        def loadData(self,record,ins,type,size,readId):
+            """Reads data from ins into record attribute."""
+            if type == self.type0:
+                target = self.getDefault()
+                record.__getattribute__(self.attr).append(target)
+            else:
+                targets = record.__getattribute__(self.attr)
+                if targets:
+                    target = targets[-1]
+                elif type == 'BPNN': # for RadScorpionBodyPart
+                    target = self.getDefault()
+                    record.__getattribute__(self.attr).append(target)
+            slots = []
+            for element in self.elements:
+                slots.extend(element.getSlotsUsed())
+            target.__slots__ = slots
+            self.loaders[type].loadData(target,ins,type,size,readId)
     melSet = MelSet(
         MelString('EDID','eid'),
         MelModel(),
-        MelGroups('bodyParts',
+        MelBptdGroups('bodyParts',
             MelString('BPTN','partName'),
             MelString('BPNN','nodeName'),
             MelString('BPNT','vatsTarget'),
@@ -2733,7 +2753,8 @@ class MreClmt(MelRecord):
         MelString('FNAM','sunPath'),
         MelString('GNAM','glarePath'),
         MelModel(),
-        MelStruct('TNAM','6B','riseBegin','riseEnd','setBegin','setEnd','volatility','phaseLength'),
+        MelStruct('TNAM','6B','riseBegin','riseEnd','setBegin','setEnd',
+                  'volatility','phaseLength',),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
@@ -2923,8 +2944,9 @@ class MreCrea(MreActor):
         MelFids('PKID','aiPackages'),
         MelStrings('KFFZ','animations'),
         MelStruct('DATA','=4Bh2sh7B','type','combatSkill','magicSkill',
-            'stealthSkill','health','unused2','damage','strength','perception',
-            'endurance','charisma','intelligence','agility','luck'),
+            'stealthSkill','health',('unused2',null2),'damage','strength',
+            'perception','endurance','charisma','intelligence','agility',
+            'luck'),
         MelStruct('RNAM','B','attackReach'),
         MelFid('ZNAM','combatStyle'),
         MelFid('PNAM','bodyPartData'),
@@ -2990,9 +3012,11 @@ class MreCsty(MelRecord):
 class MreDebr(MelRecord):
     """Debris record."""
     classType = 'DEBR'
+
+    dataFlags = Flags(0L,Flags.getNames('hasCollissionData'))
     class MelDebrData(MelStruct):
         subType = 'DATA'
-        _elements = (('percentage',0),('modPath',null1),('flags',0))
+        _elements = (('percentage',0),('modPath',null1),('flags',0),)
         def __init__(self):
             """Initialize."""
             self.attrs,self.defaults,self.actions,self.formAttrs = self.parseElements(*self._elements)
@@ -3236,7 +3260,8 @@ class MreEnch(MelRecord,MreHasEffects):
     melSet = MelSet(
         MelString('EDID','eid'),
         MelFull0(), #--At least one mod has this. Odd.
-        MelStruct('ENIT','3IB3s','itemType','chargeAmount','enchantCost',(_flags,'flags',0L),('unused1',null3)),
+        MelStruct('ENIT','3IB3s','itemType','chargeAmount','enchantCost',
+                  (_flags,'flags',0L),('unused1',null3)),
         #--itemType = 0: Scroll, 1: Staff, 2: Weapon, 3: Apparel
         MelEffects(),
         )
@@ -3246,13 +3271,14 @@ class MreEnch(MelRecord,MreHasEffects):
 class MreExpl(MelRecord):
     """Explosion record."""
     classType = 'EXPL'
-    _flags = Flags(0,Flags.getNames('unknown1',
-                                    'alwaysUsesWorldOrientation',
-                                    'knockDownAlways',
-                                    'knockDownByFormular',
-                                    'IgnoreLosCheck',
-                                    'pushExplosionSourceRefOnly',
-                                    'ignoreImageSpaceSwap'))
+    _flags = Flags(0,Flags.getNames(
+        (1, 'alwaysUsesWorldOrientation'),
+        (2, 'knockDownAlways'),
+        (3, 'knockDownByFormular'),
+        (4, 'ignoreLosCheck'),
+        (5, 'pushExplosionSourceRefOnly'),
+        (6, 'ignoreImageSpaceSwap'),
+    ))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelStruct('OBND','=6h',
@@ -3273,7 +3299,11 @@ class MreExpl(MelRecord):
 class MreEyes(MelRecord):
     """Eyes record."""
     classType = 'EYES'
-    _flags = Flags(0L,Flags.getNames('playable','notMale','notFemale',))
+    _flags = Flags(0L,Flags.getNames(
+            (0, 'playable'),
+            (1, 'notMale'),
+            (2, 'notFemale'),
+    ))
     melSet = MelSet(
         MelString('EDID','eid'),
         MelString('FULL','full'),
@@ -4392,7 +4422,8 @@ class MreNpc(MreActor):
         MelModel(),
         MelStruct('ACBS','=I2Hh3Hf2H',
             (_flags,'flags',0L),'fatigue','barterGold',
-            ('level',1),'calcMin','calcMax','speedMultiplier','karma','dispotionBase','templateFlags'),
+            ('level',1),'calcMin','calcMax','speedMultiplier','karma',
+            'dispotionBase','templateFlags'),
         MelStructs('SNAM','=IB3s','factions',
             (FID,'faction',None),'rank',('unused1','ODB')),
         MelFid('INAM','deathItem'),
@@ -4458,7 +4489,7 @@ class MreNpc(MreActor):
         else:
             self.model.modPath = r"Characters\_Male\skeleton.nif"
         #--FNAM
-        # Needs Updating for Fallout #
+        # Needs Updating for Fallout 3
         # American
         fnams = {
             0x23fe9 : 0x3cdc ,#--Argonian
@@ -4703,7 +4734,7 @@ class MrePerk(MelRecord):
     """Perk record."""
     classType = 'PERK'
     class MelPerkData(MelStruct):
-        """Handle older trucated DATA for PERK subrecord."""
+        """Handle older truncated DATA for PERK subrecord."""
         def loadData(self,record,ins,type,size,readId):
             if size == 5:
                 MelStruct.loadData(self,record,ins,type,size,readId)

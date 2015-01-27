@@ -2364,21 +2364,6 @@ class MreAnio(MelRecord):
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
-class MreAppa(MelRecord):
-    """Alchemical apparatus record."""
-    classType = 'APPA'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelString('FULL','full'),
-        MelModel(),
-        MelString('ICON','iconPath'),
-        MelFid('SCRI','script'),
-        MelStruct('DATA','=BIff',('apparatus',0),('value',25),('weight',1),('quality',10)),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
-#------------------------------------------------------------------------------
 class MreArma(MelRecord):
     """Armor addon record."""
     classType = 'ARMA'
@@ -2569,20 +2554,6 @@ class MreBptd(MelRecord):
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
-class MreBsgn(MelRecord):
-    """Birthsign record."""
-    classType = 'BSGN'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelString('FULL','full'),
-        MelString('ICON','iconPath'),
-        MelString('DESC','text'),
-        MelFids('SPLO','spells'),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
-#------------------------------------------------------------------------------
 class MreCams(MelRecord):
     """Cams Type"""
     classType = 'CAMS'
@@ -2764,29 +2735,6 @@ class MreClmt(MelRecord):
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
-#------------------------------------------------------------------------------
-class MreClot(MelRecord):
-    """Clothing record."""
-    classType = 'CLOT'
-    _flags = MelBipedFlags(0L,Flags.getNames((16,'hideRings'),(17,'hideAmulet'),(22,'notPlayable')))
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelString('FULL','full'),
-        MelFid('SCRI','script'),
-        MelFid('ENAM','enchantment'),
-        MelOptStruct('ANAM','H','enchantPoints'),
-        MelStruct('BMDT','I',(_flags,'flags',0L)),
-        MelModel('maleBody',0),
-        MelModel('maleWorld',2),
-        MelString('ICON','maleIconPath'),
-        MelModel('femaleBody',3),
-        MelModel('femaleWorld',4),
-        MelString('ICO2','femaleIconPath'),
-        MelStruct('DATA','If','value','weight'),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreCobj(MelRecord):
     """Constructible Object record (recipies)"""
@@ -3360,21 +3308,6 @@ class MreFact(MelRecord):
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
-#------------------------------------------------------------------------------
-class MreFlor(MelRecord):
-    """Flora (plant) record."""
-    classType = 'FLOR'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelString('FULL','full'),
-        MelModel(),
-        MelFid('SCRI','script'),
-        MelFid('PFIG','ingredient'),
-        MelStruct('PFPC','4B','spring','summer','fall','winter'),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreFlst(MelRecord):
     """FormID list record."""
@@ -4039,13 +3972,6 @@ class MreLvli(MreLeveledList):
     classType = 'LVLI'
     __slots__ = MreLeveledList.__slots__
 
-#------------------------------------------------------------------------------
-# class MreLvsp(MreLeveledList):
-#    """LVSP record. Leveled list for items."""
-#    classType = 'LVSP'
-#    __slots__ = MreLeveledList.__slots__
-#
-# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreLvln(MreLeveledList):
     """LVLN record. Leveled list for NPC."""
@@ -5625,30 +5551,6 @@ class MreRgdl(MelRecord):
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
-class MreRoad(MelRecord):
-    """Road structure. Part of large worldspaces."""
-    ####Could probably be loaded via MelStructA,
-    ####but little point since it is too complex to manipulate
-    classType = 'ROAD'
-    melSet = MelSet(
-        MelBase('PGRP','points_p'),
-        MelBase('PGRR','connections_p'),
-    )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
-#------------------------------------------------------------------------------
-class MreSbsp(MelRecord):
-    """Subspace record."""
-    classType = 'SBSP'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelStruct('DNAM','3f','sizeX','sizeY','sizeZ'),
-    )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
-#------------------------------------------------------------------------------
 class MreScol(MelRecord):
     """Static Collection"""
     classType = 'SCOL'
@@ -5685,57 +5587,6 @@ class MreScpt(MelRecord):
     )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
-#------------------------------------------------------------------------------
-class MreSgst(MelRecord,MreHasEffects):
-    """Sigil stone record."""
-    classType = 'SGST'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelFull0(),
-        MelModel(),
-        MelString('ICON','iconPath'),
-        MelFid('SCRI','script'),
-        MelEffects(),
-        MelStruct('DATA','=BIf','uses','value','weight'),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
-#------------------------------------------------------------------------------
-class MreSkil(MelRecord):
-    """Skill record."""
-    classType = 'SKIL'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelStruct('INDX','i','skill'),
-        MelString('DESC','description'),
-        MelString('ICON','iconPath'),
-        MelStruct('DATA','2iI2f','action','attribute','specialization',('use0',1.0),'use1'),
-        MelString('ANAM','apprentice'),
-        MelString('JNAM','journeyman'),
-        MelString('ENAM','expert'),
-        MelString('MNAM','master'),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
-#------------------------------------------------------------------------------
-class MreSlgm(MelRecord):
-    """Soul gem record."""
-    classType = 'SLGM'
-    melSet = MelSet(
-        MelString('EDID','eid'),
-        MelString('FULL','full'),
-        MelModel(),
-        MelString('ICON','iconPath'),
-        MelFid('SCRI','script'),
-        MelStruct('DATA','If','value','weight'),
-        MelStruct('SOUL','B',('soul',0)),
-        MelStruct('SLCP','B',('capacity',1)),
-        )
-    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-
-# Needs to be removed, does not exist in FO3
 #------------------------------------------------------------------------------
 class MreSoun(MelRecord):
     """Sound record."""
@@ -6342,20 +6193,20 @@ class MreWthr(MelRecord):
 # MreRecord.type_class
 # MreLvsp removed
 MreRecord.type_class = dict((x.classType,x) for x in (
-    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArma, MreArmo,
-    MreAspc, MreAvif, MreBook, MreBptd, MreBsgn, MreCams, MreCell, MreClas, MreClmt, MreClot,
+    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo,
+    MreAspc, MreAvif, MreBook, MreBptd, MreCams, MreCell, MreClas, MreClmt,
     MreCobj, MreCont, MreCpth, MreCrea, MreCsty, MreDebr, MreDial, MreDobj, MreDoor, MreEczn,
-    MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlor, MreFlst, MreFurn, MreGlob, MreGmst,
+    MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlst, MreFurn, MreGlob, MreGmst,
     MreGras, MreHair, MreHdpt, MreIdle, MreIdlm, MreImad, MreImgs, MreInfo, MreIngr, MreIpct,
     MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex, MreLvlc, MreLvli, MreLvln, MreMesg,
     MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNavm, MreNote, MreNpc, MrePack, MrePerk,
     MrePgre, MrePmis, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRefr, MreRegn, MreRgdl,
-    MreRoad, MreSbsp, MreScol, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat,
+    MreScol, MreScpt, MreSoun, MreSpel, MreStat,
     MreTact, MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWrld, MreWthr,
     MreTes4,
     ))
 MreRecord.simpleTypes = (set(MreRecord.type_class) -
-    set(('TES4','ACHR','ACRE','REFR','CELL','PGRD','ROAD','LAND','WRLD','INFO','DIAL','PGRE','NAVM')))
+    set(('TES4','ACHR','ACRE','REFR','CELL','PGRD','LAND','WRLD','INFO','DIAL','PGRE','NAVM')))
 
 # Mod Blocks, File ------------------------------------------------------------
 #------------------------------------------------------------------------------
@@ -6422,7 +6273,7 @@ class LoadFactory:
 
     def addClass(self,recClass):
         """Adds specified class."""
-        cellTypes = ('WRLD','ROAD','CELL','REFR','ACHR','ACRE','PGRD','LAND','PGRE','NAVM')
+        cellTypes = ('WRLD','CELL','REFR','ACHR','ACRE','PGRD','LAND','PGRE','NAVM')
         if isinstance(recClass,str):
             recType = recClass
             recClass = MreRecord
@@ -6455,7 +6306,7 @@ class LoadFactory:
     def getCellTypeClass(self):
         """Returns type_class dictionary for cell objects."""
         if not self.cellType_class:
-            types = ('REFR','ACHR','ACRE','PGRD','LAND','CELL','ROAD','PGRE','NAVM')
+            types = ('REFR','ACHR','ACRE','PGRD','LAND','CELL','PGRE','NAVM')
             getterRecClass = self.getRecClass
             self.cellType_class.update((x,getterRecClass(x)) for x in types)
         return self.cellType_class
@@ -7230,10 +7081,7 @@ class MobWorld(MobCells):
             header = insRecHeader()
             recType = header[0]
             recClass = cellGet(recType)
-            if recType == 'ROAD':
-                if not recClass: insSeek(header[1],1)
-                else: self.road = recClass(header,ins,True)
-            elif recType == 'CELL':
+            if recType == 'CELL':
                 if cell:
                     cellBlock = MobCell(header,selfLoadFactory,cell)
                     if block:
@@ -7345,7 +7193,7 @@ class MobWorld(MobCells):
         srcGetter = srcBlock.__getattribute__
         selfSetter = self.__setattr__
         mergeDiscard = mergeIds.discard
-        for attr in ('world','road'):
+        for attr in ('world',):
             myRecord = selfGetter(attr)
             record = srcGetter(attr)
             if myRecord and record:
@@ -16320,8 +16168,8 @@ class FidReplacer:
 class FullNames:
     """Names for records, with functions for importing/exporting from/to mod/text file."""
     defaultTypes = set((
-        'ALCH', 'AMMO', 'APPA', 'ARMO', 'BOOK', 'CLAS', 'CLOT', 'CONT', 'CREA', 'DOOR',
-        'EYES', 'FACT', 'FLOR', 'HAIR', 'INGR', 'KEYM', 'LIGH', 'MISC', 'NOTE', 'NPC_',
+        'ALCH', 'AMMO', 'ARMO', 'BOOK', 'CLAS', 'CONT', 'CREA', 'DOOR',
+        'EYES', 'FACT', 'HAIR', 'INGR', 'KEYM', 'LIGH', 'MISC', 'NOTE', 'NPC_',
         'RACE', 'SPEL', 'TERM', 'WEAP', 'ACTI', 'TACT'))
     hasShortNameTypes = set((
         'AMMO', 'AVIF', ))
@@ -17948,10 +17796,6 @@ class CompleteItemData:
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
                     _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Damage'),_('Speed')
                     ,_('Enchant Points'),_('Icon Path'),_('Model'),_('Script'),_('Enchantment'),_('Normal Weapon'))) + '"\n')),
-                #--Apparatus
-                ('APPA', bolt.csvFormat('ssfifss')+'\n',
-                    ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
-                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Quantity'),_('Icon Path'),_('Model'))) + '"\n')),
                 #--Armor
                 ('ARMO', bolt.csvFormat('ssfiiissssss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
@@ -17962,12 +17806,6 @@ class CompleteItemData:
                 ('BOOK', bolt.csvFormat('ssfiiss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
                     _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('EPoints'),_('Icon Path'),_('Model'))) + '"\n')),
-                #Clothing
-                ('CLOT', bolt.csvFormat('ssfiissssss')+'\n',
-                    ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
-                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('EPoints'),
-                    _('Male Icon Path'),_('Female Icon Path'),_('Male Model Path'),
-                    _('Female Model Path'),_('Male World Model Path'),_('Female World Model Path'))) + '"\n')),
                 #Ingredients
                 ('INGR', bolt.csvFormat('ssfiss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
@@ -17982,14 +17820,6 @@ class CompleteItemData:
                     _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Duration'),_('Icon Path'),_('Model'))) + '"\n')),
                 #--Misc
                 ('MISC', bolt.csvFormat('ssfiss')+'\n',
-                    ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
-                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Icon Path'),_('Model'))) + '"\n')),
-                #Sigilstones
-                ('SGST', bolt.csvFormat('ssfiiss')+'\n',
-                    ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
-                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Uses'),_('Icon Path'),_('Model'))) + '"\n')),
-                #Soulgems
-                ('SLGM', bolt.csvFormat('ssfiss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
                     _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Icon Path'),_('Model'))) + '"\n')),
                 #--Weapons
@@ -20373,14 +20203,14 @@ class PatchFile(ModFile):
     #--Class
     # removed MreLvsp
     mergeClasses = (
-        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreAppa, MreArma, MreArmo, MreAspc, MreAvif,
-        MreBook, MreBptd, MreBsgn, MreCams, MreClas, MreClmt, MreClot, MreCobj, MreCont, MreCpth,
+        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo, MreAspc, MreAvif,
+        MreBook, MreBptd, MreCams, MreClas, MreClmt, MreCobj, MreCont, MreCpth,
         MreCrea, MreCsty, MreDebr, MreDobj, MreDoor, MreEczn, MreEfsh, MreEnch, MreExpl, MreEyes,
-        MreFact, MreFlor, MreFlst, MreFurn, MreGlob, MreGras, MreHair, MreHdpt, MreIdle, MreIdlm,
+        MreFact, MreFlst, MreFurn, MreGlob, MreGras, MreHair, MreHdpt, MreIdle, MreIdlm,
         MreImad, MreImgs, MreIngr, MreIpct, MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex,
         MreLvlc, MreLvli, MreLvln, MreMesg, MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNote,
         MreNpc, MrePack, MrePerk, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRegn, MreRgdl,
-        MreSbsp, MreScol, MreScpt, MreSgst, MreSkil, MreSlgm, MreSoun, MreSpel, MreStat, MreTact,
+        MreScol, MreScpt, MreSoun, MreSpel, MreStat, MreTact,
         MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWthr,
         )
 
@@ -22644,21 +22474,21 @@ class GraphicsPatcher(ImportPatcher):
         #--Type Fields
         recAttrs_class = self.recAttrs_class = {}
         recFidAttrs_class = self.recFidAttrs_class = {}
-        for recClass in (MreBsgn,MreLscr, MreClas, MreLtex, MreRegn):
+        for recClass in (MreLscr, MreClas, MreLtex, MreRegn):
             recAttrs_class[recClass] = ('iconPath',)
-        for recClass in (MreActi, MreDoor, MreFlor, MreFurn, MreGras, MreStat, MreMstt, MreBptd, MreTerm, MrePwat, MreHdpt, MreTact):
+        for recClass in (MreActi, MreDoor, MreFurn, MreGras, MreStat, MreMstt, MreBptd, MreTerm, MrePwat, MreHdpt, MreTact):
             recAttrs_class[recClass] = ('model',)
         for recClass in (MreLigh,):
             recAttrs_class[recClass] = ('iconPath','model')
         for recClass in (MreMicn,):
             recAttrs_class[recClass] = ('iconPath','smallIconPath')
-        for recClass in (MreAlch, MreAmmo, MreAppa, MreBook, MreIngr, MreKeym, MreMisc, MreSgst, MreSlgm, MreTree):
+        for recClass in (MreAlch, MreAmmo, MreBook, MreIngr, MreKeym, MreMisc, MreTree):
             recAttrs_class[recClass] = ('iconPath','smallIconPath','model')
         for recClass in (MreNote,):
             recAttrs_class[recClass] = ('iconPath','smallIconPath','model','texture')
         for recClass in (MreWeap,):
             recAttrs_class[recClass] = ('iconPath','smallIconPath','model','shellCasingModel','scopeModel','worldModel','firstPersonModel','animationType','gripAnimation','reloadAnimation')
-        for recClass in (MreArmo, MreArma, MreClot):
+        for recClass in (MreArmo, MreArma):
             recAttrs_class[recClass] = ('maleBody','maleWorld','maleIconPath','maleSmallIconPath','femaleBody','femaleWorld','femaleIconPath','femaleSmallIconPath','flags')
         for recClass in (MreCrea,):
             recAttrs_class[recClass] = ('model','bodyParts','nift_p','bodyPartData','impactDataset')
@@ -22706,7 +22536,7 @@ class GraphicsPatcher(ImportPatcher):
         for recClass in (MreProj,):
             recAttrs_class[recClass] = ('model','light','muzzleFlash','explosion','muzzleFlashDuration','fadeDuration','muzzleFlashPath')
         #--Needs Longs
-        self.longTypes = set(('BSGN','LSCR','CLAS','LTEX','REGN','ACTI','DOOR','FLOR','FURN','GRAS','STAT','ALCH','AMMO','BOOK','INGR','KEYM','LIGH','MISC','SGST','SLGM','WEAP','TREE','ARMO','ARMA','CLOT','CREA','MGEF','EFSH','TXST','EXPL','IPCT','IPDS','PROJ','NOTE','TACT','HDPT'))
+        self.longTypes = set(('LSCR','CLAS','LTEX','REGN','ACTI','DOOR','FURN','GRAS','STAT','ALCH','AMMO','BOOK','INGR','KEYM','LIGH','MISC','WEAP','TREE','ARMO','ARMA','CREA','MGEF','EFSH','TXST','EXPL','IPCT','IPDS','PROJ','NOTE','TACT','HDPT'))
 
     def initData(self,progress):
         """Get graphics from source files."""
@@ -24394,9 +24224,9 @@ class ImportScripts(ImportPatcher):
         self.isActive = len(self.sourceMods) != 0
         #--Type Fields
         recAttrs_class = self.recAttrs_class = {}
-        for recClass in (MreWeap,MreActi,MreAlch,MreArmo,MreBook,MreCont,MreCrea,MreDoor,MreFlor,MreFurn,MreIngr,MreKeym,MreLigh,MreMisc,MreNpc,MreQust,MreTerm,MreTact):
+        for recClass in (MreWeap,MreActi,MreAlch,MreArmo,MreBook,MreCont,MreCrea,MreDoor,MreFurn,MreIngr,MreKeym,MreLigh,MreMisc,MreNpc,MreQust,MreTerm,MreTact):
             recAttrs_class[recClass] = ('script',)
-        self.longTypes = set(('WEAP','ACTI','ALCH','ARMO','BOOK','CONT','CREA','DOOR','FLOR','FURN','INGR','KEYM','LIGH','MISC','NPC_','QUST','TERM','TACT'))
+        self.longTypes = set(('WEAP','ACTI','ALCH','ARMO','BOOK','CONT','CREA','DOOR','FURN','INGR','KEYM','LIGH','MISC','NPC_','QUST','TERM','TACT'))
 
     def initData(self,progress):
         """Get script links from source files."""
@@ -25693,14 +25523,14 @@ class RoadImporter(ImportPatcher):
     def initData(self,progress):
         """Get cells from source files."""
         if not self.isActive: return
-        loadFactory = LoadFactory(False,MreCell,MreWrld,MreRoad)
+        loadFactory = LoadFactory(False,MreCell,MreWrld)
         progress.setFull(len(self.sourceMods))
         for srcMod in self.sourceMods:
             if srcMod not in modInfos: continue
             srcInfo = modInfos[srcMod]
             srcFile = ModFile(srcInfo,loadFactory)
             srcFile.load(True)
-            srcFile.convertToLongFids(('WRLD','ROAD'))
+            srcFile.convertToLongFids(('WRLD',))
             for worldBlock in srcFile.WRLD.worldBlocks:
                 if worldBlock.road:
                     worldId = worldBlock.world.fid
@@ -25710,17 +25540,17 @@ class RoadImporter(ImportPatcher):
 
     def getReadClasses(self):
         """Returns load factory classes needed for reading."""
-        return (None,(MreCell,MreWrld,MreRoad))[self.isActive]
+        return (None,(MreCell,MreWrld))[self.isActive]
 
     def getWriteClasses(self):
         """Returns load factory classes needed for writing."""
-        return (None,(MreCell,MreWrld,MreRoad))[self.isActive]
+        return (None,(MreCell,MreWrld))[self.isActive]
 
     def scanModFile(self, modFile, progress):
         """Add lists from modFile."""
         if not self.isActive or 'WRLD' not in modFile.tops: return
         patchWorlds = self.patchFile.WRLD
-        modFile.convertToLongFids(('CELL','WRLD','ROAD'))
+        modFile.convertToLongFids(('CELL','WRLD',))
         for worldBlock in modFile.WRLD.worldBlocks:
             if worldBlock.road:
                 worldId = worldBlock.world.fid

@@ -6193,20 +6193,21 @@ class MreWthr(MelRecord):
 # MreRecord.type_class
 # MreLvsp removed
 MreRecord.type_class = dict((x.classType,x) for x in (
-    MreAchr, MreAcre, MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo,
-    MreAspc, MreAvif, MreBook, MreBptd, MreCams, MreCell, MreClas, MreClmt,
-    MreCobj, MreCont, MreCpth, MreCrea, MreCsty, MreDebr, MreDial, MreDobj, MreDoor, MreEczn,
-    MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlst, MreFurn, MreGlob, MreGmst,
-    MreGras, MreHair, MreHdpt, MreIdle, MreIdlm, MreImad, MreImgs, MreInfo, MreIngr, MreIpct,
+    MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo, MreAspc, MreAvif, MreBook,
+    MreBptd, MreCams, MreClas, MreClmt, MreCobj, MreCont, MreCpth, MreCrea, MreCsty, MreDebr,
+    MreDobj, MreDoor, MreEczn, MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlst, MreFurn,
+    MreGlob, MreGras, MreHair, MreHdpt, MreIdle, MreIdlm, MreImad, MreImgs, MreIngr, MreIpct,
     MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex, MreLvlc, MreLvli, MreLvln, MreMesg,
-    MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNavm, MreNote, MreNpc, MrePack, MrePerk,
-    MrePgre, MrePmis, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRefr, MreRegn, MreRgdl,
-    MreScol, MreScpt, MreSoun, MreSpel, MreStat,
-    MreTact, MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWrld, MreWthr,
+    MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNote, MreNpc, MrePack, MrePerk, MreProj,
+    MrePwat, MreQust, MreRace, MreRads, MreRegn, MreRgdl, MreScol, MreScpt, MreSoun, MreSpel,
+    MreStat, MreTact, MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWthr,
+    # Not Mergable
+    MreAchr, MreAcre, MreCell, MreDial, MreGmst, MreInfo, MreNavi, MreNavm, MrePgre, MrePmis,
+    MreRefr, MreWrld,
     MreTes4,
     ))
 MreRecord.simpleTypes = (set(MreRecord.type_class) -
-    set(('TES4','ACHR','ACRE','REFR','CELL','PGRD','LAND','WRLD','INFO','DIAL','PGRE','NAVM')))
+    set(('TES4','ACHR','ACRE','REFR','CELL','PGRD','PGRE','LAND','WRLD','INFO','DIAL','NAVM')))
 
 # Mod Blocks, File ------------------------------------------------------------
 #------------------------------------------------------------------------------
@@ -20205,15 +20206,14 @@ class PatchFile(ModFile):
     #--Class
     # removed MreLvsp
     mergeClasses = (
-        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo, MreAspc, MreAvif,
-        MreBook, MreBptd, MreCams, MreClas, MreClmt, MreCobj, MreCont, MreCpth,
-        MreCrea, MreCsty, MreDebr, MreDobj, MreDoor, MreEczn, MreEfsh, MreEnch, MreExpl, MreEyes,
-        MreFact, MreFlst, MreFurn, MreGlob, MreGras, MreHair, MreHdpt, MreIdle, MreIdlm,
-        MreImad, MreImgs, MreIngr, MreIpct, MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex,
-        MreLvlc, MreLvli, MreLvln, MreMesg, MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNote,
-        MreNpc, MrePack, MrePerk, MreProj, MrePwat, MreQust, MreRace, MreRads, MreRegn, MreRgdl,
-        MreScol, MreScpt, MreSoun, MreSpel, MreStat, MreTact,
-        MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWthr,
+        MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo, MreAspc, MreAvif, MreBook,
+        MreBptd, MreCams, MreClas, MreClmt, MreCobj, MreCont, MreCpth, MreCrea, MreCsty, MreDebr,
+        MreDobj, MreDoor, MreEczn, MreEfsh, MreEnch, MreExpl, MreEyes, MreFact, MreFlst, MreFurn,
+        MreGlob, MreGras, MreHair, MreHdpt, MreIdle, MreIdlm, MreImad, MreImgs, MreIngr, MreIpct,
+        MreIpds, MreKeym, MreLgtm, MreLigh, MreLscr, MreLtex, MreLvlc, MreLvli, MreLvln, MreMesg,
+        MreMgef, MreMicn, MreMisc, MreMstt, MreMusc, MreNote, MreNpc, MrePack, MrePerk, MreProj,
+        MrePwat, MreQust, MreRace, MreRads, MreRegn, MreRgdl, MreScol, MreScpt, MreSoun, MreSpel,
+        MreStat, MreTact, MreTerm, MreTree, MreTxst, MreVtyp, MreWatr, MreWeap, MreWthr,
         )
 
     @staticmethod

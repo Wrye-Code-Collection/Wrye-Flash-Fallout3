@@ -2383,6 +2383,9 @@ class MreArma(MelRecord):
     """Armor addon record."""
     classType = 'ARMA'
     _flags = MelBipedFlags(0L,Flags.getNames())
+    _dnamFlags = Flags(0L,Flags.getNames(
+        (0,'modulatesVoice'),
+    ))
     _generalFlags = Flags(0L,Flags.getNames(
         (5,'powerArmor'),
         (6,'notPlayable'),
@@ -2408,7 +2411,7 @@ class MreArma(MelRecord):
         #9:Hand Wear,10:Chems,11:Stimpack,12:Food,13:Alcohol
         MelStruct('ETYP','i',('etype',-1)),
         MelStruct('DATA','IIf','value','health','weight'),
-        MelStruct('DNAM','hH','ar','flags'),
+        MelStruct('DNAM','hH','ar',(_dnamFlags,'dnamFlags',0L),),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
@@ -2417,6 +2420,9 @@ class MreArmo(MelRecord):
     """Armor record."""
     classType = 'ARMO'
     _flags = MelBipedFlags(0L,Flags.getNames())
+    _dnamFlags = Flags(0L,Flags.getNames(
+        (0,'modulatesVoice'),
+    ))
     _generalFlags = Flags(0L,Flags.getNames(
         (5,'powerArmor'),
         (6,'notPlayable'),
@@ -2431,7 +2437,7 @@ class MreArmo(MelRecord):
         MelFid('SCRI','script'),
         MelFid('EITM','objectEffect'),
         MelStruct('BMDT','=IB3s',(_flags,'bipedFlags',0L),
-                  (_generalFlags,'generalFlags',0L),'armoBMDT1',),
+                  (_generalFlags,'generalFlags',0L),('armoBMDT1',null3),),
         MelModel('maleBody'),
         MelModel('maleWorld',2),
         MelString('ICON','maleIconPath'),
@@ -2451,7 +2457,7 @@ class MreArmo(MelRecord):
         MelFid('YNAM','pickupSound'),
         MelFid('ZNAM','dropSound'),
         MelStruct('DATA','=2if','value','health','weight'),
-        MelStruct('DNAM','=hH','ar','flags'),
+        MelStruct('DNAM','=hH','ar',(_dnamFlags,'dnamFlags',0L),),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
@@ -4478,33 +4484,44 @@ class MreNpc(MreActor):
         )
     __slots__ = MreActor.__slots__ + melSet.getSlotsUsed()
 
-    def setRace(self,race):
-        """Set additional race info."""
-        self.race = race
-        #--Model
-        if not self.model:
-            self.model = self.getDefault('model')
-        if race in (0x23fe9,0x223c7):
-            self.model.modPath = r"Characters\_Male\SkeletonBeast.NIF"
-        else:
-            self.model.modPath = r"Characters\_Male\skeleton.nif"
-        #--FNAM
-        # Needs Updating for Fallout 3
-        # American
-        fnams = {
-            0x23fe9 : 0x3cdc ,#--Argonian
-            0x224fc : 0x1d48 ,#--Breton
-            0x191c1 : 0x5472 ,#--Dark Elf
-            0x19204 : 0x21e6 ,#--High Elf
-            0x00907 : 0x358e ,#--Imperial
-            0x22c37 : 0x5b54 ,#--Khajiit
-            0x224fd : 0x03b6 ,#--Nord
-            0x191c0 : 0x0974 ,#--Orc
-            0x00d43 : 0x61a9 ,#--Redguard
-            0x00019 : 0x4477 ,#--Vampire
-            0x223c8 : 0x4a2e ,#--Wood Elf
-            }
-        self.fnam = fnams.get(race,0x358e)
+    # NPCs do not have an FNAM subrecord or any equivalent
+    # def setRace(self,race):
+    #     """Set additional race info."""
+    #     self.race = race
+    #     #--Model
+    #     if not self.model:
+    #         self.model = self.getDefault('model')
+    #     if race in (0x23fe9,0x223c7): # Argonian, Khajiit
+    #         self.model.modPath = r"Characters\_Male\SkeletonBeast.NIF"
+    #     else:
+    #         self.model.modPath = r"Characters\_Male\skeleton.nif"
+    #     #--FNAM
+    #     # Needs Updating for Fallout 3
+    #     # American
+    #     fnams = {
+    #         0x00424a : 0xdf93 ,#--AfricanAmerican
+    #         0x0042be : 0x22fb ,#--AfricanAmerican Child
+    #         0x0042bf : 0x08ab ,#--AfricanAmerican Old
+    #         0x0987de : 0x3dbc ,#--AfricanAmerican Old Aged
+    #         0x04bf72 : 0x854f ,#--AfricanAmerican Raider
+    #         0x0038e6 : 0x8b1b ,#--Asian
+    #         0x0042c0 : 0x7277 ,#--Asian Child
+    #         0x0042c1 : 0x77e5 ,#--Asian Old
+    #         0x0987dd : 0x62ff ,#--Asian Old Aged
+    #         0x04bf71 : 0x83e0 ,#--Asian Raider
+    #         0x000019 : 0x8778 ,#--Caucasian
+    #         0x0042c2 : 0x2e79 ,#--Caucasian Child
+    #         0x0042c3 : 0x2381 ,#--Caucasian Old
+    #         0x0987df : 0x8295 ,#--Caucasian Old Aged
+    #         0x04bb8d : 0x383b ,#--Caucasian Raider
+    #         0x003b3e : 0xdb71 ,#--Ghoul
+    #         0x0038e5 : 0x010c ,#--Hispanic
+    #         0x0042c4 : 0x6c40 ,#--Hispanic Child
+    #         0x0042c5 : 0x99ad ,#--Hispanic Old
+    #         0x0987dc : 0xac2d ,#--Hispanic Old Aged
+    #         0x04bf70 : 0xba0f ,#--Hispanic Raider
+    #         }
+    #     self.fnam = fnams.get(race,0x8778)
 
 #------------------------------------------------------------------------------
 class MrePack(MelRecord):
@@ -6186,10 +6203,10 @@ class MreWeap(MelRecord):
         MelStruct('DATA','2IfHB','value','health','weight','damage','clipsize'),
         MelWeapDnam('DNAM','IffBBBBfffffIBBBBffIIfffffffffffiIffifff',
                     'animationType','animationMultiplier','reach',
-                    (_dflags1,'dnamFlags1',0L),'gripAnimation','ammoUse',
+                    (_dflags1,'dnamFlags1',0L),('gripAnimation',255),'ammoUse',
                     'reloadAnimation','minSpread','spread','weapDnam1','sightFov',
                     ('weapDnam2',0.0),(FID,'projectile',0L),'baseVatsToHitChance',
-                    'attackAnimation','projectileCount','embeddedWeaponActorValue',
+                    ('attackAnimation',255),'projectileCount','embeddedWeaponActorValue',
                     'minRange','maxRange','onHit',(_dflags2,'dnamFlags2',0L),
                     'animationAttackMultiplier','fireRate','overrideActionPoint',
                     'rumbleLeftMotorStrength','rumbleRightMotorStrength',
@@ -6198,8 +6215,9 @@ class MreWeap(MelRecord):
                     'rambleWavelangth','limbDmgMult',('resistType',-1),
                     'sightUsage','semiAutomaticFireDelayMin',
                     'semiAutomaticFireDelayMax',),
-        MelStruct('CRDT','H2sfB3sI','criticalDamage','weapCrdt1','criticalMultiplier',
-                 (_cflags,'criticalFlags',0L),'weapCrdt2',(FID,'criticalEffect',0L)),
+        MelOptStruct('CRDT','H2sfB3sI','criticalDamage',('weapCrdt1',null2),
+                     'criticalMultiplier',(_cflags,'criticalFlags',0L),
+                     ('weapCrdt2',null3),(FID,'criticalEffect',0L)),
         MelBase('VNAM','soundLevel'),
         )
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()

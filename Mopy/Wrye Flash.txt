@@ -38,6 +38,10 @@ Additionally, Wrye Bash comes packaged with the following programs:
 {{CONTENTS=0}}
 **All versions by Wrye team and or Valda unless otherwise noted.**
 
+=== 31.0 [1/27/2015]
+* Removed unused records
+* Normalized records with 306 and FNV when applicable
+
 === 30.9 [1/19/2015]
 * Fixed typo in MreClas for ATTR
 

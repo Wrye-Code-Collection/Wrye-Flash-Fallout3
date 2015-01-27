@@ -19404,7 +19404,8 @@ class PCFaces:
         #--Set face
         npc.full = face.pcName
         npc.flags.female = (face.gender & 0x1)
-        npc.setRace(masterMap(face.race,0x00907)) #--Default to Imperial
+        # NPCs do not have an FNAM subrecord or any equivalent
+        # npc.setRace(masterMap(face.race,0x00907)) #--Default to Imperial
         npc.eye = masterMap(face.eye,None)
         npc.hair = masterMap(face.hair,None)
         npc.hairLength = face.hairLength
@@ -19636,7 +19637,8 @@ class PCFaces:
         npc.full = face.pcName
         npc.flags.female = face.gender
         npc.iclass = masterMap(face.iclass,0x237a8) #--Default to Acrobat
-        npc.setRace(masterMap(face.race,0x00907)) #--Default to Imperial
+        # NPCs do not have an FNAM subrecord or any equivalent
+        # npc.setRace(masterMap(face.race,0x00907)) #--Default to Imperial
         npc.eye = masterMap(face.eye,None)
         npc.hair = masterMap(face.hair,None)
         npc.hairLength = face.hairLength

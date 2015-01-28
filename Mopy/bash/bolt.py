@@ -766,7 +766,7 @@ class SkipError(BoltError):
 
 #------------------------------------------------------------------------------
 class PermissionError(BoltError):
-    """Wrye Bash doesn't have permission to access the specified file/directory."""
+    """Wrye Flash doesn't have permission to access the specified file/directory."""
     def __init__(self,message=None):
         message = message or _('Access is denied.')
         BoltError.__init__(self,message)
@@ -777,9 +777,12 @@ class LString(object):
     __slots__ = ('_s','_cs')
 
     def __init__(self,s):
-        if isinstance(s,LString): s = s._s
-        self._s = s
-        self._cs = s.lower()
+        if isinstance(s,LString):
+            self._s = s._s
+            self._cs = s._cs
+        else:
+            self._s = s
+            self._cs = s.lower()
 
     def __getstate__(self):
         """Used by pickler. _cs is redundant,so don't include."""
@@ -963,53 +966,53 @@ class Path(object):
     #--String/unicode versions.
     @property
     def s(self):
-        "Path as string."
+        """Path as string."""
         return self._s
     @property
     def cs(self):
-        "Path as string in normalized case."
+        """Path as string in normalized case."""
         return self._cs
     @property
     def csroot(self):
-        "Root as string."
+        """Root as string."""
         return self._csroot
     @property
     def sroot(self):
-        "Root as string."
+        """Root as string."""
         return self._sroot
     @property
     def shead(self):
-        "Head as string."
+        """Head as string."""
         return self._shead
     @property
     def stail(self):
-        "Tail as string."
+        """Tail as string."""
         return self._stail
     @property
     def sbody(self):
-        "For alpha\beta.gamma returns beta as string."
+        """For alpha\beta.gamma returns beta as string."""
         return self._sbody
     @property
     def csbody(self):
-        "For alpha\beta.gamma returns beta as string in normalized case."
+        """For alpha\beta.gamma returns beta as string in normalized case."""
         return self._csbody
 
     #--Head, tail
     @property
     def headTail(self):
-        "For alpha\beta.gamma returns (alpha,beta.gamma)"
+        """For alpha\beta.gamma returns (alpha,beta.gamma)"""
         return map(GPath,(self._shead,self._stail))
     @property
     def head(self):
-        "For alpha\beta.gamma, returns alpha."
+        """For alpha\beta.gamma, returns alpha."""
         return GPath(self._shead)
     @property
     def tail(self):
-        "For alpha\beta.gamma, returns beta.gamma."
+        """For alpha\beta.gamma, returns beta.gamma."""
         return GPath(self._stail)
     @property
     def body(self):
-        "For alpha\beta.gamma, returns beta."
+        """For alpha\beta.gamma, returns beta."""
         return GPath(self._sbody)
 
     #--Root, ext
@@ -1018,15 +1021,15 @@ class Path(object):
         return (GPath(self._sroot),self._ext)
     @property
     def root(self):
-        "For alpha\beta.gamma returns alpha\beta"
+        """For alpha\beta.gamma returns alpha\beta"""
         return GPath(self._sroot)
     @property
     def ext(self):
-        "Extension (including leading period, e.g. '.txt')."
+        """Extension (including leading period, e.g. '.txt')."""
         return self._ext
     @property
     def cext(self):
-        "Extension in normalized case."
+        """Extension in normalized case."""
         return self._cext
     @property
     def temp(self):
@@ -1034,13 +1037,13 @@ class Path(object):
         return self+'.tmp'
     @property
     def backup(self):
-        "Backup file path."
+        """Backup file path."""
         return self+'.bak'
 
     #--size, atime, ctime
     @property
     def size(self):
-        "Size of file or directory."
+        """Size of file or directory."""
         if self.isdir():
             join = os.path.join
             getSize = os.path.getsize
@@ -1311,7 +1314,7 @@ class Path(object):
                 try:
                     return cmp(Encode(self._cs), Encode(other._cs))
                 except UnicodeError:
-                    deprint("Wrye Bash Unicode mode is currently %s" % (['off.','on.'][bUseUnicode]))
+                    deprint("Wrye Flash Unicode mode is currently %s" % (['off.','on.'][bUseUnicode]))
                     deprint("unrecovered Unicode error when dealing with %s - presuming non equal." % (self._cs))
                     return False
         else:
@@ -1321,7 +1324,7 @@ class Path(object):
                 try:
                     return cmp(Encode(self._cs), Encode(Path.getCase(other)))
                 except UnicodeError:
-                    deprint("Wrye Bash Unicode mode is currently %s." % (['off','on'][bUseUnicode]))
+                    deprint("Wrye Flash Unicode mode is currently %s." % (['off','on'][bUseUnicode]))
                     deprint("unrecovered Unicode error when dealing with %s - presuming non equal.'" % (self._cs))
                     return False
 
@@ -1481,6 +1484,7 @@ class DataDict:
     def __contains__(self,key):
         return key in self.data
     def __getitem__(self,key):
+        """Return value for key or modinfo (?) of the game master file."""
         if self.data.has_key(key):
             return self.data[key]
         else:
@@ -1493,7 +1497,8 @@ class DataDict:
     def __len__(self):
         return len(self.data)
     def setdefault(self,key,default):
-        return self.data.setdefault(key,value)
+        # return self.data.setdefault(key,value)
+        return self.data.setdefault(key,default)
     def keys(self):
         return self.data.keys()
     def values(self):
@@ -2343,8 +2348,8 @@ def getMatch(reMatch,group=0):
 
 def intArg(arg,default=None):
     """Returns argument as an integer. If argument is a string, then it converts it using int(arg,0)."""
-    if arg == None: return default
-    elif isinstance(arg,StringType): return int(arg,0)
+    if arg is None: return default
+    elif isinstance(arg,types.StringTypes): return int(arg,0)
     else: return int(arg)
 
 def invertDict(indict):
@@ -2904,7 +2909,7 @@ if __name__ == '__main__' and len(sys.argv) > 1:
     def genHtml(*args,**keywords):
         """Wtxt to html. Just pass through to WryeText.genHtml."""
         if not len(args):
-            args = ["Wrye Bash.txt"]
+            args = ["Wrye Flash.txt"]
         WryeText.genHtml(*args,**keywords)
 
     #--Command Handler --------------------------------------------------------

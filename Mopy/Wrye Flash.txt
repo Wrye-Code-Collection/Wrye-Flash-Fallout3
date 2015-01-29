@@ -41,6 +41,7 @@ Additionally, Wrye Bash comes packaged with the following programs:
 === 31.0 [1/27/2015]
 * Removed unused records
 * Normalized records with 306 and FNV when applicable
+* Normalized Routines and patchers between FO3 and FNV when applicable
 
 === 30.9 [1/19/2015]
 * Fixed typo in MreClas for ATTR

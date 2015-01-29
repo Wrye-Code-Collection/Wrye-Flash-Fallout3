@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 #
 # GPL License and Copyright Notice ============================================
-#  This file is part of Wrye Bash.
+#  This file is part of Wrye Flash.
 #
-#  Wrye Bash is free software; you can redistribute it and/or
+#  Wrye Flash is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
 #  as published by the Free Software Foundation; either version 2
 #  of the License, or (at your option) any later version.
 #
-#  Wrye Bash is distributed in the hope that it will be useful,
+#  Wrye Flash is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Wrye Bash; if not, write to the Free Software Foundation,
+#  along with Wrye Flash; if not, write to the Free Software Foundation,
 #  Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-#  Wrye Bash copyright (C) 2005, 2006, 2007, 2008, 2009 Wrye
+#  Wrye Flash copyright (C) 2005, 2006, 2007, 2008, 2009 Wrye
 #
 # =============================================================================
 
@@ -109,6 +109,7 @@ question = False
 
 #--File Singletons
 falloutIni = None
+falloutDefaultIni = None
 falloutPrefsIni = None
 modInfos  = None  #--ModInfos singleton
 saveInfos = None #--SaveInfos singleton
@@ -440,6 +441,7 @@ def getFormIndices(fid):
     """Returns tuple of modindex and objectindex of fid."""
     return (int(fid >> 24),int(fid & 0xFFFFFFL))
 
+#------------------------------------------------------------------------------
 # Mod I/O --------------------------------------------------------------------
 #------------------------------------------------------------------------------
 class ModError(FileError):
@@ -777,6 +779,7 @@ class MelBase:
         """Applies function to fids. If save is True, then fid is set
         to result of function."""
         raise AbstractError
+
 #------------------------------------------------------------------------------
 class MelFid(MelBase):
     """Represents a mod record fid element."""
@@ -974,6 +977,7 @@ class MelGroups(MelGroup):
         for target in record.__getattribute__(self.attr):
             for element in formElements:
                 element.mapFids(target,function,save)
+
 #------------------------------------------------------------------------------
 class MelNull(MelBase):
     """Represents an obsolete record. Reads bytes from instream, but then
@@ -1123,6 +1127,7 @@ class MelStruct(MelBase):
         for attr in self.formAttrs:
             result = function(getter(attr))
             if save: setter(attr,result)
+
 #------------------------------------------------------------------------------
 class MelStructs(MelStruct):
     """Represents array of structured records."""
@@ -1209,6 +1214,7 @@ class MelStructA(MelStructs):
             melMap = MelStruct.mapFids
             for target in record.__getattribute__(self.attr):
                 melMap(self,target,function,save)
+
 #------------------------------------------------------------------------------
 class MelTuple(MelBase):
     """Represents a fixed length array that maps to a single subrecord.
@@ -1236,7 +1242,6 @@ class MelTuple(MelBase):
 
 #------------------------------------------------------------------------------
 # Common/Special Elements
-
 #------------------------------------------------------------------------------
 class MelConditions(MelStructs):
     """Represents a set of quest/dialog conditions. Difficulty is that FID state
@@ -1386,9 +1391,9 @@ class MelDestructible(MelGroup):
     def __init__(self,attr='destructible'):
         """Initialize elements."""
         MelGroup.__init__(self,attr,
-            MelStruct('DEST','i2B2s','health','count','flags1','unused'),
+            MelStruct('DEST','i2B2s','health','count','destFlags1','unused'),
             MelGroups('stages',
-                      MelStruct('DSTD','=4B4I','health','index','damageStage','flags2',
+                      MelStruct('DSTD','=4B4I','health','index','damageStage','destFlags1',
                                 'selfDamagePerSecond',(FID,'explosion',None),(FID,'debris',None),'debrisCount'),
                       MelString('DMDL','model'),
                       MelBase('DMDT','dmdt'), #--Should be a struct. Maybe later.
@@ -1605,6 +1610,8 @@ class MelSet:
         for element in self.elements:
             element.report(None,buff,'')
         return buff.getvalue()
+
+#------------------------------------------------------------------------------
 # Flags
 #------------------------------------------------------------------------------
 class MelBipedFlags(Flags):
@@ -1619,6 +1626,7 @@ class MelBipedFlags(Flags):
         if newNames: names.update(newNames)
         Flags.__init__(self,default,names)
 
+#------------------------------------------------------------------------------
 # Alternate textures
 #------------------------------------------------------------------------------
 class MelAlternateTextures(MelBase):
@@ -1974,6 +1982,7 @@ class MelRecord(MreRecord):
     def updateMasters(self,masters):
         """Updates set of master names according to masters actually used."""
         self.__class__.melSet.updateMasters(self,masters)
+
 #------------------------------------------------------------------------------
 class MreActor(MelRecord):
     """Creatures and NPCs."""
@@ -2112,6 +2121,7 @@ class MreLeveledList(MelRecord):
             self.mergeSources = [otherMod]
         #--Done
         self.setChanged(self.mergeOverLast)
+
 #------------------------------------------------------------------------------
 class MreHasEffects:
     """Mixin class for magic items."""
@@ -9279,6 +9289,10 @@ class IniFile:
 def BestIniFile(path):
     if path.csbody == 'fallout':
         return falloutIni
+    elif path.csbody == 'fallout_default':
+        return falloutDefaultIni
+    elif path.csbody == 'falloutprefs':
+        return falloutPrefsIni
     ini = IniFile(path)
     ini_settings = ini.getSettings()
     if len(ini_settings) > 0:
@@ -9534,6 +9548,13 @@ class FalloutPrefsIni(FalloutIni):
     def __init__(self):
         """Initialize."""
         IniFile.__init__(self,dirs['saveBase'].join('FalloutPrefs.ini'),'General')
+
+#--------------------------------------------------------------------------------
+class FalloutDefaultIni(FalloutIni):
+    """Fallout_default.ini file."""
+    def __init__(self):
+        """Initialize."""
+        IniFile.__init__(self,dirs['app'].join('Fallout_default.ini'),'General')
 
 #------------------------------------------------------------------------------
 class OmodFile:
@@ -10345,7 +10366,7 @@ class ModInfo(FileInfo):
         self.writeHeader()
 
     def writeAuthorWB(self):
-        """Marks author field with " [wb]" to indicate Wrye Bash modification."""
+        """Marks author field with " [wb]" to indicate Wrye Flash modification."""
         author = self.header.author
         if '[wm]' not in author and len(author) <= 27:
             self.writeAuthor(author+' [wb]')
@@ -12053,7 +12074,7 @@ class ConfigHelpers:
 
 
         bapi.Init(dirs['compiled'].s)
-        # That didn't work - Wrye Bash isn't installed correctly
+        # That didn't work - Wrye Flash isn't installed correctly
         if not bapi.BAPI:
             raise bolt.BoltError('The BOSS API could not be loaded.')
 
@@ -12111,7 +12132,7 @@ class ConfigHelpers:
         #--No masterlist, use the taglist
         taglist = dirs['mods'].join('Bash Patches','taglist.txt')
         if not taglist.exists():
-            raise bolt.BoltError('Data\\Bash Patches\\taglist.txt could not be found.  Please ensure Wrye Bash is installed correctly.')
+            raise bolt.BoltError('Data\\Bash Patches\\taglist.txt could not be found.  Please ensure Wrye Flash is installed correctly.')
         try:
             self.tagCache = {}
             boss.Load(taglist.s)
@@ -12904,7 +12925,7 @@ class Installer(object):
                     date = apFile.mtime
                     done += size
                 except WindowsError:
-                    deprint(_('Failed to calculate crc for %s - please report this and or try the unicode build of Wrye Bash.') % (apFile.s))
+                    deprint(_('Failed to calculate crc for %s - please report this and or try the unicode build of Wrye Flash.') % (apFile.s))
                     continue
                 new_sizeCrcDate[rpFile] = (size,crc,date)
         old_sizeCrcDate.clear()
@@ -14358,7 +14379,11 @@ class InstallersData(bolt.TankData, DataDict):
         self.bashDir.makedirs()
         #--Archive invalidation
         if settings.get('bash.bsaRedirection'):
-            falloutIni.setBsaRedirection(True)
+            try:
+                falloutIni.setBsaRedirection(True)
+            except WindowsError:
+                pass
+            falloutDefaultIni.setBsaRedirection(True)
         #--Refresh Data
         changed = False
         if not self.loaded:
@@ -19433,7 +19458,7 @@ class PCFaces:
         #--Set face
         npc.full = face.pcName
         npc.flags.female = (face.gender & 0x1)
-        # NPCs do not have an FNAM subrecord or any equivalent
+        # Fallout NPCs do not have an FNAM subrecord or any equivalent
         # npc.setRace(masterMap(face.race,0x00907)) #--Default to Imperial
         npc.eye = masterMap(face.eye,None)
         npc.hair = masterMap(face.hair,None)
@@ -19666,7 +19691,7 @@ class PCFaces:
         npc.full = face.pcName
         npc.flags.female = face.gender
         npc.iclass = masterMap(face.iclass,0x237a8) #--Default to Acrobat
-        # NPCs do not have an FNAM subrecord or any equivalent
+        # Fallout NPCs do not have an FNAM subrecord or any equivalent
         # npc.setRace(masterMap(face.race,0x00907)) #--Default to Imperial
         npc.eye = masterMap(face.eye,None)
         npc.hair = masterMap(face.hair,None)
@@ -20250,7 +20275,6 @@ class Save_NPCEdits:
 class PatchFile(ModFile):
     """Defines and executes patcher configuration."""
     #--Class
-    # removed MreLvsp
     mergeClasses = (
         MreActi, MreAddn, MreAlch, MreAmmo, MreAnio, MreArma, MreArmo, MreAspc, MreAvif, MreBook,
         MreBptd, MreCams, MreClas, MreClmt, MreCobj, MreCont, MreCpth, MreCrea, MreCsty, MreDebr,
@@ -20447,7 +20471,6 @@ class PatchFile(ModFile):
         modFile.convertToLongFids()
         badForm = (GPath("Fallout3.esm"),0xA31D) #--DarkPCB record
         for blockType,block in modFile.tops.iteritems():
-            # removed 'LVSP'
             iiSkipMerge = iiMode and blockType not in ('LVLC','LVLI','LVLN')
             #--Make sure block type is also in read and write factories
             if blockType not in self.loadFactory.recTypes:
@@ -20718,7 +20741,6 @@ class CBash_PatchFile(ObModFile):
         recordsToLoad = set()
         badForm = (GPath("Fallout3.esm"),0xA31D) #--DarkPCB record
         for blockType, block in modFile.aggregates.iteritems():
-            # removed 'LVSP'
             iiSkipMerge = iiMode and blockType not in ('LVLC','LVLI','LVLN')
             if iiSkipMerge: continue
             #--Make sure block type is also in read and write factories
@@ -20803,7 +20825,6 @@ class CBash_PatchFile(ObModFile):
         """Scans load+merge mods."""
         if not len(self.loadMods): return
         iiModeSet = set(('InventOnly','IIM'))
-        # removed 'LVSP'
         levelLists = set(('LVLC','LVLI','LVLN'))
         nullProgress = bolt.Progress()
 
@@ -20840,7 +20861,7 @@ class CBash_PatchFile(ObModFile):
             print _("Please copy this entire message and report it on the current official thread at "
                     "http://forums.bethsoft.com/index.php?/forum/25-mods/.\n Also with:\n1. Your OS:"
                     "\n2. Your installed MS Visual C++ redistributable versions:\n3. Your system RAM "
-                    "amount:\n4. How much memory Python.exe\pythonw.exe or Wrye Bash.exe is using\n5."
+                    "amount:\n4. How much memory Python.exe\pythonw.exe or Wrye Flash.exe is using\n5."
                     " and finally... if restarting Wrye Bash and trying again and building the CBash "
                     "Bashed Patch right away works fine\n")
             print ObCollection.Debug_DumpModFiles()
@@ -22524,7 +22545,7 @@ class GraphicsPatcher(ImportPatcher):
         recFidAttrs_class = self.recFidAttrs_class = {}
         for recClass in (MreLscr, MreClas, MreLtex, MreRegn):
             recAttrs_class[recClass] = ('iconPath',)
-        for recClass in (MreActi, MreDoor, MreFurn, MreGras, MreStat, MreMstt, MreBptd, MreTerm, MrePwat, MreHdpt, MreTact):
+        for recClass in (MreActi, MreBptd, MreDoor, MreFurn, MreGras, MreHdpt, MreMstt, MrePwat, MreStat, MreTact, MreTerm):
             recAttrs_class[recClass] = ('model',)
         for recClass in (MreLigh,):
             recAttrs_class[recClass] = ('iconPath','model')
@@ -22537,7 +22558,7 @@ class GraphicsPatcher(ImportPatcher):
         for recClass in (MreWeap,):
             recAttrs_class[recClass] = ('iconPath','smallIconPath','model','shellCasingModel','scopeModel','worldModel','firstPersonModel','animationType','gripAnimation','reloadAnimation')
         for recClass in (MreArmo, MreArma):
-            recAttrs_class[recClass] = ('maleBody','maleWorld','maleIconPath','maleSmallIconPath','femaleBody','femaleWorld','femaleIconPath','femaleSmallIconPath','flags')
+            recAttrs_class[recClass] = ('maleBody','maleWorld','maleIconPath','maleSmallIconPath','femaleBody','femaleWorld','femaleIconPath','femaleSmallIconPath','dnamFlags')
         for recClass in (MreCrea,):
             recAttrs_class[recClass] = ('model','bodyParts','nift_p','bodyPartData','impactDataset')
         for recClass in (MreMgef,):
@@ -33551,7 +33572,6 @@ class ListsMerger(SpecialPatcher,ListPatcher):
         """Prepare to handle specified patch mod. All functions are called after this."""
         Patcher.initPatchFile(self,patchFile,loadMods)
         self.srcMods = set(self.getConfigChecked()) & set(loadMods)
-        # removed 'LVSP'
         self.listTypes = ('LVLC','LVLI','LVLN')
         self.type_list = dict([(type,{}) for type in self.listTypes])
         self.masterItems = {}
@@ -33607,12 +33627,10 @@ class ListsMerger(SpecialPatcher,ListPatcher):
 
     def getReadClasses(self):
         """Returns load factory classes needed for reading."""
-        # removed MreLvsp
         return (MreLvlc,MreLvli,MreLvln)
 
     def getWriteClasses(self):
         """Returns load factory classes needed for writing."""
-        # removed MreLvsp
         return (MreLvlc,MreLvli,MreLvln)
 
     def scanModFile(self, modFile, progress):
@@ -33684,7 +33702,6 @@ class ListsMerger(SpecialPatcher,ListPatcher):
         for leveler in (self.levelers or []):
             log('* '+self.getItemLabel(leveler))
         #--Save to patch file
-        # removed 'LVSP'
         for label, type in ((_('Creature'),'LVLC'), (_('Item'),'LVLI'), (_('NPC'),'LVLN')):
             log.setHeader(_('=== Merged %s Lists') % label)
             patchBlock = getattr(self.patchFile,type)
@@ -33697,7 +33714,6 @@ class ListsMerger(SpecialPatcher,ListPatcher):
                 for mod in record.mergeSources:
                     log('  * ' + self.getItemLabel(mod))
         #--Discard empty sublists
-        # removed 'LVSP'
         for label, type in ((_('Creature'),'LVLC'), (_('Item'),'LVLI'), (_('NPC'),'LVLN')):
             patchBlock = getattr(self.patchFile,type)
             levLists = self.type_list[type]
@@ -35719,9 +35735,7 @@ class ContentsChecker(SpecialPatcher,Patcher):
     def initPatchFile(self,patchFile,loadMods):
         """Prepare to handle specified patch mod. All functions are called after this."""
         Patcher.initPatchFile(self,patchFile,loadMods)
-        # removed 'LVSP'
         self.contType_entryTypes = {
-         #   'LVSP':'LVSP,SPEL,'.split(','),
             'LVLC':'LVLC,CREA,'.split(','),
             'LVLN':'LVLN,NPC_,'.split(','),
             #--LVLI will also be applied for containers.
@@ -35782,7 +35796,6 @@ class ContentsChecker(SpecialPatcher,Patcher):
         log.setHeader('= '+self.__class__.name)
         #--Lists
         for cAttr,eAttr,types in (
-            # removed 'LVSP'
             ('entries','listId',('LVLI','LVLC','LVLN')),
             ('items','item',('CONT','CREA','NPC_')),
             ):
@@ -36172,9 +36185,9 @@ def initDirs(bashIni, personal, localAppData, falloutPath):
         # TODO: make this gracefully degrade.  IE, if only the BAIN paths are
         # bad, just disable BAIN.  If only the saves path is bad, just disable
         # saves related stuff.
-        msg = balt.fill(_('Wrye Bash cannot access the following paths:'))
+        msg = balt.fill(_('Wrye Flash cannot access the following paths:'))
         msg += '\n\n'+ '\n'.join([' * '+dir.s for dir in badPermissions]) + '\n\n'
-        msg += balt.fill(_('See: "Wrye Bash.html, Installation - Windows Vista/7" for information on how to solve this problem.'))
+        msg += balt.fill(_('See: "Wrye Flash.html, Installation - Windows Vista/7" for information on how to solve this problem.'))
         raise PermissionError(msg)
 
     # create bash user folders, keep these in order
@@ -36366,7 +36379,7 @@ def initLogFile():
             os.remove(inisettings['LogFile'].s)
     else:
         log = inisettings['LogFile'].open("a")
-        log.write(_('%s Wrye Bash ini file read, Keep Log level: %d, initialized.\r\n') % (datetime.datetime.now(),inisettings['KeepLog']))
+        log.write(_('%s Wrye Flash ini file read, Keep Log level: %d, initialized.\r\n') % (datetime.datetime.now(),inisettings['KeepLog']))
         log.close()
 
 def initBosh(personal='',localAppData='',falloutPath=''):
@@ -36388,7 +36401,7 @@ def initSettings(readOnly=False):
             dirs['userApp'].join('bash config.pkl'),
             readOnly))
     except cPickle.UnpicklingError, err:
-        usebck = balt.askYes(None,_("Error reading the Bash Settings database (the error is: '%s'). This is probably not recoverable with the current file. Do you want to try the backup BashSettings.dat? (It will have all your UI choices of the time before last that you used Wrye Bash." %(err)),_("Settings Load Error"))
+        usebck = balt.askYes(None,_("Error reading the Bash Settings database (the error is: '%s'). This is probably not recoverable with the current file. Do you want to try the backup BashSettings.dat? (It will have all your UI choices of the time before last that you used Wrye Flash." %(err)),_("Settings Load Error"))
         if usebck:
             try:
                 settings = bolt.Settings(PickleDict(
@@ -36396,7 +36409,7 @@ def initSettings(readOnly=False):
                     dirs['userApp'].join('bash config.pkl'),
                     readOnly))
             except cPickle.UnpicklingError, err:
-                delete = balt.askYes(None,_("Error reading the BackupBash Settings database (the error is: '%s'). This is probably not recoverable with the current file. Do you want to delete the corrupted settings and load Wrye Bash without your saved UI settings?. (Otherwise Wrye Bash wo't start up)" %(err)),_("Settings Load Error"))
+                delete = balt.askYes(None,_("Error reading the BackupBash Settings database (the error is: '%s'). This is probably not recoverable with the current file. Do you want to delete the corrupted settings and load Wrye Flash without your saved UI settings?. (Otherwise Wrye Flash won't start up)" %(err)),_("Settings Load Error"))
                 if delete:
                     dirs['saveBase'].join('BashSettings.dat').remove()
                     settings = bolt.Settings(PickleDict(
@@ -36405,7 +36418,7 @@ def initSettings(readOnly=False):
                     readOnly))
                 else:raise
         else:
-            delete = balt.askYes(None,_("Do you want to delete the corrupted settings and load Wrye Bash without your saved UI settings?. (Otherwise Wrye Bash wo't start up)"),_("Settings Load Error"))
+            delete = balt.askYes(None,_("Do you want to delete the corrupted settings and load Wrye Flash without your saved UI settings?. (Otherwise Wrye Flash won't start up)"),_("Settings Load Error"))
             if delete:
                 dirs['saveBase'].join('BashSettings.dat').remove()
                 settings = bolt.Settings(PickleDict(

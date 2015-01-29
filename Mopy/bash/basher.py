@@ -2258,6 +2258,9 @@ class INIPanel(SashPanel):
         if 'FalloutPrefs.ini' not in self.choices:
             self.choices['FalloutPrefs.ini'] = bosh.falloutPrefsIni.path
             changed = True
+        if 'Fallout_default.ini' not in self.choices:
+            self.choices['Fallout_default.ini'] = bosh.falloutDefaultIni.path
+            changed = True
         if _('Browse...') not in self.choices:
             self.choices[_('Browse...')] = None
             changed = True
@@ -3276,7 +3279,7 @@ class InstallersPanel(SashTankPanel):
                 if bosh.inisettings['ClearRO']:
                     cmd = r'attrib -R "%s\*" /S /D' % (bosh.dirs['mods'])
                     cmd = Encode(cmd,'mbcs')
-                    ins,err = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=subprocess.PIPE, startupinfo=startupinfo).communicate()
+                    ins, err = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=subprocess.PIPE, startupinfo=startupinfo).communicate()
             except CancelError:
                 # User canceled the refresh
                 self.refreshing = False
@@ -4841,7 +4844,7 @@ class BashFrame(wx.Frame):
             wxver = wx.version()
             deprint(wxver)
             if not 'unicode' in wxver.lower() and not '2.9' in wxver:
-                balt.showWarning(bashFrame,_("Warning you appear to be using a non-unicode version of wxPython (%s) but have set Wrye Flash to unicode mode, this may cause problems, it is reccomended you use a unicode version of wPython instead.") % wxver)
+                balt.showWarning(bashFrame,_("Warning you appear to be using a non-unicode version of wxPython (%s) but have set Wrye Flash to unicode mode, this may cause problems, it is recommended you use a unicode version of wPython instead.") % wxver)
 
     def SetTitle(self,title=None):
         """Set title. Set to default if no title supplied."""
@@ -5514,6 +5517,7 @@ class BashApp(wx.App):
         bosh.configHelpers.refresh()
         bosh.falloutIni = bosh.FalloutIni()
         bosh.falloutPrefsIni = bosh.FalloutPrefsIni()
+        bosh.falloutDefaultIni = bosh.FalloutDefaultIni()
         bosh.modInfos = bosh.ModInfos()
         bosh.modInfos.refresh(doAutoGroup=True)
         progress.Update(30,_("Initializing SaveInfos"))
@@ -6040,7 +6044,7 @@ class PatchDialog(wx.Dialog):
         self.SetOkEnable()
 
     def UpdateConfig(self,patchConfigs,event=None):
-        if not balt.askYes(self.parent,_("Wrye Flash detects that the selected file was saved in Bash's %s mode, do you want Wrye Flash to attempt to adjust the configuration on import to work with %s mode (Good chance there will be a few mistakes)? (Otherwise this import will have no effect.)" % (['CBash','Python'][self.doCBash], ['Python','CBash'][self.doCBash]))): return
+        if not balt.askYes(self.parent,_("Wrye Flash detects that the selected file was saved in Flash's %s mode, do you want Wrye Flash to attempt to adjust the configuration on import to work with %s mode (Good chance there will be a few mistakes)? (Otherwise this import will have no effect.)" % (['CBash','Python'][self.doCBash], ['Python','CBash'][self.doCBash]))): return
         if not self.doCBash:
             bosh.CBash_PatchFile.patchTime = bosh.PatchFile.patchTime
         else:
@@ -7603,7 +7607,11 @@ class Installers_BsaRedirection(BoolLink):
             bsaFile.scan()
             resetCount = bsaFile.reset()
             #balt.showOk(self,_("BSA Hashes reset: %d") % (resetCount,))
-        bosh.falloutIni.setBsaRedirection(settings[self.key])
+        try:
+            bosh.falloutIni.setBsaRedirection(settings[self.key])
+        except WindowsError:
+            pass
+        bosh.falloutDefaultIni.setBsaRedirection(settings[self.key])
 
 #------------------------------------------------------------------------------
 class Installers_ConflictsReportShowsInactive(BoolLink):
@@ -14250,7 +14258,7 @@ class App_BOSS(App_Button):
                 if bosh.dirs['boss'].join('BOSS.exe').version >= (2,0,0,0):
                     # After version 2.0, need to pass in the -g argument
                     #exeArgs += ('-g%s' % bush.game.name,)
-                    exeArgs += ('-g%s' % u'Fallout3',)
+                    exeArgs += ('-g%s' % 'Fallout3',)
                 progress(0.05,_("Processing... launching BOSS."))
                 try:
                     subprocess.call((exePath.s,) + exeArgs[1:], startupinfo=bosh.startupinfo, close_fds=bolt.close_fds)
@@ -14438,7 +14446,6 @@ def InitImages():
     images['save.off'] = Image(GPath(bosh.dirs['images'].join('save_off.png')),wx.BITMAP_TYPE_PNG)
     #--Misc
     #images['fallout3'] = Image(GPath(bosh.dirs['images'].join('fallout3.png')),wx.BITMAP_TYPE_PNG)
-    #images['falloutnv'] = Image(GPath(bosh.dirs['images'].join('falloutnv.png')),wx.BITMAP_TYPE_PNG)
     images['help'] = Image(GPath(bosh.dirs['images'].join('help'))+bosh.inisettings['IconSize']+'.png',wx.BITMAP_TYPE_PNG)
     #--Tools
     images['doc.on'] = Image(GPath(bosh.dirs['images'].join('page_find'))+bosh.inisettings['IconSize']+'.png',wx.BITMAP_TYPE_PNG)

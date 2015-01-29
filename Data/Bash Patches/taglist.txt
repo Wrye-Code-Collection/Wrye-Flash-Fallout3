@@ -1,5 +1,5 @@
 BrokenSteel.esm
- TAG: {{BASH: Actors.ACBS, Actors.AIPackages, Relev}}
+ TAG: {{BASH: Actors.ACBS,Actors.AIPackages,Relev,C.Water,Delev,Factions,Stats}}
 Lings.esm
  TAG: {{BASH: Hair}}
 Unofficial Fallout 3 Patch.esm

@@ -149,7 +149,7 @@ allTags = sorted((
     'Names', 'NoMerge', 'NpcFaces', 'R.Relations', 'Relev', 'Scripts',
     'ScriptContents', 'Sound', 'Stats', 'Voice-F', 'Voice-M', 'R.Teeth',
     'R.Mouth', 'R.Ears', 'R.Head', 'R.Attributes-F', 'R.Attributes-M', 'R.Skills',
-    'R.Description', 'Roads', 'Actors.Anims', 'Actors.AIData', 'Actors.DeathItem',
+    'R.Description', 'Actors.Anims', 'Actors.AIData', 'Actors.DeathItem',
     'Actors.AIPackages', 'Actors.AIPackagesForceAdd', 'Actors.Stats', 'Actors.ACBS',
     'NPC.Class', 'Actors.CombatStyle', 'Creatures.Blood', 'NPC.Race',
     'Actors.Skeleton', 'NpcFacesForceFullImport', 'MustBeActiveIfImported', 'Deflst',
@@ -20862,7 +20862,7 @@ class CBash_PatchFile(ObModFile):
                     "http://forums.bethsoft.com/index.php?/forum/25-mods/.\n Also with:\n1. Your OS:"
                     "\n2. Your installed MS Visual C++ redistributable versions:\n3. Your system RAM "
                     "amount:\n4. How much memory Python.exe\pythonw.exe or Wrye Flash.exe is using\n5."
-                    " and finally... if restarting Wrye Bash and trying again and building the CBash "
+                    " and finally... if restarting Wrye Flash and trying again and building the CBash "
                     "Bashed Patch right away works fine\n")
             print ObCollection.Debug_DumpModFiles()
             raise StateError()

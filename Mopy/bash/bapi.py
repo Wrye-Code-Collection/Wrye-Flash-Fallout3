@@ -7,7 +7,7 @@ import os
 import platform
 
 try:
-    # Wrye Bash specific support
+    # Wrye Flash specific support
     import bolt
     from bolt import Path, GPath
 except:

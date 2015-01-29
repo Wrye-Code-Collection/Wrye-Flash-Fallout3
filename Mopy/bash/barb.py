@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 #
 # GPL License and Copyright Notice ============================================
-#  This file is part of Wrye Bash.
+#  This file is part of Wrye Flash.
 #
-#  Wrye Bash is free software; you can redistribute it and/or
+#  Wrye Flash is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
 #  as published by the Free Software Foundation; either version 2
 #  of the License, or (at your option) any later version.
 #
-#  Wrye Bash is distributed in the hope that it will be useful,
+#  Wrye Flash is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Wrye Bash; if not, write to the Free Software Foundation,
+#  along with Wrye Flash; if not, write to the Free Software Foundation,
 #  Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-#  Wrye Bash copyright (C) 2005, 2006, 2007, 2008, 2009 Wrye
+#  Wrye Flash copyright (C) 2005, 2006, 2007, 2008, 2009 Wrye
 #
 # =============================================================================
 
@@ -235,7 +235,7 @@ class BackupSettings(BaseBackupSettings):
         #returns False if same app version or old version == 0 (as in not previously installed) or user cancels
         if basher.settings['bash.readme'][1] == '0': return False
         return not self.SameAppVersion() and self.PromptConfirm(
-            _('A different version of Wrye Bash was previously installed.\n') +
+            _('A different version of Wrye Flash was previously installed.\n') +
             _('Previous Version: %s\n') % (basher.settings['bash.readme'][1]) +
             _('Current Version: %s\n') % (self.verApp) +
             _('Do you want to create a backup of your Bash settings before they are overwritten?'))
@@ -245,7 +245,7 @@ class BackupSettings(BaseBackupSettings):
         return not askYes(self.parent,
             _('You did not create a backup of the Bash settings.\n') +
             _('If you continue, your current settings may be overwritten.\n') +
-            _('Do you want to quit Wrye Bash now?'),
+            _('Do you want to quit Wrye Flash now?'),
             _('No backup created!'))
 
     def PromptQuit(self):
@@ -253,7 +253,7 @@ class BackupSettings(BaseBackupSettings):
         return askYes(self.parent,
             _('There was an error while trying to backup the Bash settings!\n') +
             _('If you continue, your current settings may be overwritten.\n') +
-            _('Do you want to quit Wrye Bash now?'),
+            _('Do you want to quit Wrye Flash now?'),
             _('Unable to create backup!'))
 
     def WarnFailed(self):
@@ -413,7 +413,7 @@ class RestoreSettings(BaseBackupSettings):
             _('Your Bash settings have been successfuly restored.\n') +
             _('Backup Path: %s\n') % (self.dir.join(self.archive).s) +
             _('\n') +
-            _('Before the settings can take effect, Wrye Bash must restart.\n') +
+            _('Before the settings can take effect, Wrye Flash must restart.\n') +
             _('Click OK to restart now.'),
             _('Bash Settings Restored'))
 

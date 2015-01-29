@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 #
 # GPL License and Copyright Notice ============================================
-#  This file is part of Wrye Bash.
+#  This file is part of Wrye Flash.
 #
-#  Wrye Bash is free software; you can redistribute it and/or
+#  Wrye Flash is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
 #  as published by the Free Software Foundation; either version 2
 #  of the License, or (at your option) any later version.
 #
-#  Wrye Bash is distributed in the hope that it will be useful,
+#  Wrye Flash is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Wrye Bash; if not, write to the Free Software Foundation,
+#  along with Wrye Flash; if not, write to the Free Software Foundation,
 #  Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-#  Wrye Bash copyright (C) 2005, 2006, 2007, 2008, 2009 Wrye
+#  Wrye Flash copyright (C) 2005, 2006, 2007, 2008, 2009 Wrye
 #
 # =============================================================================
 
-"""This module starts the Wrye Bash application in console mode. Basically, it runs some
+"""This module starts the Wrye Flash application in console mode. Basically, it runs some
 initialization functions and then starts the main application loop."""
 
 # Imports ---------------------------------------------------------------------
@@ -149,7 +149,7 @@ def exit():
             subprocess.Popen(sys.argv, executable=exePath.s, close_fds=bolt.close_fds) #close_fds is needed for the one instance checker
         except Exception, error:
             print error
-            print _("Error Attempting to Restart Wrye Bash!")
+            print _("Error Attempting to Restart Wrye Flash!")
             print _("cmd line: "), exePath.s, sys.argv
             print
             raise
@@ -198,12 +198,12 @@ def main():
                         action='store_true',
                         default=False,
                         dest='backup',
-                        help='Backup all Bash settings to an archive file before the app launches. Either specify the filepath with  the -f/--filename options or Wrye Bash will prompt the user for the backup file path.')
+                        help='Backup all Bash settings to an archive file before the app launches. Either specify the filepath with  the -f/--filename options or Wrye Flash will prompt the user for the backup file path.')
     backupGroup.add_option('-r', '--restore',
                         action='store_true',
                         default=False,
                         dest='restore',
-                        help='Backup all Bash settings to an archive file before the app launches. Either specify the filepath with  the -f/--filename options or Wrye Bash will prompt the user for the backup file path.')
+                        help='Backup all Bash settings to an archive file before the app launches. Either specify the filepath with  the -f/--filename options or Wrye Flash will prompt the user for the backup file path.')
     backupGroup.add_option('-f', '--filename',
                         action='store',
                         default='',
@@ -346,9 +346,9 @@ def main():
     if sys.version[0:3] < '2.6': #nasty, may cause failure in oneInstanceChecker but better than bash failing to open things for no (user) apparent reason such as in 2.5.2 and under.
         bolt.close_fds = False
         if sys.version[0:3] == 2.5:
-            run = balt.askYes(None,"Warning: You are using a python version prior to 2.6 and there may be some instances that failures will occur. Updating is recommended but not imperative. Do you still want to run Wrye Bash right now?","Warning OLD Python version detected")
+            run = balt.askYes(None,"Warning: You are using a python version prior to 2.6 and there may be some instances that failures will occur. Updating is recommended but not imperative. Do you still want to run Wrye Flash right now?","Warning OLD Python version detected")
         else:
-            run = balt.askYes(None,"Warning: You are using a Python version prior to 2.5x which is totally out of date and ancient and Bash will likely not like it and may totally refuse to work. Please update to a more recent version of Python(2.6x or 2.7x is preferred). Do you still want to run Wrye Bash?", "Warning OLD Python version detected")
+            run = balt.askYes(None,"Warning: You are using a Python version prior to 2.5x which is totally out of date and ancient and Bash will likely not like it and may totally refuse to work. Please update to a more recent version of Python(2.6x or 2.7x is preferred). Do you still want to run Wrye Flash?", "Warning OLD Python version detected")
         if not run:
             return
         

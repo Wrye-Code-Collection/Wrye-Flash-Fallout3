@@ -235,7 +235,7 @@ allBethFiles = set((
     r'zeta - sounds.bsa',
     r'DLCList.txt',
     ))
-    
+
 # Balo Canonical Groups -------------------------------------------------------
 baloGroups = (
     ('Root',),
@@ -303,7 +303,7 @@ topTypes = ['GMST', 'TXST', 'MICN', 'GLOB', 'CLAS', 'FACT', 'HDPT', 'HAIR', 'EYE
 #--Dict mapping 'ignored' top types to un-ignored top types.
 topIgTypes = dict([(struct.pack('I',(struct.unpack('I',type)[0]) | 0x1000),type) for type in topTypes])
 
-recordTypes = set(topTypes + 'GRUP,TES4,ROAD,REFR,ACHR,ACRE,PGRD,LAND,INFO,PGRE,NAVM'.split(','))
+recordTypes = set(topTypes + 'GRUP,TES4,ACHR,ACRE,INFO,LAND,NAVM,PGRE,PMIS,REFR'.split(','))
 
 # Id Functions ----------------------------------------------------------------
 def getIdFunc(modName):

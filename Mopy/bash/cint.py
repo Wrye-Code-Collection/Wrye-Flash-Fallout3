@@ -2741,7 +2741,7 @@ class ObCELLRecord(ObBaseRecord):
         retValue = _CGetField(self._CollectionID, self._ModID, self._RecordID, 40, 0, 0, 0, 0, 0, 0, 0)
         if(retValue): return retValue
         return 0
-        
+
     @property
     def bsb(self):
         """Returns tesfile block and sub-block indices for cells in this group.
@@ -3858,11 +3858,11 @@ class ObLVLIRecord(ObBaseRecord):
 #         count = CBashGeneric_LIST(4, c_short)
 #         unused2 = CBashUINT8ARRAY_LIST(5, 2)
 #         exportattrs = copyattrs = ['level', 'listId', 'count']
-# 
+#
 #     def mergeFilter(self,modSet):
 #         """Filter out items that don't come from specified modSet."""
 #         self.entries = [entry for entry in self.entries if entry.listId[0] in modSet]
-# 
+#
 #     chanceNone = CBashGeneric(5, c_ubyte)
 #     flags = CBashGeneric(6, c_ubyte)
 #     script = CBashJunk(7) #Doesn't actually exist, but is here so that LVLC,LVLI,LVLN can be processed similarly
@@ -5283,7 +5283,6 @@ class ObWTHRRecord(ObBaseRecord):
                                         'weatherType', 'boltRed', 'boltGreen', 'boltBlue', 'sounds_list'] #'modt_p',
 
 #Helper functions
-# removed 'LVSP'
 validTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SOUN','SKIL','MGEF','SCPT','LTEX','ENCH','SPEL',
                   'BSGN','ACTI','APPA','ARMO','BOOK','CLOT','CONT',
@@ -5292,9 +5291,8 @@ validTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SLGM','KEYM','ALCH','SBSP','SGST','LVLI','WTHR',
                   'CLMT','REGN','WRLD','CELL','ACHR','ACRE','REFR',
                   'PGRD','LAND','ROAD','DIAL','INFO','QUST','IDLE',
-                  'PACK','CSTY','LSCR','ANIO','WATR','EFSH'])
+                  'PACK','CSTY','LSCR','LVSP','ANIO','WATR','EFSH'])
 
-# removed 'LVSP'
 aggregateTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SOUN','SKIL','MGEF','SCPT','LTEX','ENCH','SPEL',
                   'BSGN','ACTI','APPA','ARMO','BOOK','CLOT','CONT',
@@ -5303,7 +5301,7 @@ aggregateTypes = set(['GMST','GLOB','CLAS','FACT','HAIR','EYES','RACE',
                   'SLGM','KEYM','ALCH','SBSP','SGST','LVLI','WTHR',
                   'CLMT','REGN','WRLD','CELLS','ACHRS','ACRES','REFRS',
                   'PGRDS','LANDS','ROADS','DIAL','INFOS','QUST','IDLE',
-                  'PACK','CSTY','LSCR','ANIO','WATR','EFSH'])
+                  'PACK','CSTY','LSCR','LVSP','ANIO','WATR','EFSH'])
 
 pickupables = set(['APPA','ARMO','BOOK','CLOT','INGR','LIGH','MISC',
                    'WEAP','AMMO','SLGM','KEYM','ALCH','SGST'])
@@ -5413,7 +5411,6 @@ class ObModFile(object):
                         if not formId: continue
                         if formId[0] != self.GName:
                             masters.add(formId[0])
-                # removed 'LVSP'
                 if type in ('LVLI','LVLC','LVLN'):
                     for entry in record.entries:
                         formMaster = entry.listId[0]
@@ -5890,7 +5887,6 @@ class ObModFile(object):
         return roads
 
     @property
-    # removed 'LVSP'
     def tops(self):
         return dict((("GMST", self.GMST),("GLOB", self.GLOB),("CLAS", self.CLAS),("FACT", self.FACT),
                      ("HAIR", self.HAIR),("EYES", self.EYES),("RACE", self.RACE),("SOUN", self.SOUN),
@@ -5908,7 +5904,6 @@ class ObModFile(object):
                      ("ANIO", self.ANIO),("WATR", self.WATR),("EFSH", self.EFSH)))
 
     @property
-    # removed 'LVSP'
     def aggregates(self):
         return dict((("GMST", self.GMST),("GLOB", self.GLOB),("CLAS", self.CLAS),("FACT", self.FACT),
                      ("HAIR", self.HAIR),("EYES", self.EYES),("RACE", self.RACE),("SOUN", self.SOUN),

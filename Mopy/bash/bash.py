@@ -66,7 +66,7 @@ def SetUserPath(iniPath, uArg=None):
 # Backup/Restore --------------------------------------------------------------
 def cmdBackup():
     # backup settings if app version has changed or on user request
-    if not basherImported: 
+    if not basherImported:
         import basher, barb
     backup = None
     path = None
@@ -214,7 +214,7 @@ def main():
                         default=False,
                         dest='quietquit',
                         help='Close Bash after creating or restoring backup and do not display any prompts or message dialogs.')
-    parser.set_defaults(backup_images=0)                    
+    parser.set_defaults(backup_images=0)
     backupGroup.add_option('-i', '--include-changed-images',
                         action='store_const',
                         const=1,
@@ -264,7 +264,7 @@ def main():
     parser.add_option('--genHtml',
                         default=None,
                         help=optparse.SUPPRESS_HELP)
-    
+
     parser.add_option_group(pathGroup)
     parser.add_option_group(userPathGroup)
     parser.add_option_group(backupGroup)
@@ -273,9 +273,9 @@ def main():
     if len(extra) > 0:
         parser.print_help()
         return
-    
+
     bolt.deprintOn = opts.debug
-    
+
     if opts.Psyco:
         try:
             import psyco
@@ -351,7 +351,7 @@ def main():
             run = balt.askYes(None,"Warning: You are using a Python version prior to 2.5x which is totally out of date and ancient and Bash will likely not like it and may totally refuse to work. Please update to a more recent version of Python(2.6x or 2.7x is preferred). Do you still want to run Wrye Flash?", "Warning OLD Python version detected")
         if not run:
             return
-        
+
     # process backup/restore options
     quit = False # quit if either is true, but only after calling both
     quit = quit or not cmdBackup()

@@ -4658,42 +4658,6 @@ class MrePack(MelRecord):
         )
     melSet.elements[-1].setMelSet(melSet)
     __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
-#------------------------------------------------------------------------------
-## See the comments on MreLand. Commented out for same reasons.
-##class MrePgrd(MelRecord):
-##    """Path grid structure. Part of cells."""
-##    ####Could probably be loaded via MelStructA,
-##    ####but little point since it is too complex to manipulate
-##    classType = 'PGRD'
-##    class MelPgrl(MelStructs):
-##        """Handler for pathgrid pgrl record."""
-##        def loadData(self,record,ins,type,size,readId):
-##            """Reads data from ins into record attribute."""
-##            if(size % 4 != 0):
-##                raise "Unexpected size encountered for pathgrid PGRL subrecord: %s" % size
-##            format = 'I' * (size % 4)
-##            attrs = self.attrs
-##            target = self.getDefault()
-##            record.__getattribute__(self.attr).append(target)
-##            target.__slots__ = self.attrs
-##            unpacked = ins.unpack(format,size,readId)
-##            setter = target.__setattr__
-##            map(setter,attrs,(unpacked[0], unpacked[1:]))
-##
-##        def dumpData(self,record,out):
-##            """Dumps data from record to outstream."""
-##            for target in record.__getattribute__(self.attr):
-##                out.packSub(self.subType,'I' + 'I'*(len(target.points)), target.reference, target.points)
-##
-##    melSet = MelSet(
-##        MelBase('DATA','data_p'),
-##        MelBase('PGRP','points_p'),
-##        MelBase('PGAG','pgag_p'),
-##        MelBase('PGRR','pgrr_p'),
-##        MelBase('PGRI','pgri_p'),
-##        MelPgrl('PGRL','','pgrl',(FID,'reference'),'points'),
-##    )
-##    __slots__ = MelRecord.__slots__ + melSet.getSlotsUsed()
 
 #------------------------------------------------------------------------------
 class MrePerk(MelRecord):

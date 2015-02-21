@@ -17550,7 +17550,8 @@ class CompleteItemData:
                     'minRange','maxRange','animationAttackMultiplier','fireRate','overrideActionPoint','rumbleLeftMotorStrength',
                     'rumbleRightMotorStrength','rumbleDuration','overrideDamageToWeaponMult','attackShotsPerSec',
                     'reloadTime','jamTime','aimArc','rambleWavelangth','limbDmgMult','sightUsage',
-                    'semiAutomaticFireDelayMin','semiAutomaticFireDelayMax','criticalDamage','criticalMultiplier',
+                    'semiAutomaticFireDelayMin','semiAutomaticFireDelayMax',
+                    'criticalDamage','criticalMultiplier',
                     'iconPath', 'smallIconPath'),
             }
         self.aliases = aliases or {} #--For aliasing mod fulls
@@ -17702,7 +17703,7 @@ class CompleteItemData:
             elif type == 'LIGH':
                 lights[longid] = (eid,) + tuple(func(field) for func,field in
                     #--(weight, value, duration)
-                    zip((str,sfloat,int,int,str),fields[4:9]))
+                    zip((str,sfloat,int,int,int,str,str),fields[4:11]))
             elif type == 'MISC':
                 misc[longid] = (eid,) + tuple(func(field) for func,field in
                     #--(weight, value)
@@ -17714,13 +17715,16 @@ class CompleteItemData:
                     #-- minRange, maxRange, animationAttackMultiplier, fireRate, overrideActionPoint, rumbleLeftMotorStrength,
                     #-- rumbleRightMotorStrength, rumbleDuration, overrideDamageToWeaponMult, attackShotsPerSec,
                     #-- reloadTime, jamTime, aimArc, rambleWavelangth, limbDmgMult, sightUsage,
-                    #-- semiAutomaticFireDelayMin, semiAutomaticFireDelayMax, criticalDamage, criticalMultiplier)
+                    #-- semiAutomaticFireDelayMin, semiAutomaticFireDelayMax,
+                    #-- criticalDamage, criticalMultiplier)
                     zip((str,sfloat,int,int,int,int,
                          sfloat,sfloat,int,sfloat,sfloat,sfloat,int,int,
                          sfloat,sfloat,sfloat,sfloat,sfloat,sfloat,
                          sfloat,sfloat,sfloat,sfloat,
                          sfloat,sfloat,sfloat,sfloat,sfloat,sfloat,
-                         sfloat,sfloat,int,sfloat,str,str),fields[4:40]))
+                         sfloat,sfloat,
+                         int,sfloat,
+                         str,str),fields[4:40]))
         ins.close()
 
     def writeToText(self,textPath):
@@ -17766,9 +17770,9 @@ class CompleteItemData:
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
                     _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Large Icon Path'),_('Small Icon Path'),_('Model'))) + '"\n')),
                 #Lights
-                ('LIGH', bolt.csvFormat('ssfiiss')+'\n',
+                ('LIGH', bolt.csvFormat('ssfiisss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
-                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Duration'),_('Icon Path'),_('Model'))) + '"\n')),
+                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Duration'),_('Icon Path'),_('Small Icon Path'),_('Model'))) + '"\n')),
                 #--Misc
                 ('MISC', bolt.csvFormat('ssfisss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
@@ -17834,9 +17838,9 @@ class CompleteItemData:
                     _('Editor Id'),_('Name'),_('Value'),_('Weight'),_('Model'),_('Icon'),_('Script'),_('MODB'),_('MODT_P'))) + '"\n')),
 
                 #Lights
-                ('LIGH', bolt.csvFormat('ssfiiss')+'\n',
+                ('LIGH', bolt.csvFormat('ssfiisss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),
-                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Duration'),_('Icon Path'),_('Model'))) + '"\n')),
+                    _('Editor Id'),_('Name'),_('Weight'),_('Value'),_('Duration'),_('Icon Path'),_('Small Icon Path'),_('Model'))) + '"\n')),
                 #--Misc
                 ('MISC', bolt.csvFormat('ssfiss')+'\n',
                     ('"' + '","'.join((_('Type'),_('Mod Name'),_('ObjectIndex'),

@@ -31605,7 +31605,7 @@ class NamesTweak_AmmoWeight(MultiTweakItem):
             m = listEidRe.match(record.eid)
             if m:
                 weight = format % (m.group(1), m.group(2))
-                for fid in record.fids:
+                for fid in record.formIDInList:
                     weights[fid] = weight
         for record in patchFile.AMMO.records:
             if not record.full: continue

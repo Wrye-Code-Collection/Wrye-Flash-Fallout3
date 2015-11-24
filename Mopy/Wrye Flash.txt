@@ -38,6 +38,9 @@ Additionally, Wrye Bash comes packaged with the following programs:
 {{CONTENTS=0}}
 **All versions by Wrye team and or Valda unless otherwise noted.**
 
+=== 31.5 [6/13/2015]
+* Bug fix for MreTerm - resolved DNAM issue in deleted Terminal record in mod Better Game Performance
+
 === 31.4 [6/13/2015]
 * Bug fix for False Flagged ESP Files [Valda]
 
@@ -72,7 +75,7 @@ Wrye Flash will now sort .esp files flagged as ESM files together with other .es
 
 === 30.6 [1/11/2015]
 * Updated MreAchr, MreAcre, MreAlch, MreArma, MreArmo, MreArmo, MreBook, MreBptd, MreClas, MreCrea, MreDebr, MreDial, MreEfsh, MreFact, MreFlst, MreIdle, MreIdlm, MreImad, MreInfo, MreIngr, MreIpct, MreIpds, MreLigh, MreMgef, MreNavi, MreNpc, MreRefr, MreRegn, MreScpt, MreSoun, MreTerm, MreTxst, MreWeap, MreWthr
-* Added MreCams, MreCobj, MreCpth, MreImgs, MreLgtm, MreMesg, MrePgre, MrePmis, MreRads, MreRgdl, MreScol, 
+* Added MreCams, MreCobj, MreCpth, MreImgs, MreLgtm, MreMesg, MrePgre, MrePmis, MreRads, MreRgdl, MreScol,
 
 === 30.5 [10/4/2014]
 * Updated CellImporter

@@ -24118,8 +24118,8 @@ class ImportRelations(ImportPatcher):
         id_relations= self.id_relations
         type_count = {}
         for type in ('FACT',):
-            if type not in modFile.tops: continue
             type_count[type] = 0
+            if type not in modFile.tops: continue
             for record in modFile.tops[type].records:
                 fid = record.fid
                 if fid in id_relations:

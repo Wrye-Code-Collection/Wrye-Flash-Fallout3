@@ -24049,18 +24049,19 @@ class ImportRelations(ImportPatcher):
     """Import faction relations to factions."""
     name = _('Import Relations')
     text = _("Import relations from source mods/files.")
-    defaultItemCheck = inisettings['AutoItemCheck'] #--GUI: Whether new items are checked by default or not.
+    defaultItemCheck = inisettings[
+        'AutoItemCheck']  # --GUI: Whether new items are checked by default or not.
     autoKey = 'Relations'
 
-    #--Patch Phase ------------------------------------------------------------
-    def initPatchFile(self,patchFile,loadMods):
+    # --Patch Phase ------------------------------------------------------------
+    def initPatchFile(self, patchFile, loadMods):
         """Prepare to handle specified patch mod. All functions are called after this."""
-        Patcher.initPatchFile(self,patchFile,loadMods)
-        self.id_relations= {} #--[(otherLongid0,disp0,groupCombatReaction0),(...)] = id_relations[mainLongid].
+        Patcher.initPatchFile(self, patchFile, loadMods)
+        self.id_relations = {}  # --[(otherLongid0,disp0,groupCombatReaction0),(...)] = id_relations[mainLongid].
         self.srcFiles = self.getConfigChecked()
         self.isActive = bool(self.srcFiles)
 
-    def initData(self,progress):
+    def initData(self, progress):
         """Get names from source files."""
         if not self.isActive: return
         factionRelations = FactionRelations(aliases=self.patchFile.aliases)
@@ -24076,10 +24077,11 @@ class ImportRelations(ImportPatcher):
                 if srcPath not in patchesDir: continue
                 factionRelations.readFromText(dirs['patches'].join(srcFile))
             progress.plus()
-        #--Finish
+        # --Finish
         for fid, relations in factionRelations.id_relations.iteritems():
             if fid and (fid[0] is not None and fid[0] in self.patchFile.loadSet):
-                filteredRelations = [relation for relation in relations if relation[0] and (relation[0][0] is not None and relation[0][0] in self.patchFile.loadSet)]
+                filteredRelations = [relation for relation in relations if relation[0] and
+                (relation[0][0] is not None and relation[0][0] in self.patchFile.loadSet)]
                 if filteredRelations:
                     self.id_relations[fid] = filteredRelations
 
@@ -24087,21 +24089,21 @@ class ImportRelations(ImportPatcher):
 
     def getReadClasses(self):
         """Returns load factory classes needed for reading."""
-        return (None,(MreFact,))[self.isActive]
+        return (None, (MreFact,))[self.isActive]
 
     def getWriteClasses(self):
         """Returns load factory classes needed for writing."""
-        return (None,(MreFact,))[self.isActive]
+        return (None, (MreFact,))[self.isActive]
 
     def scanModFile(self, modFile, progress):
         """Scan modFile."""
         if not self.isActive: return
-        id_relations= self.id_relations
+        id_relations = self.id_relations
         modName = modFile.fileInfo.name
         mapper = modFile.getLongMapper()
         for type in ('FACT',):
             if type not in modFile.tops: continue
-            patchBlock = getattr(self.patchFile,type)
+            patchBlock = getattr(self.patchFile, type)
             id_records = patchBlock.id_records
             for record in modFile.tops[type].getActiveRecords():
                 fid = record.fid
@@ -24110,28 +24112,31 @@ class ImportRelations(ImportPatcher):
                 if fid not in id_relations: continue
                 patchBlock.setRecord(record.getTypeCopy(mapper))
 
-    def buildPatch(self,log,progress):
+    def buildPatch(self, log, progress):
         """Make changes to patchfile."""
         if not self.isActive: return
         modFile = self.patchFile
         keep = self.patchFile.getKeeper()
-        id_relations= self.id_relations
+        id_relations = self.id_relations
         type_count = {}
         for type in ('FACT',):
-            if type not in modFile.tops: continue
             type_count[type] = 0
+            if type not in modFile.tops: continue
             for record in modFile.tops[type].records:
                 fid = record.fid
                 if fid in id_relations:
                     newRelations = set(id_relations[fid])
-                    curRelations = set((x.faction,x.mod,x.groupCombatReaction) for x in record.relations)
+                    curRelations = set(
+                        (x.faction, x.mod, x.groupCombatReaction) for x in
+                        record.relations)
                     changed = newRelations - curRelations
                     if not changed: continue
                     doKeep = False
-                    for faction,disp,groupCombatReaction in changed:
+                    for faction, disp, groupCombatReaction in changed:
                         for entry in record.relations:
                             if entry.faction == faction:
-                                if (entry.mod != disp or entry.groupCombatReaction != groupCombatReaction):
+                                if (
+                                        entry.mod != disp or entry.groupCombatReaction != groupCombatReaction):
                                     entry.mod = disp
                                     entry.groupCombatReaction = groupCombatReaction
                                     doKeep = True
@@ -24147,11 +24152,12 @@ class ImportRelations(ImportPatcher):
                     if doKeep:
                         type_count[type] += 1
                         keep(fid)
-        log.setHeader('= '+self.__class__.name)
+        log.setHeader('= ' + self.__class__.name)
         log(_("=== Source Mods/Files"))
         for file in self.srcFiles:
-            log("* " +file.s)
+            log("* " + file.s)
         log(_("\n=== Modified Factions: %d") % type_count['FACT'])
+
 
 # class CBash_ImportRelations(CBash_ImportPatcher):
 #     """Import faction relations to factions."""
@@ -24244,7 +24250,7 @@ class ImportRelations(ImportPatcher):
 #             log('  * %s: %d' % (srcMod.s,mod_count[srcMod]))
 #         self.mod_count = {}
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 class ImportScripts(ImportPatcher):
     """Imports attached scripts on objects."""
     name = _('Import Scripts')

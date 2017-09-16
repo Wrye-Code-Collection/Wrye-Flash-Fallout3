@@ -828,8 +828,8 @@ Path = None
 def GPath(name):
     """Returns common path object for specified name/path."""
     if name is None: return None
-    elif not name: norm = name
     elif isinstance(name,Path): norm = name._s
+    elif not name: norm = name
     else: norm = os.path.normpath(name)
     path = _gpaths.get(norm)
     if path != None: return path

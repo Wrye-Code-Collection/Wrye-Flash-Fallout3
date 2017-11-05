@@ -85,7 +85,7 @@ import balt
 import bolt
 import bush
 from bolt import BoltError, AbstractError, ArgumentError, StateError, UncodedError, PermissionError
-from bolt import _, LString, Unicode, Encode, GPath, Flags, DataDict, SubProgress, cstrip, deprint, delist, sio
+from bolt import _, LString, decode, encode, GPath, Flags, DataDict, SubProgress, cstrip, deprint, delist, sio
 from cint import *
 import bapi
 
@@ -2171,7 +2171,7 @@ class MreHasEffects:
                 effectName = mgef_name[effect.name]
                 if effect.name in avEffects:
                     effectName = re.sub(_('(Attribute|Skill)'),aValues[effect.actorValue],effectName)
-            buffWrite('o+*'[effect.recipient]+' '+Unicode(effectName,'mbcs'))
+            buffWrite('o+*'[effect.recipient]+' ' + decode(effectName, 'mbcs'))
             if effect.magnitude: buffWrite(' '+`effect.magnitude`+'m')
             if effect.area: buffWrite(' '+`effect.area`+'a')
             if effect.duration > 1: buffWrite(' '+`effect.duration`+'d')
@@ -8567,7 +8567,7 @@ class SaveFile:
                             stringData = ins.read(stringLength)
                             log(_('    Mod :  %02X (%s)') % (modIndex, self.masters[modIndex].s))
                             log(_('    ID  :  %u') % stringID)
-                            log(_('    Data:  %s') % Unicode(stringData,'mbcs'))
+                            log(_('    Data:  %s') % decode(stringData, 'mbcs'))
                         elif chunkType == 'RVRA':
                             #--FOSE Array
                             modIndex,arrayID,keyType,isPacked, = unpack('=BIBB',7)
@@ -8617,7 +8617,7 @@ class SaveFile:
                                 elif dataType == 3:
                                     dataLen, = unpack('=H',2)
                                     data = ins.read(dataLen)
-                                    dataStr = Unicode(data,'mbcs')
+                                    dataStr = decode(data, 'mbcs')
                                 elif dataType == 4:
                                     data, = unpack('=I',4)
                                     dataStr = '%u' % data
@@ -8645,7 +8645,7 @@ class SaveFile:
                             log(_('      StrID : %u') % (strId,))
                             log(_('      ModID : %02X %s') % (modId,espMap[modId] if modId in espMap else 'ERROR',))
                             log(_('      Flags : %u') % (strFlags,))
-                            log(_('      Data  : %s') % (Unicode(strData,'mbcs'),))
+                            log(_('      Data  : %s') % (decode(strData, 'mbcs'),))
                         elif (chunkTypeNum == 3):
                             #--Pluggy TypeArray
                             log(_('    Pluggy Array'))
@@ -8703,7 +8703,7 @@ class SaveFile:
                             log(_('      Alpha  : %02X') % (hudAlpha,))
                             log(_('      Align  : %02X') % (hudAlignment,))
                             log(_('      AutoSc : %02X') % (hudAutoScale,))
-                            log(_('      File   : %s') % (Unicode(hudFileName,'mbcs'),))
+                            log(_('      File   : %s') % (decode(hudFileName, 'mbcs'),))
                         elif (chunkTypeNum == 7):
                             #--Pluggy TypeHudT
                             log(_('    Pluggy HudT'))
@@ -8728,13 +8728,13 @@ class SaveFile:
                             log(_('      Width  : %u') % (hudWidth,))
                             log(_('      Height : %u') % (hudHeight,))
                             log(_('      Format : %u') % (hudFormat,))
-                            log(_('      FName  : %s') % (Unicode(hudFontName,'mbcs'),))
+                            log(_('      FName  : %s') % (decode(hudFontName, 'mbcs'),))
                             log(_('      FHght  : %u') % (hudFontHeight,))
                             log(_('      FWdth  : %u') % (hudFontWidth,))
                             log(_('      FWeigh : %u') % (hudWeight,))
                             log(_('      FItal  : %u') % (hudItalic,))
                             log(_('      FRGB   : %u,%u,%u') % (hudFontR,hudFontG,hudFontB,))
-                            log(_('      FText  : %s') % (Unicode(hudText,'mbcs'),))
+                            log(_('      FText  : %s') % (decode(hudText, 'mbcs'),))
                     ins.close()
 
     def findBloating(self,progress=None):
@@ -11388,7 +11388,7 @@ class ModInfos(FileInfos):
             if fileInfo:
                 masters = set(fileInfo.header.masters)
                 missing = sorted([x for x in masters if x not in self])
-                log.setHeader(head+Unicode(_('Missing Masters for: '))+fileInfo.name.s)
+                log.setHeader(head + decode(_('Missing Masters for: ')) + fileInfo.name.s)
                 for mod in missing:
                     log(bul+'xx '+mod.s)
                 log.setHeader(head+_('Masters for: ')+fileInfo.name.s)
@@ -13512,13 +13512,13 @@ class InstallerConverter(object):
         #--Move every file
         for index, (crcValue, srcDir_File, destFile) in enumerate(self.convertedFiles):
             srcDir = srcDir_File[0]
-            srcFile = Unicode(srcDir_File[1],'mbcs')
+            srcFile = decode(srcDir_File[1], 'mbcs')
             if isinstance(srcDir,basestring):
                 #--either 'BCF-Missing', or crc read from 7z l -slt
                 srcFile = tempJoin(srcDir,srcFile)
             else:
                 srcFile = tempJoin("%08X" % srcDir,srcFile)
-            destFile = destJoin(Unicode(destFile,'mbcs'))
+            destFile = destJoin(decode(destFile, 'mbcs'))
             if not srcFile.exists():
                 raise StateError(_("%s: Missing source file:\n%s") % (self.fullPath.stail, srcFile.s))
             if destFile == None:
@@ -13690,7 +13690,7 @@ class InstallerConverter(object):
             if len(errorLine) or regErrMatch(line):
                 errorLine.append(line)
             if maCompressing:
-                progress(index,Unicode(destArchive.s)+_("\nCompressing files...\n%s") % Unicode(maCompressing.group(1),'UTF8').strip())
+                progress(index, decode(destArchive.s) + _("\nCompressing files...\n%s") % decode(maCompressing.group(1), 'UTF8').strip())
                 index += 1
         result = ins.close()
         if result:
@@ -13938,7 +13938,7 @@ class InstallerArchive(Installer):
         subprogress = SubProgress(progress,0.9,1.0)
         subprogress.setFull(max(len(dest_src),1))
         for dest,src in dest_src.iteritems():
-            subprogress(i,Unicode(archive.s)+_("\nMoving files...")+'\n'+dest.s)
+            subprogress(i, decode(archive.s) + _("\nMoving files...") + '\n' + dest.s)
             i += 1
             size,crc = data_sizeCrc[dest]
             srcFull = tempDir.join(src)
@@ -14202,7 +14202,7 @@ class InstallerProject(Installer):
             if len(errorLine) or regErrMatch(line):
                 errorLine.append(line)
             if maCompressing:
-                progress(index,Unicode(archive.s)+_("\nCompressing files...\n%s") % Unicode(maCompressing.group(1)).strip())
+                progress(index, decode(archive.s) + _("\nCompressing files...\n%s") % decode(maCompressing.group(1)).strip())
                 index += 1
         result = ins.close()
         self.tempList.remove()
@@ -20290,7 +20290,7 @@ class PatchFile(ModFile):
             modFile.load(True)
         except ModError, error:
             if not verbose: return False
-            reasons += '\n.    ' + Unicode(str(error))+'.'
+            reasons += '\n.    ' + decode(str(error)) + '.'
         #--Skipped over types?
         if modFile.topsSkipped:
             if not verbose: return False

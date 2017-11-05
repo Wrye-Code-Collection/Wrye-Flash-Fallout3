@@ -46,7 +46,7 @@ import barb
 
 from bosh import formatInteger,formatDate
 from bolt import BoltError, AbstractError, ArgumentError, StateError, UncodedError, CancelError
-from bolt import _, LString, Unicode, Encode, GPath, SubProgress, deprint, delist
+from bolt import _, LString, decode, encode, GPath, SubProgress, deprint, delist
 from cint import *
 startupinfo = bolt.startupinfo
 
@@ -1573,7 +1573,7 @@ class ModList(List):
             elif col == 'Size':
                 value = formatInteger(fileInfo.size/1024)+' KB'
             elif col == 'Author' and fileInfo.header:
-                value = Unicode(fileInfo.header.author,'mbcs')
+                value = decode(fileInfo.header.author, 'mbcs')
             elif col == 'Load Order':
                 ordered = bosh.modInfos.ordered
                 if fileName in ordered:
@@ -1684,13 +1684,13 @@ class ModList(List):
         if col == 'File':
             pass #--Done by default
         elif col == 'Author':
-            self.items.sort(key=lambda a: Unicode(data[a].header.author.lower(),'mbcs'))
+            self.items.sort(key=lambda a: decode(data[a].header.author.lower(), 'mbcs'))
         elif col == 'Rating':
             self.items.sort(key=lambda a: bosh.modInfos.table.getItem(a,'rating',''))
         elif col == 'Group':
             self.items.sort(key=lambda a: bosh.modInfos.table.getItem(a,'group',''))
         elif col == 'Installer':
-            self.items.sort(key=lambda a: Unicode(bosh.modInfos.table.getItem(a,'installer',''),'mbcs'))
+            self.items.sort(key=lambda a: decode(bosh.modInfos.table.getItem(a, 'installer', ''), 'mbcs'))
         elif col == 'Load Order':
             self.items = bosh.modInfos.getOrdered(self.items,False)
         elif col == 'Modified':
@@ -1898,22 +1898,22 @@ class ModDetails(wx.Window):
         #--Empty?
         if not fileName:
             modInfo = self.modInfo = None
-            self.fileStr = Unicode('')
-            self.authorStr = Unicode('')
-            self.modifiedStr = Unicode('')
-            self.descriptionStr = Unicode('')
-            self.versionStr = Unicode('v0.0 ')
-            tagsStr = Unicode('')
+            self.fileStr = decode('')
+            self.authorStr = decode('')
+            self.modifiedStr = decode('')
+            self.descriptionStr = decode('')
+            self.versionStr = decode('v0.0 ')
+            tagsStr = decode('')
         #--Valid fileName?
         else:
             modInfo = self.modInfo = bosh.modInfos[fileName]
             #--Remember values for edit checks
-            self.fileStr = Unicode(modInfo.name.s)
-            self.authorStr = Unicode(modInfo.header.author,'mbcs')
-            self.modifiedStr = Unicode(formatDate(modInfo.mtime))
-            self.descriptionStr = Unicode(modInfo.header.description,'mbcs')
-            self.versionStr = Unicode('v%0.2f' % (modInfo.header.version,))
-            tagsStr = Unicode('\n').join(sorted(modInfo.getBashTags()))
+            self.fileStr = decode(modInfo.name.s)
+            self.authorStr = decode(modInfo.header.author, 'mbcs')
+            self.modifiedStr = decode(formatDate(modInfo.mtime))
+            self.descriptionStr = decode(modInfo.header.description, 'mbcs')
+            self.versionStr = decode('v%0.2f' % (modInfo.header.version,))
+            tagsStr = decode('\n').join(sorted(modInfo.getBashTags()))
         #--Editable mtime?
         if fileName in bosh.modInfos.autoSorted:
             self.modified.SetEditable(False)
@@ -1972,8 +1972,8 @@ class ModDetails(wx.Window):
 
     def OnEditAuthor(self,event):
         if not self.modInfo: return
-        authorStr = Unicode(self.author.GetValue())
-        if authorStr != Unicode(self.authorStr):
+        authorStr = decode(self.author.GetValue())
+        if authorStr != decode(self.authorStr):
             self.authorStr = authorStr
             self.SetEdited()
 
@@ -2010,8 +2010,8 @@ class ModDetails(wx.Window):
         #--Change Tests
         changeName = (self.fileStr != modInfo.name)
         changeDate = (self.modifiedStr != formatDate(modInfo.mtime))
-        changeHedr = ((self.authorStr != Unicode(modInfo.header.author,'mbcs')) or
-            (self.descriptionStr != Unicode(modInfo.header.description,'mbcs') ))
+        changeHedr = ((self.authorStr != decode(modInfo.header.author, 'mbcs')) or
+                      (self.descriptionStr != decode(modInfo.header.description, 'mbcs')))
         changeMasters = self.masters.edited
         #--Warn on rename if file has BSA and/or dialog
         hasBsa, hasVoices = modInfo.hasResources()
@@ -2649,9 +2649,9 @@ class SaveDetails(wx.Window):
         #--Set Fields
         self.file.SetValue(self.fileStr)
         self.playerInfo.SetLabel(_("%s\nLevel %d, Play Time %s\n%s") %
-                                 (Unicode(self.playerNameStr,'mbcs'),
+                                 (decode(self.playerNameStr, 'mbcs'),
                                   self.playerLevel,self.playTime,
-                                  Unicode(self.curCellStr,'mbcs')))
+                                  decode(self.curCellStr, 'mbcs')))
         self.gCoSaves.SetLabel(self.coSaves)
         self.masters.SetFileInfo(saveInfo)
         #--Picture
@@ -5488,7 +5488,7 @@ class BashApp(wx.App):
         #--Constants
         self.InitResources()
         #--Init Data
-        progress = wx.ProgressDialog(Unicode("Wrye Flash"),_("Initializing Data")+' '*10,
+        progress = wx.ProgressDialog(decode("Wrye Flash"), _("Initializing Data") + ' ' * 10,
             style=wx.PD_AUTO_HIDE | wx.PD_APP_MODAL | (sys.version[:3] != '2.4' and wx.PD_SMOOTH))
         self.InitData(progress)
         progress.Update(70,_("Initializing Version"))
@@ -8955,12 +8955,12 @@ class InstallerProject_FomodConfigDialog(wx.Frame):
         self.SetSizeHints(300,300)
         self.SetBackgroundColour(wx.NullColour)
         #--Fields
-        self.gName = wx.TextCtrl(self,-1,Unicode(config.name))
-        self.gVersion = wx.TextCtrl(self,-1,Unicode(config.version))
-        self.gWebsite = wx.TextCtrl(self,-1,Unicode(config.website))
-        self.gAuthor = wx.TextCtrl(self,-1,Unicode(config.author))
-        self.gEmail = wx.TextCtrl(self,-1,Unicode(config.email))
-        self.gDescription = wx.TextCtrl(self,-1,Unicode(config.description),style=wx.TE_MULTILINE)
+        self.gName = wx.TextCtrl(self,-1,decode(config.name))
+        self.gVersion = wx.TextCtrl(self,-1,decode(config.version))
+        self.gWebsite = wx.TextCtrl(self,-1,decode(config.website))
+        self.gAuthor = wx.TextCtrl(self,-1,decode(config.author))
+        self.gEmail = wx.TextCtrl(self,-1,decode(config.email))
+        self.gDescription = wx.TextCtrl(self,-1,decode(config.description),style=wx.TE_MULTILINE)
         #--Max Lenght
         self.gName.SetMaxLength(100)
         self.gVersion.SetMaxLength(32)
@@ -9002,13 +9002,13 @@ class InstallerProject_FomodConfigDialog(wx.Frame):
         """Handle save button."""
         config = self.config
         #--Text fields
-        config.name = Unicode(self.gName.GetValue().strip(),'mbcs')
-        config.website = Unicode(self.gWebsite.GetValue().strip())
-        config.author = Unicode(self.gAuthor.GetValue().strip(),'mbcs')
-        config.email = Unicode(self.gEmail.GetValue().strip())
-        config.description = Unicode(self.gDescription.GetValue().strip(),'mbcs')
+        config.name = decode(self.gName.GetValue().strip(), 'mbcs')
+        config.website = decode(self.gWebsite.GetValue().strip())
+        config.author = decode(self.gAuthor.GetValue().strip(), 'mbcs')
+        config.email = decode(self.gEmail.GetValue().strip())
+        config.description = decode(self.gDescription.GetValue().strip(), 'mbcs')
         #--Version
-        config.version = Unicode(self.gVersion.GetValue().strip())
+        config.version = decode(self.gVersion.GetValue().strip())
         #--Done
         self.data[self.project].writeFomodConfig(self.project,self.config)
         self.Destroy()
@@ -13045,7 +13045,7 @@ class Save_EditCreatedData(balt.ListEditorData):
                 if not record.full: continue
                 record.getSize() #--Since type copy makes it changed.
                 saveFile.created[index] = record
-                record_full = Unicode(record.full,'mbcs')
+                record_full = decode(record.full, 'mbcs')
                 if record_full not in data: data[record_full] = (record_full,[])
                 data[record_full][1].append(record)
         #--GUI

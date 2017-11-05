@@ -65,7 +65,7 @@ UnicodeEncodings = (
     )
 NumEncodings = len(UnicodeEncodings)
 
-def Unicode(name,tryFirstEncoding=False):
+def decode(name,tryFirstEncoding=False):
     if not bUseUnicode: return name #don't change if not unicode mode.
     if isinstance(name,unicode): return name
     if isinstance(name,str):
@@ -83,7 +83,7 @@ def Unicode(name,tryFirstEncoding=False):
                     raise
     return name
 
-def Encode(name,tryFirstEncoding=False):
+def encode(name,tryFirstEncoding=False):
     if not bUseUnicode: return name #don't change if not unicode mode.
     if isinstance(name,str): return name
     if isinstance(name,unicode):
@@ -161,11 +161,7 @@ if language.lower() == 'german': language = 'de' #--Hack for German speakers who
 # TODO: use bosh.dirs['l10n'] once we solve the circular import
 languagePkl, languageTxt = (os.path.join('bash','l10n',language+ext) for ext in ('.pkl','.txt'))
 #--Recompile pkl file?
-if os.path.exists(languageTxt) and (
-    not os.path.exists(languagePkl) or (
-        os.path.getmtime(languageTxt) > os.path.getmtime(languagePkl)
-        )
-    ):
+if os.path.exists(languageTxt) and (not os.path.exists(languagePkl) or (os.path.getmtime(languageTxt) > os.path.getmtime(languagePkl))):
     compileTranslator(languageTxt,languagePkl)
 #--Use dictionary from pickle as translator
 if os.path.exists(languagePkl):
@@ -173,18 +169,19 @@ if os.path.exists(languagePkl):
     reEscQuote = re.compile(r"\\'")
     _translator = cPickle.load(pklFile)
     pklFile.close()
-    def _(text,encode=True):
+
+
+    def _(text,do_encode=True):
         #text = Encode(text,'mbcs')
         if isinstance(text,unicode): text = text.encode('mbcs')
-        if encode: text = reEscQuote.sub("'",text.encode('string_escape'))
+        if do_encode: text = reEscQuote.sub("'",text.encode('string_escape'))
         head,core,tail = reTrans.match(text).groups()
-        if core and core in _translator:
-            text = head+_translator[core]+tail
-        if encode: text = text.decode('string_escape')
+        if core and core in _translator: text = head+_translator[core]+tail
+        if do_encode: text = text.decode('string_escape')
         if bUseUnicode: text = unicode(text,'mbcs')
         return text
 else:
-    def _(text,encode=True): return text
+    def _(text,do_encode=True): return text
 
 CBash = 0
 images_list = {
@@ -909,7 +906,7 @@ class Path(object):
             elif isinstance(name,unicode):
                 self.__setstate__(name)
             else:
-                self.__setstate__(Unicode(name))
+                self.__setstate__(decode(name))
                 ##try:
                 ##    self.__setstate__(unicode(str(name),'UTF8'))
                 ##except UnicodeDecodeError:
@@ -1245,7 +1242,7 @@ class Path(object):
         if self.isdir() and safety and safety.lower() in self._cs:
             # Clear ReadOnly flag if set
             cmd = r'attrib -R "%s\*" /S /D' % (self._s)
-            cmd = Encode(cmd,'mbcs')
+            cmd = encode(cmd, 'mbcs')
             ins, err = Popen(cmd, stdout=PIPE, stdin=PIPE, startupinfo=startupinfo).communicate()
             shutil.rmtree(self._s)
 
@@ -1312,7 +1309,7 @@ class Path(object):
                 return cmp(self._cs, other._cs)
             except UnicodeDecodeError:
                 try:
-                    return cmp(Encode(self._cs), Encode(other._cs))
+                    return cmp(encode(self._cs), encode(other._cs))
                 except UnicodeError:
                     deprint("Wrye Flash Unicode mode is currently %s" % (['off.','on.'][bUseUnicode]))
                     deprint("unrecovered Unicode error when dealing with %s - presuming non equal." % (self._cs))
@@ -1322,7 +1319,7 @@ class Path(object):
                 return cmp(self._cs, Path.getCase(other))
             except UnicodeDecodeError:
                 try:
-                    return cmp(Encode(self._cs), Encode(Path.getCase(other)))
+                    return cmp(encode(self._cs), encode(Path.getCase(other)))
                 except UnicodeError:
                     deprint("Wrye Flash Unicode mode is currently %s." % (['off','on'][bUseUnicode]))
                     deprint("unrecovered Unicode error when dealing with %s - presuming non equal.'" % (self._cs))
@@ -2652,7 +2649,7 @@ class WryeText:
         anchorlist = [] #to make sure that each anchor is unique.
         def subAnchor(match):
             text = match.group(1)
-            anchor = urllib.quote(Encode(reWd.sub('',text)))
+            anchor = urllib.quote(encode(reWd.sub('',text)))
             count = 0
             if re.match(r'\d', anchor):
                 anchor = '_' + anchor
@@ -2697,7 +2694,7 @@ class WryeText:
             address = text = match.group(1).strip()
             if '|' in text:
                 (address,text) = [chunk.strip() for chunk in text.split('|',1)]
-                if address == '#': address += urllib.quote(Encode(reWd.sub('',text)))
+                if address == '#': address += urllib.quote(encode(reWd.sub('',text)))
             if address.startswith('!'):
                 newWindow = ' target="_blank"'
                 address = address[1:]
@@ -2812,7 +2809,7 @@ class WryeText:
             elif maHead:
                 lead,text = maHead.group(1,2)
                 text = re.sub(' *=*#?$','',text.strip())
-                anchor = urllib.quote(Encode(reWd.sub('',text)))
+                anchor = urllib.quote(encode(reWd.sub('',text)))
                 level = len(lead)
                 if anchorHeaders:
                     if re.match(r'\d', anchor):
@@ -2882,7 +2879,7 @@ class WryeText:
             if not (bUseUnicode or isinstance(line, unicode)):
                 return line.decode('mbcs').encode('UTF8')
             else:
-                return Encode(line,'UTF8')
+                return encode(line, 'UTF8')
         out.write(WryeText.htmlHead % (toutf8(title),css))
         didContents = False
         for line in outLines:

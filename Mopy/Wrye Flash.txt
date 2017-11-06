@@ -38,6 +38,10 @@ Additionally, Wrye Bash comes packaged with the following programs:
 {{CONTENTS=0}}
 **All versions by Wrye team and or Valda unless otherwise noted.**
 
+=== 31.7 [11/5/2017]
+* Bug fix for Import Relations [Valda]
+* Add form version to Bash Patch [Sharlikran]
+
 === 31.6 [5/17/2016]
 * Bug fix for BOSS Detection [Valda]
 * Bug fix for Deselect All in Update Bash Patch window [Valda]

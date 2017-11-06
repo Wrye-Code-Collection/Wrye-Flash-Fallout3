@@ -1724,47 +1724,55 @@ class MreSubrecord:
 #------------------------------------------------------------------------------
 class MreRecord(object):
     """Generic Record."""
-    subtype_attr = {'EDID':'eid','FULL':'full','MODL':'model'}
-    _flags1 = Flags(0L,Flags.getNames(
-        ( 0,'esm'),
-        ( 5,'deleted'),
-        ( 6,'borderRegion'),
-        ( 7,'turnFireOff'),
-        ( 9,'castsShadows'),
-        (10,'questItem'),
-        (10,'persistent'),
-        (11,'initiallyDisabled'),
-        (12,'ignored'),
-        (15,'visibleWhenDistant'),
-        (17,'dangerous'),
-        (18,'compressed'),
-        (19,'cantWait'),
-        ))
-    __slots__ = ['recType','size','fid','flags3','flags2','flags1','changed','subrecords','data','inName','longFids',]
-    #--Set at end of class data definitions.
+    subtype_attr = {'EDID': 'eid', 'FULL': 'full', 'MODL': 'model'}
+    _flags1 = Flags(0L, Flags.getNames(
+        (0, 'esm'),
+        (5, 'deleted'),
+        (6, 'borderRegion'),
+        (7, 'turnFireOff'),
+        (9, 'castsShadows'),
+        (10, 'questItem'),
+        (10, 'persistent'),
+        (11, 'initiallyDisabled'),
+        (12, 'ignored'),
+        (15, 'visibleWhenDistant'),
+        (17, 'dangerous'),
+        (18, 'compressed'),
+        (19, 'cantWait'),
+    ))
+    __slots__ = ['recType', 'size', 'fid', 'flags3', 'flags2', 'flags1',
+                 'changed', 'subrecords', 'data', 'inName', 'longFids', ]
+    # --Set at end of class data definitions.
     type_class = None
     simpleTypes = None
 
-    def __init__(self,header,ins=None,unpack=False):
-        (self.recType,self.size,flags1,self.fid,self.flags2,self.flags3) = header
+    def __init__(self, header, ins=None, unpack=False):
+        """ self.flags3 has Form Version """
+        (self.recType, self.size, flags1, self.fid, self.flags2,
+         self.flags3) = header
         self.flags1 = MreRecord._flags1(flags1)
-        self.longFids = False #--False: Short (numeric); True: Long (espname,objectindex)
+        self.longFids = False  # --False: Short (numeric); True: Long (espname,objectindex)
         self.changed = False
         self.subrecords = None
         self.data = ''
         self.inName = ins and ins.inName
-        if ins: self.load(ins,unpack)
+        if ins: self.load(ins, unpack)
 
     def __repr__(self):
-        if hasattr(self,'eid') and self.eid is not None:
-            eid=' '+self.eid
+        if hasattr(self, 'eid') and self.eid is not None:
+            eid = ' ' + self.eid
         else:
-            eid=''
-        return '<%s object: %s (%s)%s>' % (`type(self)`.split("'")[1], self.recType, strFid(self.fid), eid)
+            eid = ''
+        return '<%s object: %s (%s)%s>' % (
+        `type(self)`.split("'")[1], self.recType, strFid(self.fid), eid)
 
     def getHeader(self):
-        """Returns header tuple."""
-        return (self.recType,self.size,int(self.flags1),self.fid,self.flags2,self.flags3)
+        """Returns header tuple.
+        self.flags3 Has Form Version
+        """
+        return (
+        self.recType, self.size, int(self.flags1), self.fid, self.flags2,
+        self.flags3)
 
     def getBaseCopy(self):
         """Returns an MreRecord version of self."""
@@ -1772,7 +1780,7 @@ class MreRecord(object):
         baseCopy.data = self.data
         return baseCopy
 
-    def getTypeCopy(self,mapper=None):
+    def getTypeCopy(self, mapper=None):
         """Returns a type class copy of self, optionaly mapping fids to long."""
         if self.__class__ == MreRecord:
             fullClass = MreRecord.type_class[self.recType]
@@ -1782,12 +1790,12 @@ class MreRecord(object):
         else:
             myCopy = copy.deepcopy(self)
         if mapper and not myCopy.longFids:
-            myCopy.convertFids(mapper,True)
+            myCopy.convertFids(mapper, True)
         myCopy.changed = True
         myCopy.data = None
         return myCopy
 
-    def mergeFilter(self,modSet):
+    def mergeFilter(self, modSet):
         """This method is called by the bashed patch mod merger. The intention is
         to allow a record to be filtered according to the specified modSet. E.g.
         for a list record, items coming from mods not in the modSet could be
@@ -1798,39 +1806,40 @@ class MreRecord(object):
         """Return self.data, first decompressing it if necessary."""
         if not self.flags1.compressed: return self.data
         import zlib
-        size, = struct.unpack('I',self.data[:4])
+        size, = struct.unpack('I', self.data[:4])
         decomp = zlib.decompress(self.data[4:])
         if len(decomp) != size:
             raise ModError(self.inName,
-                _('Mis-sized compressed data. Expected %d, got %d.') % (size,len(decomp)))
+                _('Mis-sized compressed data. Expected %d, got %d.') % (
+                size, len(decomp)))
         return decomp
 
-    def load(self,ins=None,unpack=False):
+    def load(self, ins=None, unpack=False):
         """Load data from ins stream or internal data buffer."""
         type = self.recType
-        #--Read, but don't analyze.
+        # --Read, but don't analyze.
         if not unpack:
-            self.data = ins.read(self.size,type)
-        #--Unbuffered analysis?
+            self.data = ins.read(self.size, type)
+        # --Unbuffered analysis?
         elif ins and not self.flags1.compressed:
             inPos = ins.tell()
-            self.data = ins.read(self.size,type)
-            ins.seek(inPos,0,type+'_REWIND')
-            self.loadData(ins,inPos+self.size)
-        #--Buffered analysis (subclasses only)
+            self.data = ins.read(self.size, type)
+            ins.seek(inPos, 0, type + '_REWIND')
+            self.loadData(ins, inPos + self.size)
+        # --Buffered analysis (subclasses only)
         else:
             if ins:
-                self.data = ins.read(self.size,type)
+                self.data = ins.read(self.size, type)
             if not self.__class__ == MreRecord:
                 reader = self.getReader()
-                self.loadData(reader,reader.size)
+                self.loadData(reader, reader.size)
                 reader.close()
-        #--Discard raw data?
+        # --Discard raw data?
         if unpack == 2:
             self.data = None
             self.changed = True
 
-    def loadData(self,ins,endPos):
+    def loadData(self, ins, endPos):
         """Loads data from input stream. Called by load().
 
         Subclasses should actually read the data, but MreRecord just skips over
@@ -1848,25 +1857,25 @@ class MreRecord(object):
         readAtEnd = reader.atEnd
         readSubHeader = reader.unpackSubHeader
         subAppend = self.subrecords.append
-        while not readAtEnd(reader.size,recType):
-            (type,size) = readSubHeader(recType)
-            subAppend(MreSubrecord(type,size,reader))
+        while not readAtEnd(reader.size, recType):
+            (type, size) = readSubHeader(recType)
+            subAppend(MreSubrecord(type, size, reader))
         reader.close()
 
-    def convertFids(self,mapper,toLong):
+    def convertFids(self, mapper, toLong):
         """Converts fids between formats according to mapper.
         toLong should be True if converting to long format or False if converting to short format."""
         raise AbstractError(self.recType)
 
-    def updateMasters(self,masters):
+    def updateMasters(self, masters):
         """Updates set of master names according to masters actually used."""
         raise AbstractError(self.recType)
 
-    def setChanged(self,value=True):
+    def setChanged(self, value=True):
         """Sets changed attribute to value. [Default = True.]"""
         self.changed = value
 
-    def setData(self,data):
+    def setData(self, data):
         """Sets data and size."""
         self.data = data
         self.size = len(data)
@@ -1876,8 +1885,9 @@ class MreRecord(object):
         """Return size of self.data, after, if necessary, packing it."""
         if not self.changed: return self.size
         if self.longFids: raise StateError(
-            _('Packing Error: %s %s: Fids in long format.') % (self.recType,self.fid))
-        #--Pack data and return size.
+            _('Packing Error: %s %s: Fids in long format.') % (
+            self.recType, self.fid))
+        # --Pack data and return size.
         out = ModWriter(cStringIO.StringIO())
         self.dumpData(out)
         self.data = out.getvalue()
@@ -1885,50 +1895,62 @@ class MreRecord(object):
         if self.flags1.compressed:
             import zlib
             dataLen = len(self.data)
-            comp = zlib.compress(self.data,6)
-            self.data = struct.pack('=I',dataLen) + comp
+            comp = zlib.compress(self.data, 6)
+            self.data = struct.pack('=I', dataLen) + comp
         self.size = len(self.data)
         self.setChanged(False)
         return self.size
 
-    def dumpData(self,out):
+    def dumpData(self, out):
         """Dumps state into data. Called by getSize(). This default version
         just calls subrecords to dump to out."""
         if self.subrecords == None:
             raise StateError('Subrecords not unpacked. [%s: %s %08X]' %
-                (self.inName, self.recType, self.fid))
+                             (self.inName, self.recType, self.fid))
         for subrecord in self.subrecords:
             subrecord.dump(out)
 
-    def dump(self,out):
+    @staticmethod
+    def set_form_version(flags3):
+        """ Set form Version to 15 """
+        flags3_1, flags3_2 = struct.unpack('=2h', struct.pack('=I', flags3))
+        flags3_1 = 15
+        new_flags3 = struct.unpack('=I', struct.pack('=2h', flags3_1, flags3_2))[0]
+        return new_flags3
+
+    def dump(self, out):
         """Dumps all data to output stream."""
-        if self.changed: raise StateError(_('Data changed: ')+ self.recType)
+        if self.changed: raise StateError(_('Data changed: ') + self.recType)
         if not self.data and not self.flags1.deleted and self.size > 0:
-            raise StateError(_('Data undefined: ')+self.recType+' '+hex(self.fid))
-        out.write(struct.pack('=4s5I',self.recType,self.size,int(self.flags1),self.fid,self.flags2,self.flags3))
-        if self.size > 0: out.write(Encode(self.data,'mbcs'))
+            raise StateError(_('Data undefined: ') + self.recType + ' ' + hex(self.fid))
+        if self.recType != 'GRUP':
+            self.flags3 = MreRecord.set_form_version(self.flags3)
+        out.write(
+            struct.pack('=4s5I', self.recType, self.size, int(self.flags1),
+                self.fid, self.flags2, self.flags3))
+        if self.size > 0: out.write(Encode(self.data, 'mbcs'))
 
     def getReader(self):
         """Returns a ModReader wrapped around (decompressed) self.data."""
-        return ModReader(self.inName,stringBuffer(self.getDecompressed()))
+        return ModReader(self.inName, stringBuffer(self.getDecompressed()))
 
-    #--Accessing subrecords ---------------------------------------------------
-    def getSubString(self,subType):
+    # --Accessing subrecords ---------------------------------------------------
+    def getSubString(self, subType):
         """Returns the (stripped) string for a zero-terminated string record."""
-        #--Common subtype expanded in self?
+        # --Common subtype expanded in self?
         attr = MreRecord.subtype_attr.get(subType)
-        value = None #--default
-        #--If not MreRecord, then will have info in data.
+        value = None  # --default
+        # --If not MreRecord, then will have info in data.
         if self.__class__ != MreRecord:
             if attr not in self.__slots__: return value
             return self.__getattribute__(attr)
-        #--Subrecords available?
+        # --Subrecords available?
         if self.subrecords != None:
             for subrecord in self.subrecords:
                 if subrecord.subType == subType:
                     value = cstrip(subrecord.data)
                     break
-        #--No subrecords, but have data.
+        # --No subrecords, but have data.
         elif self.data:
             reader = self.getReader()
             recType = self.recType
@@ -1936,16 +1958,17 @@ class MreRecord(object):
             readSubHeader = reader.unpackSubHeader
             readSeek = reader.seek
             readRead = reader.read
-            while not readAtEnd(reader.size,recType):
-                (type,size) = readSubHeader(recType)
+            while not readAtEnd(reader.size, recType):
+                (type, size) = readSubHeader(recType)
                 if type != subType:
-                    readSeek(size,1)
+                    readSeek(size, 1)
                 else:
                     value = cstrip(readRead(size))
                     break
             reader.close()
-        #--Return it
+        # --Return it
         return value
+
 
 #------------------------------------------------------------------------------
 class MelRecord(MreRecord):

@@ -236,7 +236,7 @@ settingDefaults = {
     'bash.installers.skipLandscapeLODMeshes':False,
     'bash.installers.skipLandscapeLODTextures':False,
     'bash.installers.skipLandscapeLODNormals':False,
-    'bash.installers.allowFOSEPlugins':False,
+    'bash.installers.allowFOSEPlugins':True,
     'bash.installers.sortProjects':True,
     'bash.installers.sortActive':False,
     'bash.installers.sortStructure':False,

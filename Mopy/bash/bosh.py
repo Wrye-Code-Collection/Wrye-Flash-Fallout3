@@ -7342,13 +7342,14 @@ class MobWorlds(MobBase):
             if worldBlock:
                 worldBlock.updateRecords(srcWorldBlock,mapper,mergeIds)
 
-    def setWorld(self,world):
+    def setWorld(self, world, worldcellblock=None):
         """Adds record to record list and indexed."""
         if self.worldBlocks and not self.id_worldBlocks:
             self.indexRecords()
         fid = world.fid
         if fid in self.id_worldBlocks:
             self.id_worldBlocks[fid].world = world
+            self.id_worldBlocks[fid].worldCellBlock = worldcellblock
         else:
             worldBlock = MobWorld(('GRUP',0,0,1,self.stamp,self.stamp2),self.loadFactory,world)
             worldBlock.setChanged()
@@ -22299,17 +22300,34 @@ class CellImporter(ImportPatcher):
     def initData(self,progress):
         """Get cells from source files."""
         if not self.isActive: return
+        cellData = self.cellData
+        # cellData['Maps'] = {}
+
         def importCellBlockData(cellBlock):
+            """
+            Add attribute values from source mods to a temporary cache.
+            These are used to filter for required records by formID and
+            to update the attribute values taken from the master files
+            when creating cellData.
+            """
             if not cellBlock.cell.flags1.ignored:
                 fid = cellBlock.cell.fid
                 if fid not in tempCellData:
                     tempCellData[fid] = {}
                     tempCellData[fid+('flags',)] = {}
                 for attr in attrs:
-                    tempCellData[fid][attr] = cellBlock.cell.__getattribute__(attr)
+                    tempCellData[fid][attr] = (cellBlock.cell.__getattribute__(attr))
                 for flag in flags:
-                    tempCellData[fid+('flags',)][flag] = cellBlock.cell.flags.__getattr__(flag)
+                    tempCellData[fid + ('flags',)][flag] = (cellBlock.cell.flags.__getattr__(flag))
+
         def checkMasterCellBlockData(cellBlock):
+            """
+            Add attribute values from record(s) in master file(s).
+            Only adds records where a matching formID is found in temp
+            cell data.
+            The attribute values in temp cell data are then used to
+            update these records where the value is different.
+            """
             if not cellBlock.cell.flags1.ignored:
                 fid = cellBlock.cell.fid
                 if fid not in tempCellData: return
@@ -22320,15 +22338,18 @@ class CellImporter(ImportPatcher):
                     if tempCellData[fid][attr] != cellBlock.cell.__getattribute__(attr):
                         cellData[fid][attr] = tempCellData[fid][attr]
                 for flag in flags:
-                    if tempCellData[fid+('flags',)][flag] != cellBlock.cell.flags.__getattr__(flag):
-                        cellData[fid+('flags',)][flag] = tempCellData[fid+('flags',)][flag]
-        cellData = self.cellData
-       # cellData['Maps'] = {}
+                    if tempCellData[fid + ('flags',)][flag] != cellBlock.cell.flags.__getattr__(flag):
+                        cellData[fid + ('flags',)][flag] = (tempCellData[fid + ('flags',)][flag])
+
         loadFactory = LoadFactory(False,MreCell,MreWrld)
         progress.setFull(len(self.sourceMods))
         cachedMasters = {}
         for srcMod in self.sourceMods:
             if srcMod not in modInfos: continue
+            # tempCellData maps long fids for cells in srcMod to dicts of
+            # (attributes (among attrs) -> their values for this mod). It is
+            # used to update cellData with cells that change those attributes'
+            # values from the value in any of srcMod's masters.
             tempCellData = {}
             tempCellData['Maps'] = {}
             srcInfo = modInfos[srcMod]
@@ -22342,8 +22363,7 @@ class CellImporter(ImportPatcher):
                 attrs = set(reduce(operator.add, (self.recAttrs[bashKey] for bashKey in bashTags if
                     bashKey in self.recAttrs)))
             except: attrs = set()
-            flags = tuple(self.recFlags[bashKey] for bashKey in bashTags if
-                bashKey in self.recAttrs and self.recFlags[bashKey] != '')
+            flags = tuple(self.recFlags[bashKey] for bashKey in bashTags if bashKey in self.recAttrs and self.recFlags[bashKey] != '')
             if 'CELL' in srcFile.tops:
                 for cellBlock in srcFile.CELL.cellBlocks:
                     importCellBlockData(cellBlock)
@@ -22351,11 +22371,14 @@ class CellImporter(ImportPatcher):
                 for worldBlock in srcFile.WRLD.worldBlocks:
                     for cellBlock in worldBlock.cellBlocks:
                         importCellBlockData(cellBlock)
-                   # if 'C.Maps' in bashTags:
-                   #     if worldBlock.world.mapPath:
-                   #         tempCellData['Maps'][worldBlock.world.fid] = worldBlock.world.mapPath
+                    # if 'C.Maps' in bashTags:
+                    #     if worldBlock.world.mapPath:
+                    #         tempCellData['Maps'][worldBlock.world.fid] = worldBlock.world.mapPath
+                    if worldBlock.worldCellBlock:
+                        importCellBlockData(worldBlock.worldCellBlock)
             for master in masters:
-                if not master in modInfos: continue # or break filter mods
+                if not master in modInfos: continue  # or break 
+                # filter mods
                 if master in cachedMasters:
                     masterFile = cachedMasters[master]
                 else:
@@ -22374,6 +22397,8 @@ class CellImporter(ImportPatcher):
                         # if worldBlock.world.fid in tempCellData['Maps']:
                             # if worldBlock.world.mapPath != tempCellData['Maps'][worldBlock.world.fid]:
                                 # cellData['Maps'][worldBlock.world.fid] = tempCellData['Maps'][worldBlock.world.fid]
+                        if worldBlock.worldCellBlock:
+                            checkMasterCellBlockData(worldBlock.worldCellBlock)
             tempCellData = {}
             progress.plus()
 
@@ -22394,24 +22419,53 @@ class CellImporter(ImportPatcher):
             for worldBlock in modFile.WRLD.worldBlocks:
                 for cellBlock in worldBlock.cellBlocks:
                     if cellBlock.cell.fid in cellData:
-                        patchWorlds.setWorld(worldBlock.world)
-                        patchWorlds.id_worldBlocks[worldBlock.world.fid].setCell(
-                            cellBlock.cell)
+                        patchWorlds.setWorld(worldBlock.world,worldBlock.worldCellBlock)
+                        patchWorlds.id_worldBlocks[worldBlock.world.fid].setCell(cellBlock.cell)
                 # if worldBlock.world.fid in cellData['Maps']:
                     # patchWorlds.setWorld(worldBlock.world)
 
-    def buildPatch(self,log,progress):
+    def buildPatch(self, log, progress):  # buildPatch0
         """Adds merged lists to patchfile."""
+
+        def regions_differ(patch_value, value_):
+            """
+            Required for regions because comparing using `==` or `!=`
+            results in false positives.
+            """
+            sorted_patch_value = sorted(patch_value)
+            sorted_value = sorted(value_)
+            regions_compare = set(sorted_value).difference(
+                sorted_patch_value)
+            return (bool(regions_compare))
+
         def handleCellBlock(cellBlock):
-            modified=False
-            for attr,value in cellData[cellBlock.cell.fid].iteritems():
-                if cellBlock.cell.__getattribute__(attr) != value:
-                    cellBlock.cell.__setattr__(attr,value)
-                    modified=True
-            for flag,value in cellData[cellBlock.cell.fid+('flags',)].iteritems():
-                if cellBlock.cell.flags.__getattr__(flag) != value:
-                    cellBlock.cell.flags.__setattr__(flag,value)
-                    modified=True
+            #@formatter:off
+            """
+            This function checks if an attr or flag in CellData has
+            a value which is different to the corresponding value in the
+            bash patch file.
+            The Patch file will contain the last corresponding record
+            found when it is created regardless of tags.
+            If the CellData value is different, then the value is copied
+            to the bash patch, and the cell is flagged as modified.
+            Modified cell Blocks are kept, the other are discarded.
+            """
+            #@formatter:on
+            modified = False
+            for attr, value in cellData[cellBlock.cell.fid].viewitems():
+                patch_value = cellBlock.cell.__getattribute__(attr)
+                if attr == 'regions':
+                    if regions_differ(patch_value, value):
+                        cellBlock.cell.__setattr__(attr, value)
+                        modified = True
+                elif patch_value != value:
+                    cellBlock.cell.__setattr__(attr, value)
+                    modified = True
+            for flag, value in cellData[cellBlock.cell.fid + ('flags',)].viewitems():
+                patch_value = cellBlock.cell.flags.__getattr__(flag)
+                if patch_value != value:
+                    cellBlock.cell.flags.__setattr__(flag, value)
+                    modified = True
             if modified:
                 cellBlock.cell.setChanged()
                 keep(cellBlock.cell.fid)
@@ -22426,26 +22480,34 @@ class CellImporter(ImportPatcher):
         for worldBlock in self.patchFile.WRLD.worldBlocks:
             keepWorld = False
             for cellBlock in worldBlock.cellBlocks:
-                if cellBlock.cell.fid in cellData and handleCellBlock(cellBlock):
-                    count.increment(cellBlock.cell.fid[0])
-                    keepWorld = True
-            # if worldBlock.world.fid in cellData['Maps']:
-                # if worldBlock.world.mapPath != cellData['Maps'][worldBlock.world.fid]:
-                    # print worldBlock.world.mapPath
-                    # worldBlock.world.mapPath = cellData['Maps'][worldBlock.world.fid]
-                    # print worldBlock.world.mapPath
-                    # worldBlock.world.setChanged()
-                    # keepWorld = True
+                if cellBlock.cell.fid in cellData:
+                    if handleCellBlock(cellBlock):
+                        count.increment(cellBlock.cell.fid[0])
+                        keepWorld = True
+                # if worldBlock.world.fid in cellData['Maps']:
+                    # if worldBlock.world.mapPath != cellData['Maps'][worldBlock.world.fid]:
+	                    # print worldBlock.world.mapPath
+	                    # worldBlock.world.mapPath = cellData['Maps'][worldBlock.world.fid]
+	                    # print worldBlock.world.mapPath
+	                    # worldBlock.world.setChanged()
+	                    # keepWorld = True
+            if worldBlock.worldCellBlock:
+                if worldBlock.worldCellBlock.cell.fid in cellData:
+                    if handleCellBlock(worldBlock.worldCellBlock):
+                        count[worldBlock.worldCellBlock.cell.fid[0]] += 1
+                        keepWorld = True
             if keepWorld:
                 keep(worldBlock.world.fid)
 
-        log.setHeader('= '+self.__class__.name)
+        log.setHeader('= ' + self.__class__.name)
         log(_("=== Source Mods"))
         for mod in self.sourceMods:
-            log("* " +mod.s)
+            log("* " + mod.s)
         log(_("\n=== Cells/Worlds Patched"))
         for srcMod in modInfos.getOrdered(count.keys()):
-            log('* %s: %d' % (srcMod.s,count[srcMod]))
+            log('* %s: %d' % (srcMod.s, count[srcMod]))
+
+
 # class CBash_CellImporter(CBash_ImportPatcher):
 #     """Merges changes to cells (climate, lighting, and water.)"""
 #     name = _('Import Cells')

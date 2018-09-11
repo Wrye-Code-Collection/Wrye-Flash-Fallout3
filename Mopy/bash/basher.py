@@ -6817,6 +6817,8 @@ class ImportScriptContents(bosh.ImportScriptContents,ListPatcher):pass
 class DestructiblePatcher(bosh.DestructiblePatcher,ListPatcher): pass
 ##class CBash_DestructiblePatcher(bosh.DestructiblePatcher,ListPatcher): pass
 
+class WeaponModsPatcher(bosh.WeaponModsPatcher, ListPatcher): pass
+
 # Patchers 30 ------------------------------------------------------------------
 class AssortedTweaker(bosh.AssortedTweaker,TweakPatcher): pass
 #class CBash_AssortedTweaker(bosh.CBash_AssortedTweaker,TweakPatcher): pass
@@ -6899,6 +6901,7 @@ PatchDialog.patchers.extend((
     ImportScriptContents(),
 ##    ImportActorsSpells(),
     DestructiblePatcher(),
+    WeaponModsPatcher(),
     ListsMerger(),
     FidListsMerger(),
 ##    MFactMarker(),

@@ -712,13 +712,13 @@ def Init(path):
             tagIds_removed = c_uint32_p()
             numRemoved = c_size_t()
             userlist = c_bool()
-            _CGetModBashTags(self._DB, _enc(plugin), byref(tagIds_added),
-                byref(numAdded), byref(tagIds_removed), byref(numRemoved),
+            _CGetModBashTags(self._DB, _enc(plugin),
+                byref(tagIds_added), byref(numAdded),
+                byref(tagIds_removed), byref(numRemoved),
                 byref(userlist))
             added = set(
                 [self.tags[tagIds_added[i]] for i in xrange(numAdded.value)])
-            removed = set([self.tags[tagIds_removed[i]] for i in
-                           xrange(numRemoved.value)])
+            removed = set([self.tags[tagIds_removed[i]] for i in xrange(numRemoved.value)])
             return (added, removed, userlist.value)
 
         def GetDirtyMessage(self, plugin):
@@ -745,8 +745,7 @@ def Init(path):
             """Given a list of plugins, returns the subset of that list,
                consisting of plugins that meet the given BOSS_API_CLEAN_*
                code"""
-            return [x for x in plugins if
-                    self.GetDirtyMessage(x)[1] == cleanCode]
+            return [x for x in plugins if self.GetDirtyMessage(x)[1] == cleanCode]
 
         def DeactivatePlugins(self, plugins):
             for plugin in plugins:
